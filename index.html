@@ -5,16 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Servicio de Impresión 3D</title>
     <link rel="stylesheet" href="styles.css">
-    <script defer src="script.js"></script>
-    <script src="https://www.google.com/recaptcha/api.js?render=6LcYMhAqAAAAAM2RAUUSn2t27rGRRFNqIrFV2gwJ"></script>
-    <script>
-        // Llamar a recaptcha.ready para inicializar reCAPTCHA v3
-        grecaptcha.ready(function() {
-            grecaptcha.execute('6LcYMhAqAAAAAM2RAUUSn2t27rGRRFNqIrFV2gwJ', { action: 'formulario' }).then(function(token) {
-                document.getElementById('recaptchaResponse').value = token;
-            });
-        });
-    </script>
 </head>
 <body>
     <header>
@@ -65,7 +55,8 @@
     
     <section id="contacto">
         <h2>Contacto</h2>
-        <form id="formulario" action="procesar_formulario.php" method="POST" onsubmit="return validarFormulario()">
+        <!-- Formulario de contacto usando Formspree -->
+        <form action="https://formspree.io/f/mrbzbyra" method="POST">
             <label for="nombre">Nombre:</label>
             <input type="text" id="nombre" name="nombre" required>
             
@@ -75,9 +66,6 @@
             <label for="mensaje">Mensaje:</label>
             <textarea id="mensaje" name="mensaje" required></textarea>
             
-            <!-- Campo oculto para almacenar el token reCAPTCHA v3 -->
-            <input type="hidden" id="recaptchaResponse" name="recaptchaResponse">
-            
             <button type="submit">Enviar</button>
         </form>
     </section>
@@ -85,16 +73,5 @@
     <footer>
         <p>&copy; 2024 Servicio de Impresión 3D. Todos los derechos reservados.</p>
     </footer>
-
-    <script>
-        function validarFormulario() {
-            var token = document.getElementById('recaptchaResponse').value;
-            if (!token) {
-                alert("Por favor, verifica que no eres un robot.");
-                return false;
-            }
-            return true;
-        }
-    </script>
 </body>
 </html>
