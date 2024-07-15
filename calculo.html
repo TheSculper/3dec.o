@@ -26,12 +26,15 @@
         <h2>Calcula el Costo de tu Pieza</h2>
         <form id="calculoForm">
             <label for="material">Material:</label>
-            <select id="material" name="material" required>
+            <select id="material" name="material" required onchange="actualizarOpcionesColor()">
                 <option value="100">PLA (100 CLP/gramo)</option>
-                <option value="300">PLA + (150 CLP/gramo)</option>
                 <option value="200">PETG (200 CLP/gramo)</option>
                 <option value="300">ABS (300 CLP/gramo)</option>
-                <option value="300">TPU (300 CLP/gramo)</option>
+            </select>
+
+            <label for="color">Color:</label>
+            <select id="color" name="color">
+                <!-- Options will be dynamically updated based on material selection -->
             </select>
 
             <label for="peso">Peso de la pieza (gramos):</label>
@@ -50,5 +53,63 @@
     <footer>
         <p>&copy; 2024 Servicio de Impresión 3D. Todos los derechos reservados.</p>
     </footer>
+
+    <script>
+        function actualizarOpcionesColor() {
+            const materialSelect = document.getElementById('material');
+            const colorSelect = document.getElementById('color');
+            const selectedMaterial = materialSelect.value;
+
+            // Limpiar las opciones actuales
+            colorSelect.innerHTML = '';
+
+            // Agregar opciones de color basadas en el material seleccionado
+            if (selectedMaterial === '100') { // PLA
+                agregarOpcionColor('Negro', 'Negro');
+                agregarOpcionColor('Blanco', 'Blanco');
+            } else if (selectedMaterial === '300') { // ABS
+                agregarOpcionColor('Rojo', 'Rojo');
+            }
+        }
+
+        function agregarOpcionColor(texto, valor) {
+            const colorSelect = document.getElementById('color');
+            const option = document.createElement('option');
+            option.textContent = texto;
+            option.value = valor;
+            colorSelect.appendChild(option);
+        }
+
+        document.getElementById('calculoForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const materialCost = parseFloat(document.getElementById('material').value);
+            const colorCost = getColorCost(document.getElementById('color').value); // Función para obtener el costo del color
+            const weight = parseFloat(document.getElementById('peso').value);
+            const time = parseFloat(document.getElementById('tiempo').value);
+            const fixedCostPerHour = 5000; // Costo fijo por hora de impresión
+
+            if (isNaN(materialCost) || isNaN(weight) || isNaN(time)) {
+                alert('Por favor, ingrese valores válidos en todos los campos.');
+                return;
+            }
+
+            const totalCost = (materialCost * weight) + colorCost + (fixedCostPerHour * time);
+            document.getElementById('costoTotal').textContent = totalCost.toFixed(2);
+        });
+
+        function getColorCost(color) {
+            // Definir el costo por color según tus especificaciones
+            switch (color) {
+                case 'Negro':
+                case 'Blanco':
+                    return 50; // Costo adicional por elegir negro o blanco para PLA (ejemplo)
+                case 'Rojo':
+                    return 70; // Costo adicional por elegir rojo para ABS (ejemplo)
+                default:
+                    return 0; // Si no se especifica un color, no hay costo adicional
+            }
+        }
+    </script>
 </body>
 </html>
