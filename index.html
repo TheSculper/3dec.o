@@ -7,6 +7,12 @@
     <link rel="stylesheet" href="styles.css">
     <script defer src="script.js"></script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script>
+        function onSubmit(token) {
+            document.getElementById("formulario").submit();
+        }
+    </script>
+
 </head>
 <body>
     <header>
@@ -57,7 +63,7 @@
     
     <section id="contacto">
         <h2>Contacto</h2>
-        <form action="procesar_formulario.php" method="POST">
+        <form id="formulario" action="procesar_formulario.php" method="POST">
             <label for="nombre">Nombre:</label>
             <input type="text" id="nombre" name="nombre" required>
             
@@ -66,13 +72,20 @@
             
             <label for="mensaje">Mensaje:</label>
             <textarea id="mensaje" name="mensaje" required></textarea>
-
-            <!-- Agregar reCAPTCHA -->
-            <div class="g-recaptcha" data-sitekey="6LcYMhAqAAAAAM2RAUUSn2t27rGRRFNqIrFV2gwJ"></div><br><br>
             
-            <button type="submit">Enviar</button>
+            <button type="button" onclick="submitForm()">Enviar</button>
         </form>
     </section>
+
+    <script>
+        function submitForm() {
+            grecaptcha.ready(function() {
+                grecaptcha.execute('6LcYMhAqAAAAAM2RAUUSn2t27rGRRFNqIrFV2gwJ', { action: 'submit' }).then(function(token) {
+                    document.getElementById("formulario").submit();
+                });
+            });
+        }
+    </script>
     
     <footer>
         <p>&copy; 2024 Servicio de Impresión 3D. Todos los derechos reservados.</p>
