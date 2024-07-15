@@ -156,3 +156,12 @@ form button:hover {
     border-radius: 5px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
+
+/*logo */
+
+.logo img {
+    width: 100px; /* Ajusta el tamaño del logo según tus necesidades */
+    height: auto;
+    margin-right: 10px; /* Añade un margen derecho para separar el logo del texto */
+    vertical-align: middle; /* Alinea verticalmente el logo con el texto */
+}
