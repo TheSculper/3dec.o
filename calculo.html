@@ -27,9 +27,10 @@
         <form id="calculoForm">
             <label for="material">Material:</label>
             <select id="material" name="material" required onchange="actualizarOpcionesColor()">
-                <option value="100">PLA (100 CLP/gramo)</option>
-                <option value="200">PETG (200 CLP/gramo)</option>
-                <option value="300">ABS (300 CLP/gramo)</option>
+                <option value="10">PLA (100 CLP/gramo)</option>
+                <option value="20">PETG (200 CLP/gramo)</option>
+                <option value="30">ABS (300 CLP/gramo)</option>
+                <option value="40">TPU (400 CLP/gramo)</option>
             </select>
 
             <label for="color">Color:</label>
@@ -64,12 +65,17 @@
             colorSelect.innerHTML = '';
 
             // Agregar opciones de color basadas en el material seleccionado
-            if (selectedMaterial === '100') { // PLA
+            if (selectedMaterial === '10') { // PLA
                 agregarOpcionColor('Negro', 'Negro');
                 agregarOpcionColor('Blanco', 'Blanco');
-            } else if (selectedMaterial === '300') { // ABS
+            } else if (selectedMaterial === '30') { // ABS
                 agregarOpcionColor('Rojo', 'Rojo');
+            } else if (selectedMaterial === '20') { // PETG
+                agregarOpcionColor('Negro', 'Negro');
+            } else if (selectedMaterial === '40') { // TPU
+                agregarOpcionColor('Negro', 'Negro');
             }
+            
         }
 
         function agregarOpcionColor(texto, valor) {
@@ -87,7 +93,7 @@
             const colorCost = getColorCost(document.getElementById('color').value); // Función para obtener el costo del color
             const weight = parseFloat(document.getElementById('peso').value);
             const time = parseFloat(document.getElementById('tiempo').value);
-            const fixedCostPerHour = 5000; // Costo fijo por hora de impresión
+            const fixedCostPerHour = 2000; // Costo fijo por hora de impresión
 
             if (isNaN(materialCost) || isNaN(weight) || isNaN(time)) {
                 alert('Por favor, ingrese valores válidos en todos los campos.');
