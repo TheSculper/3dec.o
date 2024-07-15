@@ -85,3 +85,24 @@ form button {
 form button:hover {
     background-color: #555;
 }
+
+/* Nuevos estilos para la galería de fotos */
+section#galeria {
+    background-color: #f4f4f4;
+    padding: 2rem;
+    text-align: center;
+}
+
+.galeria {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.galeria img {
+    max-width: 30%;
+    height: auto;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+}
