@@ -45,6 +45,7 @@ section#sobre-nosotros {
 
 section#contacto {
     background-color: #e4e4e4;
+    margin-bottom: 200px; /* Espacio por debajo del formulario */
 }
 
 footer {
