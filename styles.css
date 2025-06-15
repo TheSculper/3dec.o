@@ -165,3 +165,40 @@ form button:hover {
     margin-right: 10px; /* Añade un margen derecho para separar el logo del texto */
     vertical-align: middle; /* Alinea verticalmente el logo con el texto */
 }
+
+.catalogo-stl {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.producto-stl {
+    border: 1px solid #ccc;
+    padding: 1rem;
+    border-radius: 10px;
+    max-width: 250px;
+    text-align: center;
+    background-color: #fdfdfd;
+}
+
+.producto-stl img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.boton-stl {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: #3c84e7;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+}
+
+.boton-stl:hover {
+    background-color: #1d60bb;
+}
