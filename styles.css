@@ -174,7 +174,6 @@ form button:hover {
     margin-top: 2rem;
 }
 
-}
 
 .catalogo-fisico {
     display: flex;
@@ -199,8 +198,6 @@ form button:hover {
     border-radius: 8px;
 }
 
-}
-
 .producto-fisico {
     border: 1px solid #ccc;
     padding: 1rem;
@@ -208,8 +205,6 @@ form button:hover {
     max-width: 250px;
     text-align: center;
     background-color: #fdfdfd;
-}
-
 }
 
 .producto-fisico img {
@@ -229,5 +224,19 @@ form button:hover {
 }
 
 .boton-stl:hover {
+    background-color: #1d60bb;
+}
+
+.boton-fisico {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: #3c84e7;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+}
+
+.boton-fisico:hover {
     background-color: #1d60bb;
 }
