@@ -174,15 +174,6 @@ form button:hover {
     margin-top: 2rem;
 }
 
-
-.catalogo-fisico {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 2rem;
-    justify-content: center;
-    margin-top: 2rem;
-}
-
 .producto-stl {
     border: 1px solid #ccc;
     padding: 1rem;
@@ -193,21 +184,6 @@ form button:hover {
 }
 
 .producto-stl img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-}
-
-.producto-fisico {
-    border: 1px solid #ccc;
-    padding: 1rem;
-    border-radius: 10px;
-    max-width: 250px;
-    text-align: center;
-    background-color: #fdfdfd;
-}
-
-.producto-fisico img {
     max-width: 100%;
     height: auto;
     border-radius: 8px;
@@ -225,6 +201,30 @@ form button:hover {
 
 .boton-stl:hover {
     background-color: #1d60bb;
+}
+
+
+.catalogo-fisico {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.producto-fisico {
+    border: 1px solid #ccc;
+    padding: 1rem;
+    border-radius: 10px;
+    max-width: 250px;
+    text-align: center;
+    background-color: #fdfdfd;
+}
+
+.producto-fisico img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
 }
 
 .boton-fisico {
