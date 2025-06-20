@@ -18,7 +18,7 @@ const MATERIAL_DATA = {
 const FIXED_COSTS = {
     machineOperatingCostPerHour: 2000, // Costo fijo por hora de impresión (luz, desgaste máquina, etc.)
     laborCostPerHour: 2000,           // Costo de mano de obra por hora (para post-procesado)
-    profitMargin: 0.25,               // Margen de ganancia del 25%
+    profitMargin: 0.5,               // Margen de ganancia del 50%
     supportMaterialFactor: 0.10,      // 10% del costo del material principal para material de soporte
     failureRateFactor: 0.05           // Factor del 5% para cubrir impresiones fallidas
 };
