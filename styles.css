@@ -477,3 +477,61 @@ footer {
         padding: 10px 20px;
     }
 }
+
+/* Hamburger button base styles */
+#menu-toggle {
+    display: none; /* Oculto por defecto, visible solo en móvil */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    z-index: 1100;
+}
+
+#menu-toggle .hamburger {
+    display: block;
+    width: 28px;
+    height: 4px;
+    margin: 4px 0;
+    background: #fff;
+    border-radius: 2px;
+    transition: 0.3s;
+}
+
+/* Mostrar hamburger y ocultar menú en móvil */
+@media (max-width: 768px) {
+    #menu-toggle {
+        display: flex;
+        margin-left: auto;
+    }
+    nav ul {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px; /* Ajusta según la altura de tu header */
+        right: 0;
+        width: 200px;
+        background: #333;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        z-index: 1001;
+        padding: 12px 0;
+        border-radius: 0 0 8px 8px;
+    }
+    nav ul.menu-active {
+        display: flex;
+    }
+}
+
+/* Opcional: animación para el ícono (hamburger a "X" al abrir) */
+#menu-toggle.open .hamburger:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+#menu-toggle.open .hamburger:nth-child(2) {
+    opacity: 0;
+}
+#menu-toggle.open .hamburger:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -6px);
+}
