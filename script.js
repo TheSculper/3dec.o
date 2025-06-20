@@ -252,7 +252,7 @@ enviarStlWhatsAppBtn.addEventListener('click', () => {
         return;
     }
 
-    const phoneNumber = 'TU_NUMERO_DE_WHATSAPP'; // IMPORTANT: USE THE SAME NUMBER HERE
+    const phoneNumber = '56975297791'; // IMPORTANT: USE THE SAME NUMBER HERE
     const fileName = file.name;
 
     const message = `
