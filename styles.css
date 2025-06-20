@@ -1,140 +1,239 @@
+/* --- General Body and Typography --- */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    line-height: 1.6; /* Mejora la legibilidad del texto */
+    color: #333; /* Color de texto general */
+    padding-bottom: 70px; /* Espacio para el footer fijo, ajusta si tu footer es más alto */
 }
 
+h1, h2, h3 {
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+p {
+    margin-bottom: 1rem;
+}
+
+/* --- Header and Navigation --- */
 header {
     background-color: #333;
     color: white;
-    padding: 1rem 0;
+    padding: 1rem 20px; /* Añadido padding horizontal para evitar que el contenido toque los bordes */
     text-align: center;
+    display: flex; /* Permite alinear logo y título */
+    flex-direction: column; /* Por defecto apila el logo y el título */
+    align-items: center; /* Centra horizontalmente el logo y el título */
+    position: sticky; /* Fija el header al hacer scroll */
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Sutil sombra para profundidad */
+}
+
+header h1 {
+    color: white; /* Asegura que el título en el header sea blanco */
+    margin-top: 10px; /* Espacio entre el logo y el título */
+    margin-bottom: 1rem; /* Espacio antes de la navegación */
+}
+
+.logo {
+    display: flex; /* Permite que la imagen y el texto del logo estén en línea */
+    align-items: center; /* Alinea verticalmente imagen y texto del logo */
+    justify-content: center; /* Centra el logo */
 }
 
 .logo img {
-    width: 100px; /* Ajusta el tamaño del logo según tus necesidades */
+    width: 80px; /* Ajusta el tamaño del logo */
     height: auto;
-    margin-right: 10px;
+    margin-right: 15px; /* Espacio entre imagen y texto del logo */
     vertical-align: middle;
 }
 
 nav ul {
     list-style-type: none;
     padding: 0;
-    margin: 0; /* Asegura que no haya margen predeterminado que empuje el contenido */
-}
-
-nav ul li {
-    display: inline;
-    margin: 0 1rem;
+    margin: 0;
+    display: flex; /* Usa flexbox para los elementos de navegación */
+    flex-wrap: wrap; /* Permite que los elementos se envuelvan en pantallas pequeñas */
+    justify-content: center; /* Centra los elementos de navegación */
+    gap: 1.5rem; /* Espacio entre elementos de navegación */
 }
 
 nav ul li a {
     color: white;
     text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
 }
 
-section {
-    padding: 2rem;
-}
-
-section#inicio {
-    background-color: #f4f4f4;
-}
-
-section#servicios {
-    background-color: #e4e4e4;
-}
-
-section#sobre-nosotros {
-    background-color: #f4f4f4;
-}
-
-section#contacto {
-    background-color: #e4e4e4;
-    padding-bottom: 100px; /* Asegura espacio encima del footer para esta sección */
-}
-
-/* Estilos generales para formularios */
-form {
-    display: flex;
-    flex-direction: column;
-}
-
-form label {
-    margin: 0.5rem 0 0.2rem;
-}
-
-form input, 
-form textarea,
-form select { /* Se añadió select a los estilos generales de formulario */
-    padding: 0.5rem;
-    margin-bottom: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-form button {
-    padding: 0.7rem;
-    border: none;
-    background-color: #333;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-form button:hover {
+nav ul li a:hover {
     background-color: #555;
 }
 
-/* Estilos para la galería */
-section#galeria {
-    background-color: #f4f4f4;
-    padding: 2rem;
-    text-align: center;
+/* --- Sections General Styling --- */
+section {
+    padding: 40px 20px; /* Aumenta el padding para más espacio */
+    margin-bottom: 0; /* Asegura que no haya margen extra entre secciones */
 }
 
+section:nth-of-type(even) { /* Para alternar colores de fondo de secciones */
+    background-color: #f4f4f4;
+}
+
+section:nth-of-type(odd) {
+    background-color: #e9e9e9;
+}
+
+/* Específico para el inicio */
+section#inicio {
+    background-color: #f8f8f8; /* Color suave para la primera sección */
+    text-align: center;
+    padding-top: 60px;
+    padding-bottom: 60px;
+}
+
+/* --- Main Call-to-Action Buttons (in index.html) --- */
+.main-cta-buttons {
+    margin-top: 40px; /* Más espacio desde el texto */
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px; /* Espacio entre los botones */
+}
+
+.boton-principal, .boton-whatsapp-inicio {
+    display: inline-block;
+    padding: 15px 30px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1em;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    text-align: center;
+    min-width: 220px; /* Asegura un ancho mínimo para botones */
+}
+
+.boton-principal {
+    background-color: #3c84e7; /* Azul primario */
+    color: white;
+}
+
+.boton-principal:hover {
+    background-color: #1d60bb;
+    transform: translateY(-3px); /* Efecto de "levantar" */
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.boton-whatsapp-inicio {
+    background-color: #25D366; /* Verde de WhatsApp */
+    color: white;
+}
+
+.boton-whatsapp-inicio:hover {
+    background-color: #1DA851;
+    transform: translateY(-3px); /* Efecto de "levantar" */
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+/* --- Form Styles (General) --- */
+form {
+    display: flex;
+    flex-direction: column;
+    max-width: 600px; /* Limita el ancho del formulario */
+    margin: 0 auto; /* Centra el formulario */
+    padding: 20px;
+    background-color: #ffffff; /* Fondo blanco para el formulario */
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+form label {
+    margin: 0.8rem 0 0.4rem; /* Más espacio para las etiquetas */
+    font-weight: bold;
+    color: #555;
+}
+
+form input,
+form textarea,
+form select {
+    padding: 0.75rem; /* Aumenta el padding */
+    margin-bottom: 1.2rem; /* Más espacio entre campos */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); /* Sombra interna sutil */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+form input:focus,
+form textarea:focus,
+form select:focus {
+    border-color: #3c84e7;
+    box-shadow: 0 0 0 3px rgba(60, 132, 231, 0.2); /* Sombra de enfoque azul */
+    outline: none; /* Quita el contorno predeterminado del navegador */
+}
+
+form button {
+    padding: 1rem; /* Más padding para los botones */
+    border: none;
+    background-color: #3c84e7;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+form button:hover {
+    background-color: #1d60bb;
+    transform: translateY(-2px);
+}
+
+/* --- Gallery Styles --- */
 .galeria {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 1rem;
+    gap: 20px; /* Aumentado el gap */
+    margin-top: 30px;
 }
 
 .galeria img {
-    max-width: 30%;
-    height: auto;
-    border: 2px solid #ccc;
-    border-radius: 5px;
+    width: 280px; /* Ancho fijo para las imágenes de la galería */
+    height: 200px; /* Altura fija para consistencia */
+    object-fit: cover; /* Asegura que las imágenes llenen el espacio sin distorsionarse */
+    border: 4px solid #fff; /* Borde blanco alrededor de las imágenes */
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1); /* Sombra más pronunciada */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Estilos para la calculadora de costos */
+.galeria img:hover {
+    transform: scale(1.05); /* Ligeramente más grande al pasar el ratón */
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+/* --- Calculator Specific Styles --- */
 section#calculo {
-    background-color: #f4f4f4;
-    padding: 2rem;
+    padding-top: 40px;
+    padding-bottom: 100px; /* Mantiene espacio para el footer fijo */
     text-align: center;
-    padding-bottom: 100px; /* Asegura espacio debajo del contenido de la calculadora para el footer */
 }
 
-section#calculo form { /* Sobreescribe el formulario general para alineación específica de la calculadora */
-    align-items: center;
-    max-width: 400px;
+section#calculo form {
+    align-items: stretch; /* Estira los inputs para llenar el ancho */
+    max-width: 500px; /* Un poco más ancho para la calculadora */
     margin: 0 auto;
 }
 
-section#calculo form input,
-section#calculo form select { /* Asegura ancho del 100% para inputs y selects dentro del formulario de la calculadora */
-    width: 100%;
-}
-
-/* Visualización del resultado del desglose de costos */
-#resultado {
-    margin-top: 20px;
-    padding: 10px;
-    background-color: #f9f9f9;
-    border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+section#calculo form input[type="file"] {
+    padding: 10px; /* Más padding para el input de archivo */
 }
 
 /* Estilos para el desglose colapsable */
@@ -143,17 +242,28 @@ section#calculo form select { /* Asegura ancho del 100% para inputs y selects de
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #f0f0f0;
-    padding: 10px 15px;
-    border-radius: 5px;
-    margin-top: 20px;
+    background-color: #e0e0e0; /* Color de fondo del encabezado del desglose */
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin: 30px auto 20px auto; /* Centra el toggle y añade margen */
     user-select: none;
-    text-align: left; /* Alinea el texto a la izquierda dentro del botón de alternar */
+    text-align: left;
+    max-width: 500px; /* Ancho consistente con el formulario */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #444;
+    transition: background-color 0.3s ease;
+}
+
+#toggleDesglose:hover {
+    background-color: #d0d0d0;
 }
 
 #toggleDesglose .arrow {
     transition: transform 0.3s ease;
-    font-size: 1.2em;
+    font-size: 1.3em;
+    color: #666;
 }
 
 #toggleDesglose.active .arrow {
@@ -161,72 +271,117 @@ section#calculo form select { /* Asegura ancho del 100% para inputs y selects de
 }
 
 #desgloseContenido {
-    transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+    transition: max-height 0.4s ease-in-out, opacity 0.4s ease-in-out, padding 0.4s ease-in-out;
     overflow: hidden;
     max-height: 0;
     opacity: 0;
-    padding: 0 15px; /* Quita el padding vertical cuando está oculto */
-    text-align: left; /* Alinea el texto a la izquierda dentro del contenido */
+    padding: 0 20px; /* Quita el padding vertical cuando está oculto */
+    text-align: left;
+    background-color: #ffffff; /* Fondo blanco para el contenido del desglose */
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    max-width: 500px; /* Ancho consistente con el formulario */
+    margin: 0 auto; /* Centra el contenido del desglose */
 }
+
+#desgloseContenido p {
+    margin-bottom: 0.5rem; /* Menos margen entre líneas del desglose */
+    padding: 5px 0;
+    border-bottom: 1px dashed #eee; /* Línea de puntos entre elementos */
+}
+#desgloseContenido p:last-child {
+    border-bottom: none; /* No hay línea en el último elemento */
+}
+
 
 #desgloseContenido.visible {
-    max-height: 500px; /* Ajusta si el contenido de tu desglose es muy largo */
+    max-height: 500px; /* Ajusta según la altura máxima esperada de tu contenido */
     opacity: 1;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding-top: 15px;
+    padding-bottom: 15px;
 }
 
-/* Estilos para las secciones de la tienda */
+/* Estilos para el costo total */
+h3 #costoTotal {
+    font-size: 2.2em; /* Hace el costo total más grande */
+    color: #3c84e7; /* Color primario */
+    font-weight: bold;
+}
+
+/* --- Tienda Sections Styles --- */
 section#tienda-fisica,
-section#tienda {
-    background-color: #e4e4e4; /* O el color que se ajuste a tu diseño */
-    padding: 2rem;
+section#tienda-stl { /* Usé 'tienda-stl' como ID para la sección de archivos STL */
+    padding: 40px 20px;
     text-align: center;
 }
 
-.catalogo-stl,
-.catalogo-fisico {
+.catalogo-productos { /* Unifica los estilos de ambos catálogos */
     display: flex;
     flex-wrap: wrap;
-    gap: 2rem;
     justify-content: center;
-    margin-top: 2rem;
+    gap: 30px; /* Espacio entre productos */
+    margin-top: 30px;
 }
 
-.producto-stl,
-.producto-fisico {
-    border: 1px solid #ccc;
-    padding: 1rem;
-    border-radius: 10px;
-    max-width: 250px;
+.producto {
+    background-color: #ffffff; /* Fondo blanco para las tarjetas de producto */
+    border: 1px solid #ddd;
+    border-radius: 12px; /* Bordes más redondeados */
+    padding: 25px;
     text-align: center;
-    background-color: #fdfdfd;
+    width: 280px; /* Ancho fijo para cada producto */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1); /* Sombra más pronunciada */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.producto-stl img,
-.producto-fisico img {
+.producto:hover {
+    transform: translateY(-5px); /* Efecto de "levantar" al pasar el ratón */
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.producto img {
     max-width: 100%;
-    height: auto;
+    height: 180px; /* Altura fija para las imágenes del producto */
+    object-fit: cover;
     border-radius: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #eee; /* Borde sutil para las imágenes de producto */
 }
 
-.boton-stl,
-.boton-fisico {
+.producto h3 {
+    margin-top: 0;
+    color: #333;
+    font-size: 1.3em;
+}
+
+.producto p {
+    font-size: 0.95em;
+    color: #666;
+    flex-grow: 1;
+    margin-bottom: 20px; /* Más espacio antes del botón */
+}
+
+.boton-tienda {
     display: inline-block;
-    margin-top: 1rem;
-    padding: 0.5rem 1rem;
-    background-color: #3c84e7;
+    background-color: #007bff; /* Azul para botones de tienda */
     color: white;
-    text-decoration: none;
+    padding: 12px 25px;
     border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: auto; /* Empuja el botón al final del contenedor flex */
 }
 
-.boton-stl:hover,
-.boton-fisico:hover {
-    background-color: #1d60bb;
+.boton-tienda:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
 }
 
-/* --- Estilos para el botón de WhatsApp --- */
+/* --- WhatsApp Button (General for Calculadora page) --- */
 .boton-whatsapp {
     background-color: #25D366; /* Color verde de WhatsApp */
     color: white;
@@ -236,24 +391,89 @@ section#tienda {
     cursor: pointer;
     font-size: 1.1em;
     font-weight: bold;
-    margin-top: 25px; /* Espacio arriba del botón */
-    transition: background-color 0.3s ease;
-    text-decoration: none; /* Asegura que no tenga subrayado si es un <a> */
-    display: inline-block; /* Para que el padding y margin funcionen correctamente */
+    margin-top: 25px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    text-decoration: none;
+    display: inline-block;
 }
 
 .boton-whatsapp:hover {
-    background-color: #1DA851; /* Un verde un poco más oscuro al pasar el ratón */
+    background-color: #1DA851;
+    transform: translateY(-2px);
 }
 
-
+/* --- Footer --- */
 footer {
     background-color: #333;
     color: white;
     text-align: center;
     padding: 1rem 0;
-    position: fixed; /* Mantiene el footer fijo en la parte inferior */
+    position: fixed;
     width: 100%;
     bottom: 0;
-    z-index: 1000; /* Asegura que el footer esté por encima de otro contenido si hay desplazamiento */
+    z-index: 1000;
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.2); /* Sombra superior para el footer */
+}
+
+/* --- Responsive Design (Media Queries) --- */
+@media (max-width: 768px) {
+    header {
+        padding: 1rem 10px;
+    }
+    nav ul {
+        flex-direction: column; /* Apila los elementos del menú */
+        gap: 0.5rem;
+        margin-top: 10px;
+    }
+    nav ul li {
+        margin: 0.2rem 0;
+    }
+
+    .main-cta-buttons {
+        flex-direction: column; /* Apila los botones CTA */
+        gap: 15px;
+    }
+    .boton-principal, .boton-whatsapp-inicio {
+        width: 90%; /* Hace que los botones sean casi de ancho completo */
+        max-width: 300px; /* Limita el ancho máximo */
+        margin: 0 auto; /* Centra los botones apilados */
+    }
+
+    .galeria img {
+        max-width: 45%; /* Dos imágenes por fila en pantallas pequeñas */
+        width: unset; /* Deshace el ancho fijo para usar max-width */
+        height: auto;
+    }
+
+    .catalogo-productos {
+        flex-direction: column; /* Apila los productos en columnas */
+        align-items: center;
+    }
+
+    .producto {
+        width: 90%; /* Ajusta el ancho de los productos en pantallas pequeñas */
+        max-width: 300px;
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.5em;
+    }
+    .logo img {
+        width: 60px;
+    }
+    section {
+        padding: 30px 15px;
+    }
+    .galeria img {
+        max-width: 90%; /* Una imagen por fila en los dispositivos más pequeños */
+    }
+    form {
+        padding: 15px;
+    }
+    form button, .boton-whatsapp {
+        font-size: 1em;
+        padding: 10px 20px;
+    }
 }
