@@ -41,16 +41,16 @@ const MATERIAL_DATA = {
 };
 
 const FIXED_COSTS = {
-    machineOperatingCostPerHour: 2000,
-    laborCostPerHour: 2000,
-    profitMargin: 0.50,
-    supportMaterialFactor: 0.10,
-    failureRateFactor: 0.05,
+    machineOperatingCostPerHour: 2000,           // Fixed cost per hour of printing (electricity, machine wear, etc.)
+    laborCostPerHour: 2000,                     // Labor cost per hour (for post-processing)
+    profitMargin: 0.50,                         // 50% Profit Margin!
+    supportMaterialFactor: 0.10,                // 10% of main material cost for support material
+    failureRateFactor: 0.05,                    // 5% factor to cover failed prints
     packagingCostsByVolume: [
-        { maxVolumeCm3: 100, cost: 650 },
-        { maxVolumeCm3: 500, cost: 1300 },
-        { maxVolumeCm3: 2000, cost: 2500 },
-        { maxVolumeCm3: Infinity, cost: 4000 }
+        { maxVolumeCm3: 100, cost: 650 },     // Small items
+        { maxVolumeCm3: 500, cost: 1300 },    // Medium items
+        { maxVolumeCm3: 2000, cost: 2500 },   // Large items
+        { maxVolumeCm3: Infinity, cost: 4000 } // Very large items
     ]
 };
 
@@ -92,7 +92,7 @@ const enviarStlWhatsAppBtn = document.getElementById('enviarStlWhatsAppBtn');
 // Updates color options based on selected material
 function actualizarOpcionesColor() {
     const selectedMaterialValue = materialSelect.value;
-    colorSelect.innerHTML = '<option value="">Selecciona un color</option>';
+    colorSelect.innerHTML = '<option value="">Selecciona un color</option>'; // Reset options
 
     if (selectedMaterialValue) {
         const materialType = selectedMaterialValue.split('_')[1];
@@ -107,7 +107,7 @@ function actualizarOpcionesColor() {
             });
         }
     }
-    calculateAndDisplayCost();
+    calculateAndDisplayCost(); // Recalculate when material changes
 }
 
 // Function to calculate packaging cost based on calculated volume
@@ -292,3 +292,26 @@ document.getElementById('calculoForm').addEventListener('submit', function(event
 document.addEventListener('DOMContentLoaded', () => {
     actualizarOpcionesColor();
 });
+
+// --- FOOTER ONLY VISIBLE AT BOTTOM ON MOBILE ---
+function toggleFooterOnScroll() {
+    const footer = document.querySelector('footer');
+    if (!footer) return;
+
+    if (window.innerWidth <= 768) {
+        // ¿Estamos al fondo?
+        const scrollBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 1;
+        if (scrollBottom) {
+            footer.classList.add('visible-footer');
+        } else {
+            footer.classList.remove('visible-footer');
+        }
+    } else {
+        // En escritorio, mostrar siempre el footer
+        footer.classList.add('visible-footer');
+    }
+}
+
+window.addEventListener('scroll', toggleFooterOnScroll);
+window.addEventListener('resize', toggleFooterOnScroll);
+document.addEventListener('DOMContentLoaded', toggleFooterOnScroll);
