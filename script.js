@@ -2,7 +2,7 @@
 const MATERIAL_DATA = {
     'PLA': {
         '17_PLA': { baseCost: 17, colors: ['Negro', 'Blanco', 'Gris', 'Azul'] },
-        '20_PLA': { baseCost: 20, colors: ['Rojo brillante', 'Verde limón', 'Naranja'] } // Ejemplo de PLA más caro por colores especiales
+        '20_PLA': { baseCost: 20, colors: ['Rojo brillante', 'Verde limón', 'Naranja'] }
     },
     'PETG': {
         '23_PETG': { baseCost: 23, colors: ['Negro', 'Transparente', 'Verde oscuro'] }
@@ -30,6 +30,7 @@ const pesoInput = document.getElementById('pesoInput');
 const tiempoInput = document.getElementById('tiempoInput');
 const postProcesadoInput = document.getElementById('postProcesadoInput');
 
+// Spans para mostrar el desglose y el total
 const costoMaterialBaseSpan = document.getElementById('costoMaterialBase');
 const costoMaterialSoporteSpan = document.getElementById('costoMaterialSoporte');
 const costoMaquinaSpan = document.getElementById('costoMaquina');
@@ -41,13 +42,11 @@ const costoTotalSpan = document.getElementById('costoTotal');
 
 // --- FUNCIONES ---
 
-// Actualiza las opciones de color basadas en el material seleccionado
 function actualizarOpcionesColor() {
     const selectedMaterialValue = materialSelect.value;
     colorSelect.innerHTML = '<option value="">Selecciona un color</option>'; // Restablecer opciones
 
     if (selectedMaterialValue) {
-        // Extraemos el tipo de material (ej. 'PLA', 'PETG')
         const materialType = selectedMaterialValue.split('_')[1]; 
         const materialOption = MATERIAL_DATA[materialType]?.[selectedMaterialValue];
 
@@ -55,15 +54,14 @@ function actualizarOpcionesColor() {
             materialOption.colors.forEach(color => {
                 const option = document.createElement('option');
                 option.textContent = color;
-                option.value = color; // El valor del color es el mismo que el texto
+                option.value = color;
                 colorSelect.appendChild(option);
             });
         }
     }
-    calculateAndDisplayCost(); // Recalcular al cambiar el material (y, por ende, el color)
+    calculateAndDisplayCost(); // Recalcular al cambiar el material
 }
 
-// Función principal de cálculo y visualización
 function calculateAndDisplayCost() {
     // Obtener valores de los campos de entrada
     const selectedMaterialOption = materialSelect.value;
@@ -81,7 +79,7 @@ function calculateAndDisplayCost() {
         ajusteFalloSpan.textContent = '0.00';
         margenGananciaSpan.textContent = '0.00';
         costoTotalSpan.textContent = '0.00';
-        return; // Detiene la ejecución si hay valores inválidos
+        return;
     }
 
     // Extraer el costo base por gramo del material seleccionado
@@ -89,49 +87,53 @@ function calculateAndDisplayCost() {
     const materialData = MATERIAL_DATA[materialType]?.[selectedMaterialOption];
     const materialCostPerGram = materialData ? materialData.baseCost : 0;
 
-    // Calcular costos individuales
+    // --- Calcular y mostrar costos individuales con operaciones ---
+    
+    // Costo del Material Base
     const baseMaterialCost = materialCostPerGram * peso;
+    costoMaterialBaseSpan.textContent = `${materialCostPerGram} [CLP/g] * ${peso} [g] = $${baseMaterialCost.toFixed(2)}`;
+
+    // Costo Material de Soporte
     const supportCost = baseMaterialCost * FIXED_COSTS.supportMaterialFactor;
+    costoMaterialSoporteSpan.textContent = `$${baseMaterialCost.toFixed(2)} * ${FIXED_COSTS.supportMaterialFactor * 100}% = $${supportCost.toFixed(2)}`;
+
+    // Costo de Operación de Máquina
     const machineOperatingCost = FIXED_COSTS.machineOperatingCostPerHour * tiempo;
+    costoMaquinaSpan.textContent = `${FIXED_COSTS.machineOperatingCostPerHour} [CLP/h] * ${tiempo} [h] = $${machineOperatingCost.toFixed(2)}`;
+
+    // Costo de Post-Procesado
     const postProcessingCost = FIXED_COSTS.laborCostPerHour * postProcesado;
+    costoPostProcesadoSpan.textContent = `${FIXED_COSTS.laborCostPerHour} [CLP/h] * ${postProcesado} [h] = $${postProcessingCost.toFixed(2)}`;
 
     // Sumar todos los costos base (subtotal antes de aplicar margen y fallos)
     const subTotalCostBeforeFactors = baseMaterialCost + supportCost + machineOperatingCost + postProcessingCost;
+    subtotalInicialSpan.textContent = `$${baseMaterialCost.toFixed(2)} + $${supportCost.toFixed(2)} + $${machineOperatingCost.toFixed(2)} + $${postProcessingCost.toFixed(2)} = $${subTotalCostBeforeFactors.toFixed(2)}`;
 
     // Calcular el ajuste por tasa de fallo y el subtotal con ajuste
     const failureAdjustmentAmount = subTotalCostBeforeFactors * FIXED_COSTS.failureRateFactor;
     const subTotalCostWithFailure = subTotalCostBeforeFactors + failureAdjustmentAmount;
+    ajusteFalloSpan.textContent = `$${subTotalCostBeforeFactors.toFixed(2)} * ${FIXED_COSTS.failureRateFactor * 100}% = $${failureAdjustmentAmount.toFixed(2)} (Total con fallo: $${subTotalCostWithFailure.toFixed(2)})`;
 
     // Calcular el margen de ganancia y el costo total
     const profitAmount = subTotalCostWithFailure * FIXED_COSTS.profitMargin;
     const totalCost = subTotalCostWithFailure + profitAmount;
-
-    // Mostrar el desglose y el resultado final
-    costoMaterialBaseSpan.textContent = baseMaterialCost.toFixed(2);
-    costoMaterialSoporteSpan.textContent = supportCost.toFixed(2);
-    costoMaquinaSpan.textContent = machineOperatingCost.toFixed(2);
-    costoPostProcesadoSpan.textContent = postProcessingCost.toFixed(2);
-    subtotalInicialSpan.textContent = subTotalCostBeforeFactors.toFixed(2);
-    ajusteFalloSpan.textContent = failureAdjustmentAmount.toFixed(2);
-    margenGananciaSpan.textContent = profitAmount.toFixed(2);
+    margenGananciaSpan.textContent = `$${subTotalCostWithFailure.toFixed(2)} * ${FIXED_COSTS.profitMargin * 100}% = $${profitAmount.toFixed(2)}`;
+    
+    // Costo Total Final
     costoTotalSpan.textContent = totalCost.toFixed(2);
 }
 
 // --- LISTENERS DE EVENTOS ---
 
-// Actualizar opciones de color cuando cambia el material
 materialSelect.addEventListener('change', actualizarOpcionesColor);
-
-// Actualizar el cálculo en tiempo real cuando cualquier campo cambia
 pesoInput.addEventListener('input', calculateAndDisplayCost);
 tiempoInput.addEventListener('input', calculateAndDisplayCost);
 postProcesadoInput.addEventListener('input', calculateAndDisplayCost);
-colorSelect.addEventListener('change', calculateAndDisplayCost); // Aunque el color no afecta el costo directamente, es bueno recalcular
+colorSelect.addEventListener('change', calculateAndDisplayCost); 
 
-// Asegurarse de que el formulario no intente enviarse (por si se mantiene el botón submit)
 document.getElementById('calculoForm').addEventListener('submit', function(event) {
     event.preventDefault();
-    calculateAndDisplayCost(); // Llama a la función de cálculo
+    calculateAndDisplayCost();
 });
 
 // Inicializar la calculadora al cargar la página
