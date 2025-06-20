@@ -13,8 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Cierra el menú solo en móvil/tablet al hacer clic en un enlace
         navList.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
-                // Verificar si el menú está abierto y si el viewport es móvil
-                if (navList.classList.contains('menu-active') && window.innerWidth <= 768) {
+                if (window.innerWidth <= 768) {
                     navList.classList.remove('menu-active');
                     menuToggle.classList.remove('open');
                     menuToggle.setAttribute('aria-expanded', 'false');
@@ -22,243 +21,365 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+
+    // --- Header Dinámico en Scroll (index.html) ---
+    const header = document.querySelector('header');
+    if (header) {
+        window.addEventListener('scroll', () => {
+            if (window.innerWidth <= 768) { // Solo para dispositivos móviles
+                if (window.scrollY > 50) { // Si el scroll es mayor a 50px
+                    header.classList.add('header-scrolled');
+                } else {
+                    header.classList.remove('header-scrolled');
+                }
+            } else {
+                header.classList.remove('header-scrolled'); // Asegurarse de que no esté activo en desktop
+            }
+        });
+        // Asegurarse de que el header se adapte si se carga la página con scroll en móvil
+        if (window.innerWidth <= 768 && window.scrollY > 50) {
+            header.classList.add('header-scrolled');
+        }
+    }
 });
 
 // --- CONFIGURATION DATA (Adjust these values to your actual costs) ---
 const MATERIAL_DATA = {
     'PLA': {
-        '17_PLA': { baseCost: 17, colors: ['Negro', 'Blanco', 'Gris', 'Azul'] },
-        '20_PLA': { baseCost: 20, colors: ['Rojo brillante', 'Verde limón', 'Naranja'] }
+        'PLA_17': { baseCost: 17, colors: ['Negro', 'Blanco', 'Gris', 'Azul', 'Rojo'] },
+        'PLA_20': { baseCost: 20, colors: ['Rojo brillante', 'Verde limón', 'Naranja', 'Rosa'] }
     },
     'PETG': {
-        '23_PETG': { baseCost: 23, colors: ['Transparente', 'Blanco', 'Negro'] }
+        'PETG_23': { baseCost: 23, colors: ['Negro', 'Transparente', 'Verde oscuro', 'Azul Transparente'] }
     },
     'ABS': {
-        '25_ABS': { baseCost: 25, colors: ['Negro', 'Blanco'] }
+        'ABS_25': { baseCost: 25, colors: ['Negro', 'Gris', 'Blanco', 'Rojo'] }
     },
     'TPU': {
-        '30_TPU': { baseCost: 30, colors: ['Negro', 'Rojo'] }
+        'TPU_30': { baseCost: 30, colors: ['Negro', 'Translúcido', 'Rojo', 'Azul'] }
     }
 };
 
-// --- CALCULATOR LOGIC ---
 
-// Cache DOM elements for better performance and readability
-// Asegúrate de que estos IDs existan en tu archivo calculo.html
-const DOMElements = {
-    materialSelect: document.getElementById('materialSelect'),
-    colorSelect: document.getElementById('colorSelect'),
-    pesoInput: document.getElementById('pesoInput'),
-    tiempoInput: document.getElementById('tiempoInput'),
-    postProcesadoInput: document.getElementById('postProcesadoInput'),
-    largoInput: document.getElementById('largoInput'),
-    anchoInput: document.getElementById('anchoInput'),
-    altoInput: document.getElementById('altoInput'),
-    costoMaterialBaseSpan: document.getElementById('costoMaterialBase'),
-    costoMaterialSoporteSpan: document.getElementById('costoMaterialSoporte'),
-    costoMaquinaSpan: document.getElementById('costoMaquina'),
-    costoPostProcesadoSpan: document.getElementById('costoPostProcesado'),
-    costoEmpaqueSpan: document.getElementById('costoEmpaque'),
-    subtotalInicialSpan: document.getElementById('subtotalInicial'),
-    ajusteFalloSpan: document.getElementById('ajusteFallo'),
-    margenGananciaSpan: document.getElementById('margenGanancia'),
-    costoTotalSpan: document.getElementById('costoTotal'),
-    enviarWhatsAppBtn: document.getElementById('enviarWhatsAppBtn'),
-    calculoForm: document.getElementById('calculoForm'),
-    errorMessagesDiv: document.getElementById('errorMessages') // Nuevo div para mensajes de error
+const FIXED_COSTS = {
+    machineOperatingCostPerHour: 2000,           // Fixed cost per hour of printing (electricity, machine wear, etc.)
+    laborCostPerHour: 2000,                     // Labor cost per hour (for post-processing)
+    profitMargin: 0.35,                         // 35% Profit Margin
+    supportMaterialFactor: 0.10,                // 10% of main material cost for support material
+    failureRateFactor: 0.05,                    // 5% factor to cover failed prints
+    packagingCostsByVolume: [
+        { maxVolumeCm3: 100, cost: 650 },     // Small items
+        { maxVolumeCm3: 500, cost: 1300 },    // Medium items
+        { maxVolumeCm3: 2000, cost: 2500 },   // Large items
+        { maxVolumeCm3: Infinity, cost: 4000 } // Very large items
+    ]
 };
 
-// Costos fijos (pueden ser variables CSS o configuraciones aquí)
-const COSTO_FIJO_EMPAQUE = 2.00; // Costo fijo de empaque
-const FACTOR_AJUSTE_FALLO = 0.05; // 5% de ajuste por posibles fallos
-const MARGEN_GANANCIA = 0.35; // 35% de margen de ganancia
+// --- Your WhatsApp Number (Ofuscated for basic protection) ---
+const WHATSAPP_PHONE_NUMBER = "34685002931"; // Número real de WhatsApp
 
-// Función para actualizar las opciones de color según el material seleccionado
+// --- DOM ELEMENTS (calculo.html specific) ---
+const materialSelect = document.getElementById('materialSelect');
+const colorSelect = document.getElementById('colorSelect');
+const pesoInput = document.getElementById('pesoInput');
+const tiempoInput = document.getElementById('tiempoInput');
+const postProcesadoInput = document.getElementById('postProcesadoInput');
+const largoInput = document.getElementById('largoInput');
+const anchoInput = document.getElementById('anchoInput');
+const altoInput = document.getElementById('altoInput');
+const errorMessagesDiv = document.getElementById('errorMessages'); // Añadido para mensajes de error
+
+// Spans to display breakdown and total
+const costoMaterialBaseSpan = document.getElementById('costoMaterialBase');
+const costoMaterialSoporteSpan = document.getElementById('costoMaterialSoporte');
+const costoMaquinaSpan = document.getElementById('costoMaquina');
+const costoPostProcesadoSpan = document.getElementById('costoPostProcesado');
+const costoEmpaqueSpan = document.getElementById('costoEmpaque');
+const subtotalInicialSpan = document.getElementById('subtotalInicial');
+const ajusteFalloSpan = document.getElementById('ajusteFallo');
+const margenGananciaSpan = document.getElementById('margenGanancia');
+const costoTotalSpan = document.getElementById('costoTotal');
+
+// Elements for the breakdown dropdown
+const toggleDesgloseBtn = document.getElementById('toggleDesglose');
+const desgloseContenidoDiv = document.getElementById('desgloseContenido');
+// const toggleArrow = document.getElementById('toggleArrow'); // Ya no es necesario si la flecha es parte de toggleDesgloseBtn y se rota con CSS
+
+// Buttons for WhatsApp integration
+const enviarWhatsAppBtn = document.getElementById('enviarWhatsAppBtn');
+const stlFileInput = document.getElementById('stlFileInput');
+const enviarStlWhatsAppBtn = document.getElementById('enviarStlWhatsAppBtn');
+
+
+// --- FUNCTIONS ---
+
+// Updates color options based on selected material
 function actualizarOpcionesColor() {
-    // Solo ejecutar si el elemento materialSelect existe (estamos en la página de la calculadora)
-    if (!DOMElements.materialSelect) return;
+    const selectedMaterialValue = materialSelect.value;
+    colorSelect.innerHTML = '<option value="">Selecciona un color</option>'; // Reset options
+    colorSelect.disabled = true; // Deshabilitar por defecto
 
-    const selectedMaterialType = DOMElements.materialSelect.value;
-    const materialOptions = MATERIAL_DATA[selectedMaterialType];
+    if (selectedMaterialValue) {
+        const parts = selectedMaterialValue.split('_');
+        const materialCategory = parts[0]; // e.g., 'PLA', 'PETG'
+        const materialSpecific = selectedMaterialValue; // e.g., 'PLA_17'
 
-    // Limpiar opciones de color existentes
-    DOMElements.colorSelect.innerHTML = '<option value="">Seleccione un color</option>';
-    DOMElements.colorSelect.disabled = true; // Desactivar hasta que se seleccione un material con colores
+        const materialData = MATERIAL_DATA[materialCategory]?.[materialSpecific];
 
-    if (materialOptions) {
-        // Recopilar todos los colores disponibles para el tipo de material seleccionado
-        const allColors = new Set();
-        for (const key in materialOptions) {
-            if (materialOptions.hasOwnProperty(key)) {
-                materialOptions[key].colors.forEach(color => allColors.add(color));
-            }
-        }
-
-        // Añadir opciones de color al select
-        if (allColors.size > 0) {
-            allColors.forEach(color => {
+        if (materialData && materialData.colors) {
+            materialData.colors.forEach(color => {
                 const option = document.createElement('option');
-                option.value = color;
                 option.textContent = color;
-                DOMElements.colorSelect.appendChild(option);
+                option.value = color;
+                colorSelect.appendChild(option);
             });
-            DOMElements.colorSelect.disabled = false; // Activar el select de color
+            colorSelect.disabled = false; // Habilitar si hay colores
         }
     }
-    // Después de actualizar los colores, recalcula el costo
-    calculateAndDisplayCost();
+    calculateAndDisplayCost(); // Recalculate when material changes
 }
 
-// Función para resetear los valores mostrados y ocultar el botón de WhatsApp
-function resetCostDisplay() {
-    // Solo ejecutar si los elementos de costo existen (estamos en la página de la calculadora)
-    if (!DOMElements.costoTotalSpan) return;
-
-    DOMElements.costoMaterialBaseSpan.textContent = '0.00';
-    DOMElements.costoMaterialSoporteSpan.textContent = '0.00';
-    DOMElements.costoMaquinaSpan.textContent = '0.00';
-    DOMElements.costoPostProcesadoSpan.textContent = '0.00';
-    DOMElements.costoEmpaqueSpan.textContent = '0.00';
-    DOMElements.subtotalInicialSpan.textContent = '0.00';
-    DOMElements.ajusteFalloSpan.textContent = '0.00';
-    DOMElements.margenGananciaSpan.textContent = '0.00';
-    DOMElements.costoTotalSpan.textContent = '0.00';
-    DOMElements.enviarWhatsAppBtn.style.display = 'none';
-    DOMElements.errorMessagesDiv.innerHTML = ''; // Limpiar mensajes de error
+// Function to calculate packaging cost based on calculated volume
+function calculatePackagingCost(volumeCm3) {
+    if (isNaN(volumeCm3) || volumeCm3 < 0) {
+        return 0;
+    }
+    for (const range of FIXED_COSTS.packagingCostsByVolume) {
+        if (volumeCm3 <= range.maxVolumeCm3) {
+            return range.cost;
+        }
+    }
+    return 0;
 }
 
-// Función principal para calcular y mostrar el costo
+// Function to display error messages
+function showErrorMessage(message) {
+    errorMessagesDiv.innerHTML = `<p>${message}</p>`;
+    errorMessagesDiv.style.display = 'block';
+}
+
+// Function to clear error messages
+function clearErrorMessages() {
+    errorMessagesDiv.innerHTML = '';
+    errorMessagesDiv.style.display = 'none';
+}
+
+
+// Main function to calculate and display costs (for manual input flow)
 function calculateAndDisplayCost() {
-    // Solo ejecutar si los elementos de entrada existen (estamos en la página de la calculadora)
-    if (!DOMElements.materialSelect) return;
+    clearErrorMessages(); // Clear previous errors
 
-    resetCostDisplay(); // Resetear antes de cada nuevo cálculo
+    // Get values from input fields, ensuring they are valid numbers
+    const selectedMaterialOption = materialSelect.value;
+    const peso = parseFloat(pesoInput.value);
+    const tiempo = parseFloat(tiempoInput.value);
+    const postProcesado = parseFloat(postProcesadoInput.value);
+    const largo = parseFloat(largoInput.value);
+    const ancho = parseFloat(anchoInput.value);
+    const alto = parseFloat(altoInput.value);
 
-    const selectedMaterialType = DOMElements.materialSelect.value;
-    // La opción seleccionada del material es el value del <option>, que contiene "COSTO_TIPO"
-    const selectedMaterialOptionValue = DOMElements.materialSelect.options[DOMElements.materialSelect.selectedIndex]?.value;
-    const selectedColor = DOMElements.colorSelect.value;
-
-    const peso = parseFloat(DOMElements.pesoInput.value);
-    const tiempo = parseFloat(DOMElements.tiempoInput.value);
-    const postProcesado = parseFloat(DOMElements.postProcesadoInput.value);
-    const largo = parseFloat(DOMElements.largoInput.value);
-    const ancho = parseFloat(DOMElements.anchoInput.value);
-    const alto = parseFloat(DOMElements.altoInput.value);
-
-    let errors = [];
-
-    // --- Validaciones de entrada ---
-    if (!selectedMaterialType || selectedMaterialType === "") {
-        errors.push('Por favor, selecciona un tipo de material.');
+    // Validate main inputs. If any are invalid, reset display
+    let isValid = true;
+    if (!selectedMaterialOption) {
+        showErrorMessage("Por favor, selecciona un tipo de material.");
+        isValid = false;
     }
-    if (DOMElements.colorSelect.disabled === false && (!selectedColor || selectedColor === "")) {
-        errors.push('Por favor, selecciona un color.');
+    if (isNaN(peso) || peso <= 0) {
+        showErrorMessage("Ingresa un peso válido (> 0).");
+        isValid = false;
     }
-    if (isNaN(peso) || peso <= 0) errors.push('El peso debe ser un número positivo.');
-    if (isNaN(tiempo) || tiempo <= 0) errors.push('El tiempo de impresión debe ser un número positivo (en horas).');
-    if (isNaN(postProcesado) || postProcesado < 0) errors.push('El tiempo de post-procesado debe ser un número positivo o cero (en horas).');
+    if (isNaN(tiempo) || tiempo <= 0) {
+        showErrorMessage("Ingresa un tiempo de impresión válido (> 0).");
+        isValid = false;
+    }
+    if (isNaN(postProcesado) || postProcesado < 0) {
+        showErrorMessage("Ingresa un tiempo de post-procesado válido (>= 0).");
+        isValid = false;
+    }
     if (isNaN(largo) || largo <= 0 || isNaN(ancho) || ancho <= 0 || isNaN(alto) || alto <= 0) {
-        errors.push('Las dimensiones (largo, ancho, alto) deben ser números positivos.');
+        showErrorMessage("Ingresa dimensiones válidas (> 0 para Largo, Ancho y Alto).");
+        isValid = false;
     }
 
-    if (errors.length > 0) {
-        DOMElements.errorMessagesDiv.innerHTML = errors.map(msg => `<p>${msg}</p>`).join('');
-        return; // Detener la ejecución si hay errores
-    }
-
-    // Obtener el costo base del material desde la opción seleccionada
-    // Asumimos que el formato es 'COSTO_TIPO_MATERIAL', por ejemplo '17_PLA'
-    const materialCostValue = selectedMaterialOptionValue.split('_')[0];
-    const materialCostPerGram = parseFloat(materialCostValue);
-
-    // Asegurarse de que el costo por gramo es un número válido
-    if (isNaN(materialCostPerGram) || materialCostPerGram <= 0) {
-        errors.push('Error: No se pudo obtener un costo válido para el material seleccionado.');
-        DOMElements.errorMessagesDiv.innerHTML = errors.map(msg => `<p>${msg}</p>`).join('');
+    if (!isValid) {
+        // Reset all display spans
+        costoMaterialBaseSpan.textContent = '0.00';
+        costoMaterialSoporteSpan.textContent = '0.00';
+        costoMaquinaSpan.textContent = '0.00';
+        costoPostProcesadoSpan.textContent = '0.00';
+        costoEmpaqueSpan.textContent = '0.00';
+        subtotalInicialSpan.textContent = '0.00';
+        ajusteFalloSpan.textContent = '0.00';
+        margenGananciaSpan.textContent = '0.00';
+        costoTotalSpan.textContent = '0.00';
+        enviarWhatsAppBtn.style.display = 'none';
         return;
     }
 
-    // --- Cálculos ---
-    const costoMaterialBase = peso * materialCostPerGram;
-    // Se asume un 10% del peso para el soporte, con el mismo costo por gramo
-    const costoMaterialSoporte = (peso * 0.10) * materialCostPerGram;
-    // Costo de máquina: 3 euros/hora
-    const costoMaquina = tiempo * 3;
-    // Costo post-procesado: 10 euros/hora
-    const costoPostProcesado = postProcesado * 10;
-    const costoEmpaque = COSTO_FIJO_EMPAQUE; // Costo fijo de empaque
+    // Calculate the volume of the piece (cm³)
+    const volumenCalculado = largo * ancho * alto;
 
-    const subtotalInicial = costoMaterialBase + costoMaterialSoporte + costoMaquina + costoPostProcesado + costoEmpaque;
-    const ajusteFallo = subtotalInicial * FACTOR_AJUSTE_FALLO;
-    const subtotalConAjuste = subtotalInicial + ajusteFallo;
-    const margenGanancia = subtotalConAjuste * MARGEN_GANANCIA;
-    const costoTotal = subtotalConAjuste + margenGanancia;
+    // Extract base cost per kg for the selected material
+    const parts = selectedMaterialOption.split('_');
+    const materialCategory = parts[0];
+    const materialSpecific = selectedMaterialOption;
 
-    // --- Mostrar resultados ---
-    DOMElements.costoMaterialBaseSpan.textContent = costoMaterialBase.toFixed(2);
-    DOMElements.costoMaterialSoporteSpan.textContent = costoMaterialSoporte.toFixed(2);
-    DOMElements.costoMaquinaSpan.textContent = costoMaquina.toFixed(2);
-    DOMElements.costoPostProcesadoSpan.textContent = costoPostProcesado.toFixed(2);
-    DOMElements.costoEmpaqueSpan.textContent = costoEmpaque.toFixed(2);
-    DOMElements.subtotalInicialSpan.textContent = subtotalInicial.toFixed(2);
-    DOMElements.ajusteFalloSpan.textContent = ajusteFallo.toFixed(2);
-    DOMElements.margenGananciaSpan.textContent = margenGanancia.toFixed(2);
-    DOMElements.costoTotalSpan.textContent = costoTotal.toFixed(2);
+    const materialData = MATERIAL_DATA[materialCategory]?.[materialSpecific];
+    // Convert cost from €/kg to €/gram
+    const materialCostPerGram = materialData ? materialData.baseCost / 1000 : 0; // €/kg -> €/g
 
-    // Mostrar botón de WhatsApp y configurar mensaje
-    DOMElements.enviarWhatsAppBtn.style.display = 'block';
-    DOMElements.enviarWhatsAppBtn.onclick = () => {
-        const mensajeWhatsApp = `
-¡Hola 3deco! Me gustaría solicitar una impresión 3D con los siguientes detalles:
+    // --- Calculate and display individual costs with operations ---
+    const baseMaterialCost = materialCostPerGram * peso; // cost in euros
+    costoMaterialBaseSpan.textContent = `${(materialCostPerGram * 1000).toFixed(2)} €/kg * ${peso.toFixed(2)} g = ${baseMaterialCost.toFixed(2)} €`;
 
-Material: ${selectedMaterialType} - ${selectedColor}
-Peso (gr): ${peso}
-Tiempo de impresión (horas): ${tiempo}
-Tiempo de post-procesado (horas): ${postProcesado}
-Dimensiones (mm): ${largo}x${ancho}x${alto}
+    const supportCost = baseMaterialCost * FIXED_COSTS.supportMaterialFactor;
+    costoMaterialSoporteSpan.textContent = `${baseMaterialCost.toFixed(2)} € * ${FIXED_COSTS.supportMaterialFactor * 100}% = ${supportCost.toFixed(2)} €`;
 
-Costo Estimado: ${costoTotal.toFixed(2)} €
+    const machineOperatingCost = FIXED_COSTS.machineOperatingCostPerHour * tiempo;
+    costoMaquinaSpan.textContent = `${FIXED_COSTS.machineOperatingCostPerHour.toFixed(2)} €/h * ${tiempo.toFixed(1)} h = ${machineOperatingCost.toFixed(2)} €`;
 
-Por favor, adjunta tu archivo STL en el chat de WhatsApp. ¡Gracias!
+    const postProcessingCost = FIXED_COSTS.laborCostPerHour * postProcesado;
+    costoPostProcesadoSpan.textContent = `${FIXED_COSTS.laborCostPerHour.toFixed(2)} €/h * ${postProcesado.toFixed(1)} h = ${postProcessingCost.toFixed(2)} €`;
+
+    const packagingCost = calculatePackagingCost(volumenCalculado);
+    costoEmpaqueSpan.textContent = `${largo.toFixed(1)}x${ancho.toFixed(1)}x${alto.toFixed(1)} cm = ${volumenCalculado.toFixed(2)} cm³ = ${packagingCost.toFixed(2)} €`;
+
+    const subTotalCostBeforeFactors = baseMaterialCost + supportCost + machineOperatingCost + postProcessingCost + packagingCost;
+    subtotalInicialSpan.textContent = `${subTotalCostBeforeFactors.toFixed(2)} €`;
+
+    const failureAdjustmentAmount = subTotalCostBeforeFactors * FIXED_COSTS.failureRateFactor;
+    const subTotalCostWithFailure = subTotalCostBeforeFactors + failureAdjustmentAmount;
+    ajusteFalloSpan.textContent = `${failureAdjustmentAmount.toFixed(2)} €`;
+
+    const profitAmount = subTotalCostWithFailure * FIXED_COSTS.profitMargin;
+    const totalCost = subTotalCostWithFailure + profitAmount;
+    margenGananciaSpan.textContent = `${profitAmount.toFixed(2)} €`;
+
+    costoTotalSpan.textContent = totalCost.toFixed(2);
+
+    // --- WhatsApp Button Logic for Manual Quote ---
+    enviarWhatsAppBtn.style.display = 'block';
+    enviarWhatsAppBtn.onclick = () => {
+        const phoneNumber = WHATSAPP_PHONE_NUMBER;
+        const message = `
+¡Hola! 👋 Me gustaría cotizar una impresión 3D con los siguientes detalles (ingresados manualmente):
+
+*Material:* ${materialSelect.options[materialSelect.selectedIndex].text}
+*Color:* ${colorSelect.value || 'No especificado'}
+*Peso:* ${peso.toFixed(2)} gramos
+*Tiempo de Impresión:* ${tiempo.toFixed(1)} horas
+*Tiempo de Post-Procesado:* ${postProcesado.toFixed(1)} horas
+*Dimensiones:* ${largo.toFixed(1)}cm (L) x ${ancho.toFixed(1)}cm (A) x ${alto.toFixed(1)}cm (Al) = ${volumenCalculado.toFixed(2)} cm³
+
+---
+*Desglose Estimado:*
+- Material Base: ${baseMaterialCost.toFixed(2)} €
+- Material Soporte: ${supportCost.toFixed(2)} €
+- Operación Máquina: ${machineOperatingCost.toFixed(2)} €
+- Post-Procesado: ${postProcessingCost.toFixed(2)} €
+- Empaque: ${packagingCost.toFixed(2)} €
+- Subtotal (sin fallo/margen): ${subTotalCostBeforeFactors.toFixed(2)} €
+- Ajuste por Fallo: ${failureAdjustmentAmount.toFixed(2)} €
+- Margen de Ganancia: ${profitAmount.toFixed(2)} €
+
+*Costo Total Estimado:* ${totalCost.toFixed(2)} €
+---
+
+¡Espero tu confirmación!
         `;
-        window.open(`https://wa.me/34685002931?text=${encodeURIComponent(mensajeWhatsApp)}`, '_blank');
-        alert("Recuerda adjuntar tu archivo STL directamente en el chat de WhatsApp después de abrirlo.");
+        const encodedMessage = encodeURIComponent(message);
+        const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+        window.open(whatsappLink, '_blank');
     };
 }
 
-// --- Event Listeners for Calculator (only add if elements exist on the page) ---
-if (DOMElements.calculoForm) { // Check if we are on the calculator page
-    DOMElements.materialSelect.addEventListener('change', actualizarOpcionesColor);
-    DOMElements.colorSelect.addEventListener('change', calculateAndDisplayCost);
-    DOMElements.pesoInput.addEventListener('input', calculateAndDisplayCost);
-    DOMElements.tiempoInput.addEventListener('input', calculateAndDisplayCost);
-    DOMElements.postProcesadoInput.addEventListener('input', calculateAndDisplayCost);
-    DOMElements.largoInput.addEventListener('input', calculateAndDisplayCost);
-    DOMElements.anchoInput.addEventListener('input', calculateAndDisplayCost);
-    DOMElements.altoInput.addEventListener('input', calculateAndDisplayCost);
+// --- EVENT LISTENERS ---
 
-    // Prevenir el envío del formulario (que recargaría la página)
-    DOMElements.calculoForm.addEventListener('submit', function(event) {
-        event.preventDefault();
-        calculateAndDisplayCost();
-    });
-
-    // Inicializar la calculadora y las opciones de color cuando la página carga
-    document.addEventListener('DOMContentLoaded', () => {
-        actualizarOpcionesColor(); // Esto también disparará el cálculo inicial
+// Listener for the STL file input
+if (stlFileInput) {
+    stlFileInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            enviarStlWhatsAppBtn.style.display = 'block';
+        } else {
+            enviarStlWhatsAppBtn.style.display = 'none';
+        }
     });
 }
 
 
-// --- FOOTER VISIBILITY LOGIC (existing logic) ---
-let isMobile = window.innerWidth <= 768; // Initialize mobile state
+// Listener for the "Enviar Archivo 3D para Cotización" button
+if (enviarStlWhatsAppBtn) {
+    enviarStlWhatsAppBtn.addEventListener('click', () => {
+        const file = stlFileInput.files[0];
+        if (!file) {
+            alert('Por favor, selecciona un archivo 3D primero.');
+            return;
+        }
 
+        const phoneNumber = WHATSAPP_PHONE_NUMBER;
+        const fileName = file.name;
+
+        const message = `
+¡Hola! 👋 Te envío un archivo 3D para cotización.
+
+*Nombre del archivo:* ${fileName}
+
+Por favor, revisa el archivo adjunto (que enviaré por separado en WhatsApp) y envíame una cotización.
+
+¡Gracias!
+        `;
+        const encodedMessage = encodeURIComponent(message);
+        const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+        window.open(whatsappLink, '_blank');
+        alert(`Por favor, recuerda adjuntar el archivo "${fileName}" directamente en el chat de WhatsApp después de hacer clic en Aceptar.`);
+    });
+}
+
+// Listener for the breakdown toggle (only if elements exist, i.e., on calculo.html)
+if (toggleDesgloseBtn && desgloseContenidoDiv) {
+    toggleDesgloseBtn.addEventListener('click', () => {
+        desgloseContenidoDiv.classList.toggle('hidden'); // Alterna la clase 'hidden'
+        toggleDesgloseBtn.classList.toggle('active'); // Alterna la clase 'active' para rotar la flecha
+    });
+}
+
+
+// Listeners for manual input changes (trigger recalculation)
+if (materialSelect) materialSelect.addEventListener('change', actualizarOpcionesColor);
+if (pesoInput) pesoInput.addEventListener('input', calculateAndDisplayCost);
+if (tiempoInput) tiempoInput.addEventListener('input', calculateAndDisplayCost);
+if (postProcesadoInput) postProcesadoInput.addEventListener('input', calculateAndDisplayCost);
+if (largoInput) largoInput.addEventListener('input', calculateAndDisplayCost);
+if (anchoInput) anchoInput.addEventListener('input', calculateAndDisplayCost);
+if (altoInput) altoInput.addEventListener('input', calculateAndDisplayCost);
+if (colorSelect) colorSelect.addEventListener('change', calculateAndDisplayCost);
+
+
+// Prevent form submission (which would reload the page)
+if (document.getElementById('calculoForm')) {
+    document.getElementById('calculoForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        calculateAndDisplayCost();
+    });
+}
+
+
+// Initialize the calculator and color options when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    // Check if materialSelect exists before calling actualizarOpcionesColor
+    if (materialSelect) {
+        actualizarOpcionesColor();
+    }
+});
+
+
+// --- FOOTER ONLY VISIBLE AT BOTTOM ON MOBILE ---
 function toggleFooterOnScroll() {
     const footer = document.querySelector('footer');
     if (!footer) return;
 
-    if (isMobile) {
+    if (window.innerWidth <= 768) {
         // ¿Estamos al fondo?
         const scrollBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 1;
         if (scrollBottom) {
@@ -272,40 +393,6 @@ function toggleFooterOnScroll() {
     }
 }
 
-// Update mobile state on resize and re-evaluate footer
-window.addEventListener('resize', () => {
-    const wasMobile = isMobile;
-    isMobile = window.innerWidth <= 768;
-    // Only re-evaluate footer if mobile state changed or if it's already mobile
-    if (wasMobile !== isMobile || isMobile) {
-        toggleFooterOnScroll();
-    }
-});
-
-// Event listeners for footer visibility
 window.addEventListener('scroll', toggleFooterOnScroll);
-document.addEventListener('DOMContentLoaded', toggleFooterOnScroll); // Initial check on load
-
-
-// --- HEADER VISIBILITY LOGIC FOR MOBILE (NEW) ---
-const header = document.querySelector('header'); // Get the header element
-const SCROLL_THRESHOLD = 50; // Pixels to scroll down before hiding header elements
-
-function toggleHeaderElementsVisibility() {
-    // Only apply this logic for mobile devices
-    if (window.innerWidth <= 768) {
-        if (window.scrollY > SCROLL_THRESHOLD) {
-            header.classList.add('header-scrolled');
-        } else {
-            header.classList.remove('header-scrolled');
-        }
-    } else {
-        // Ensure the class is removed on desktop if it somehow got applied
-        header.classList.remove('header-scrolled');
-    }
-}
-
-// Event listeners for header elements visibility
-window.addEventListener('scroll', toggleHeaderElementsVisibility);
-window.addEventListener('resize', toggleHeaderElementsVisibility); // Re-evaluate on resize
-document.addEventListener('DOMContentLoaded', toggleHeaderElementsVisibility); // Initial check on load
+window.addEventListener('resize', toggleFooterOnScroll);
+document.addEventListener('DOMContentLoaded', toggleFooterOnScroll);
