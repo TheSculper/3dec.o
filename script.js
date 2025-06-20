@@ -1,3 +1,26 @@
+// --- HAMBURGER MENU LOGIC ---
+document.addEventListener('DOMContentLoaded', () => {
+    const menuToggle = document.getElementById('menu-toggle');
+    const navList = document.querySelector('nav ul');
+
+    if (menuToggle && navList) {
+        menuToggle.addEventListener('click', function() {
+            const isActive = navList.classList.toggle('menu-active');
+            menuToggle.classList.toggle('open', isActive);
+            menuToggle.setAttribute('aria-expanded', isActive ? 'true' : 'false');
+        });
+
+        // Opcional: cerrar el menú al hacer clic en un enlace de navegación
+        navList.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navList.classList.remove('menu-active');
+                menuToggle.classList.remove('open');
+                menuToggle.setAttribute('aria-expanded', 'false');
+            });
+        });
+    }
+});
+
 // --- CONFIGURATION DATA (Adjust these values to your actual costs) ---
 const MATERIAL_DATA = {
     'PLA': {
