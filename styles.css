@@ -12,9 +12,17 @@ header {
     text-align: center;
 }
 
+.logo img {
+    width: 100px; /* Adjust logo size as needed */
+    height: auto;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
 nav ul {
     list-style-type: none;
     padding: 0;
+    margin: 0; /* Ensure no default margin pushes content */
 }
 
 nav ul li {
@@ -45,19 +53,10 @@ section#sobre-nosotros {
 
 section#contacto {
     background-color: #e4e4e4;
-    margin-bottom: 200px; /* Espacio por debajo del formulario */
+    padding-bottom: 100px; /* Ensures space above the footer for this section */
 }
 
-footer {
-    background-color: #333;
-    color: white;
-    text-align: center;
-    padding: 1rem 0;
-    position: fixed;
-    width: 100%;
-    bottom: 0;
-}
-
+/* General form styles - applied to all forms */
 form {
     display: flex;
     flex-direction: column;
@@ -67,7 +66,9 @@ form label {
     margin: 0.5rem 0 0.2rem;
 }
 
-form input, form textarea {
+form input, 
+form textarea,
+form select { /* Added select to general form styles */
     padding: 0.5rem;
     margin-bottom: 1rem;
     border: 1px solid #ccc;
@@ -87,7 +88,7 @@ form button:hover {
     background-color: #555;
 }
 
-/* Nuevos estilos para la galería de fotos */
+/* Gallery styles */
 section#galeria {
     background-color: #f4f4f4;
     padding: 2rem;
@@ -108,102 +109,82 @@ section#galeria {
     border-radius: 5px;
 }
 
-/* Estilos para la calculadora de costos */
+/* Calculator specific styles */
 section#calculo {
     background-color: #f4f4f4;
     padding: 2rem;
     text-align: center;
+    padding-bottom: 100px; /* Ensures space below the calculator content for the footer */
 }
 
-form {
-    display: flex;
-    flex-direction: column;
+section#calculo form { /* Override general form for calculator page specific alignment */
     align-items: center;
     max-width: 400px;
     margin: 0 auto;
 }
 
-form label {
-    margin: 0.5rem 0 0.2rem;
-}
-
-form input {
-    padding: 0.5rem;
-    margin-bottom: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+section#calculo form input,
+section#calculo form select { /* Ensures width 100% for inputs and selects within calculator form */
     width: 100%;
 }
 
-form button {
-    padding: 0.7rem;
-    border: none;
-    background-color: #333;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-form button:hover {
-    background-color: #555;
-}
-
+/* Cost breakdown result display */
 #resultado {
     margin-top: 20px;
-    margin-bottom: 200px; /* Espacio debajo del resultado */
     padding: 10px;
     background-color: #f9f9f9;
     border-radius: 5px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
-/*logo */
-
-.logo img {
-    width: 100px; /* Ajusta el tamaño del logo según tus necesidades */
-    height: auto;
-    margin-right: 10px; /* Añade un margen derecho para separar el logo del texto */
-    vertical-align: middle; /* Alinea verticalmente el logo con el texto */
-}
-
-.catalogo-stl {
+/* Collapsible breakdown styles */
+#toggleDesglose {
+    cursor: pointer;
     display: flex;
-    flex-wrap: wrap;
-    gap: 2rem;
-    justify-content: center;
-    margin-top: 2rem;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f0f0f0;
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin-top: 20px;
+    user-select: none;
+    text-align: left; /* Align text left within the toggle button */
 }
 
-.producto-stl {
-    border: 1px solid #ccc;
-    padding: 1rem;
-    border-radius: 10px;
-    max-width: 250px;
+#toggleDesglose .arrow {
+    transition: transform 0.3s ease;
+    font-size: 1.2em;
+}
+
+#toggleDesglose.active .arrow {
+    transform: rotate(-180deg);
+}
+
+#desgloseContenido {
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    padding: 0 15px; /* Quita el padding vertical cuando está oculto */
+    text-align: left; /* Align text left within the content */
+}
+
+#desgloseContenido.visible {
+    max-height: 500px; /* Adjust if your breakdown content is very long */
+    opacity: 1;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+/* Store sections styles */
+section#tienda-fisica,
+section#tienda {
+    background-color: #e4e4e4; /* Or whatever color fits your design */
+    padding: 2rem;
     text-align: center;
-    background-color: #fdfdfd;
 }
 
-.producto-stl img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-}
-
-.boton-stl {
-    display: inline-block;
-    margin-top: 1rem;
-    padding: 0.5rem 1rem;
-    background-color: #3c84e7;
-    color: white;
-    text-decoration: none;
-    border-radius: 6px;
-}
-
-.boton-stl:hover {
-    background-color: #1d60bb;
-}
-
-
+.catalogo-stl,
 .catalogo-fisico {
     display: flex;
     flex-wrap: wrap;
@@ -212,6 +193,7 @@ form button:hover {
     margin-top: 2rem;
 }
 
+.producto-stl,
 .producto-fisico {
     border: 1px solid #ccc;
     padding: 1rem;
@@ -221,12 +203,14 @@ form button:hover {
     background-color: #fdfdfd;
 }
 
+.producto-stl img,
 .producto-fisico img {
     max-width: 100%;
     height: auto;
     border-radius: 8px;
 }
 
+.boton-stl,
 .boton-fisico {
     display: inline-block;
     margin-top: 1rem;
@@ -237,6 +221,18 @@ form button:hover {
     border-radius: 6px;
 }
 
+.boton-stl:hover,
 .boton-fisico:hover {
     background-color: #1d60bb;
+}
+
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+    position: fixed; /* Keep it fixed at the bottom */
+    width: 100%;
+    bottom: 0;
+    z-index: 1000; /* Ensure footer is on top of other content if scrolled */
 }
