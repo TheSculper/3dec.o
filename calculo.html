@@ -25,6 +25,12 @@
     <section id="calculo">
         <h2>Calcula el Costo de tu Pieza</h2>
         <form id="calculoForm">
+            <label for="stlFileInput">¿Tienes el archivo 3D (STL, OBJ, 3MF)?</label>
+            <input type="file" id="stlFileInput" accept=".stl,.obj,.3mf">
+            <small>Sube tu archivo para una cotización personalizada o rellena manualmente.</small>
+            <button type="button" id="enviarStlWhatsAppBtn" class="boton-whatsapp" style="display: none; margin-bottom: 20px;">Enviar Archivo 3D para Cotización</button>
+            <hr> <p style="font-weight: bold; margin-bottom: 15px;">O rellena los datos manualmente:</p>
+
             <label for="materialSelect">Material:</label>
             <select id="materialSelect" name="material" required>
                 <option value="">Selecciona un material</option>
@@ -82,7 +88,7 @@
     </section>
 
     <footer>
-        <p>&copy; 2025 Servicio de Impresión 3D. Todos los derechos reservados.</p>
+        <p>&copy; 2024 Servicio de Impresión 3D. Todos los derechos reservados.</p>
     </footer>
 </body>
 </html>
