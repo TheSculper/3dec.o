@@ -49,6 +49,14 @@
             <label for="postProcesadoInput">Tiempo de Post-Procesado (horas):</label>
             <input type="number" id="postProcesadoInput" name="postProcesado" step="0.1" min="0" placeholder="Ej: 1" value="0">
 
+            <label for="largoInput">Largo de la pieza (cm):</label>
+            <input type="number" id="largoInput" name="largo" step="0.1" min="0" placeholder="Ej: 10" value="0" required>
+
+            <label for="anchoInput">Ancho de la pieza (cm):</label>
+            <input type="number" id="anchoInput" name="ancho" step="0.1" min="0" placeholder="Ej: 8" value="0" required>
+
+            <label for="altoInput">Alto de la pieza (cm):</label>
+            <input type="number" id="altoInput" name="alto" step="0.1" min="0" placeholder="Ej: 5" value="0" required>
             <button type="submit" style="display: none;">Calcular</button> 
         </form>
 
@@ -61,6 +69,7 @@
             <p>Costo Material de Soporte: <span id="costoMaterialSoporte">0.00</span></p>
             <p>Costo de Operación de Máquina: <span id="costoMaquina">0.00</span></p>
             <p>Costo de Post-Procesado: <span id="costoPostProcesado">0.00</span></p>
+            <p>Costo de Empaque: <span id="costoEmpaque">0.00</span></p>
             <p>Subtotal (antes de margen y fallos): <span id="subtotalInicial">0.00</span></p>
             <p>Ajuste por Tasa de Fallo: <span id="ajusteFallo">0.00</span></p>
             <p>Margen de Ganancia: <span id="margenGanancia">0.00</span></p>
@@ -70,7 +79,7 @@
     </section>
 
     <footer>
-        <p>&copy; 2024 Servicio de Impresión 3D. Todos los derechos reservados.</p>
+        <p>&copy; 2025 Servicio de Impresión 3D. Todos los derechos reservados.</p>
     </footer>
 </body>
 </html>
