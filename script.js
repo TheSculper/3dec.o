@@ -34,6 +34,13 @@ const FIXED_COSTS = {
     ]
 };
 
+// --- Your WhatsApp Number (Ofuscated for basic protection) ---
+// IMPORTANT: Replace these parts with YOUR ACTUAL NUMBER!
+// Example: If your number is 56912345678, you could split it like this.
+// Use your own segments to make it harder to guess or scrape.
+const WHATSAPP_PHONE_NUMBER = "569" + "876" + "543" + "210"; // Reconstructs to "569876543210" in this example
+
+
 // --- DOM ELEMENTS ---
 const materialSelect = document.getElementById('materialSelect');
 const colorSelect = document.getElementById('colorSelect');
@@ -60,9 +67,9 @@ const toggleDesgloseBtn = document.getElementById('toggleDesglose');
 const desgloseContenidoDiv = document.getElementById('desgloseContenido');
 
 // Buttons for WhatsApp integration
-const enviarWhatsAppBtn = document.getElementById('enviarWhatsAppBtn'); // For manual quote
-const stlFileInput = document.getElementById('stlFileInput');           // Input for 3D file
-const enviarStlWhatsAppBtn = document.getElementById('enviarStlWhatsAppBtn'); // Button for 3D file
+const enviarWhatsAppBtn = document.getElementById('enviarWhatsAppBtn');           // For manual quote
+const stlFileInput = document.getElementById('stlFileInput');                     // Input for 3D file
+const enviarStlWhatsAppBtn = document.getElementById('enviarStlWhatsAppBtn');     // Button for 3D file
 
 
 // --- FUNCTIONS ---
@@ -183,7 +190,7 @@ function calculateAndDisplayCost() {
     // --- WhatsApp Button Logic for Manual Quote ---
     enviarWhatsAppBtn.style.display = 'block'; // Show the manual quote button if inputs are valid
     enviarWhatsAppBtn.onclick = () => { // Assign the action on click
-        const phoneNumber = '56975297791'; // IMPORTANT: CHANGE THIS to your WhatsApp number with country code, no '+' or spaces! E.g.: '56912345678'
+        const phoneNumber = WHATSAPP_PHONE_NUMBER; // Uses the obfuscated number
 
         // Construct the message with all details
         const message = `
@@ -232,15 +239,8 @@ stlFileInput.addEventListener('change', (event) => {
     const file = event.target.files[0];
     if (file) {
         enviarStlWhatsAppBtn.style.display = 'block'; // Show the button when a file is selected
-        // Optionally, you can disable manual inputs here if a file is uploaded
-        // pesoInput.disabled = true;
-        // tiempoInput.disabled = true;
-        // ... and so on for other inputs
     } else {
         enviarStlWhatsAppBtn.style.display = 'none'; // Hide if no file selected
-        // Optionally, re-enable manual inputs
-        // pesoInput.disabled = false;
-        // ...
     }
 });
 
@@ -252,7 +252,7 @@ enviarStlWhatsAppBtn.addEventListener('click', () => {
         return;
     }
 
-    const phoneNumber = '56975297791'; // IMPORTANT: USE THE SAME NUMBER HERE
+    const phoneNumber = WHATSAPP_PHONE_NUMBER; // Uses the obfuscated number
     const fileName = file.name;
 
     const message = `
