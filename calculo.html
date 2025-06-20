@@ -53,25 +53,24 @@
         </form>
 
         ---
-
-        <div id="resultadoDesglose">
-            <h3>Desglose de Costos:</h3>
-            <p>Costo del Material Base: $<span id="costoMaterialBase">0.00</span></p>
-            <p>Costo Material de Soporte: $<span id="costoMaterialSoporte">0.00</span></p>
-            <p>Costo de Operación de Máquina: $<span id="costoMaquina">0.00</span></p>
-            <p>Costo de Post-Procesado: $<span id="costoPostProcesado">0.00</span></p>
-            <p>Subtotal (antes de margen y fallos): $<span id="subtotalInicial">0.00</span></p>
-            <p>Ajuste por Tasa de Fallo: $<span id="ajusteFallo">0.00</span></p>
-            <p>Margen de Ganancia: $<span id="margenGanancia">0.00</span></p>
+        <h3 id="toggleDesglose">
+            Desglose de Costos <span class="arrow">&#9660;</span>
+        </h3>
+        <div id="desgloseContenido" class="hidden">
+            <p>Costo del Material Base: <span id="costoMaterialBase">0.00</span></p>
+            <p>Costo Material de Soporte: <span id="costoMaterialSoporte">0.00</span></p>
+            <p>Costo de Operación de Máquina: <span id="costoMaquina">0.00</span></p>
+            <p>Costo de Post-Procesado: <span id="costoPostProcesado">0.00</span></p>
+            <p>Subtotal (antes de margen y fallos): <span id="subtotalInicial">0.00</span></p>
+            <p>Ajuste por Tasa de Fallo: <span id="ajusteFallo">0.00</span></p>
+            <p>Margen de Ganancia: <span id="margenGanancia">0.00</span></p>
         </div>
 
         <h3>Costo Total Estimado: $<span id="costoTotal">0.00</span></h3>
     </section>
 
-    <div style="height: 100px;"></div> 
-
     <footer>
-        <p>&copy; 2025 Servicio de Impresión 3D. Todos los derechos reservados.</p>
+        <p>&copy; 2024 Servicio de Impresión 3D. Todos los derechos reservados.</p>
     </footer>
 </body>
 </html>
