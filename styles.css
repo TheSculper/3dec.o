@@ -530,6 +530,51 @@ section {
     font-size: 0.9em;
 }
 
+/* --- Estilos para el Desglose de Costos colapsable (calculo.html) --- */
+#toggleDesglose { /* Usamos el ID del h3 */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #eee;
+    color: #333; /* Asegura que el texto sea visible */
+}
+
+#toggleDesglose .arrow { /* El span de la flecha dentro del h3 */
+    transition: transform 0.3s ease;
+    font-size: 1.2em;
+    color: #3c84e7; /* Color de la flecha */
+}
+
+#toggleDesglose.active .arrow { /* Rota la flecha cuando el h3 tiene la clase 'active' */
+    transform: rotate(-90deg); /* Rota la flecha cuando está colapsado */
+}
+
+#desgloseContenido { /* El contenedor del desglose */
+    max-height: 500px; /* Altura máxima para mostrar el contenido */
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out, opacity 0.5s ease;
+    opacity: 1;
+}
+
+#desgloseContenido.hidden { /* Clase para ocultar el contenido, como está en tu HTML */
+    max-height: 0; /* Colapsa la altura a 0 */
+    opacity: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+/* Asegurarse de que el contenido del desglose no tenga padding que impida que se oculte por completo */
+#desgloseContenido p {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 0; /* Eliminar padding si lo hay */
+}
+
 
 /* --- Footer --- */
 footer {
