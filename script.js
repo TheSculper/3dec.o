@@ -40,7 +40,6 @@ const colorSelect = document.getElementById('colorSelect');
 const pesoInput = document.getElementById('pesoInput');
 const tiempoInput = document.getElementById('tiempoInput');
 const postProcesadoInput = document.getElementById('postProcesadoInput');
-// Inputs for dimensions
 const largoInput = document.getElementById('largoInput');
 const anchoInput = document.getElementById('anchoInput');
 const altoInput = document.getElementById('altoInput');
@@ -60,8 +59,11 @@ const costoTotalSpan = document.getElementById('costoTotal');
 const toggleDesgloseBtn = document.getElementById('toggleDesglose');
 const desgloseContenidoDiv = document.getElementById('desgloseContenido');
 
-// New DOM element for the WhatsApp button
-const enviarWhatsAppBtn = document.getElementById('enviarWhatsAppBtn');
+// Buttons for WhatsApp integration
+const enviarWhatsAppBtn = document.getElementById('enviarWhatsAppBtn'); // For manual quote
+const stlFileInput = document.getElementById('stlFileInput');           // Input for 3D file
+const enviarStlWhatsAppBtn = document.getElementById('enviarStlWhatsAppBtn'); // Button for 3D file
+
 
 // --- FUNCTIONS ---
 
@@ -96,10 +98,10 @@ function calculatePackagingCost(volumeCm3) {
             return range.cost;
         }
     }
-    return 0; // If volume is unexpectedly large and no suitable range is found
+    return 0;
 }
 
-// Main function to calculate and display costs
+// Main function to calculate and display costs (for manual input flow)
 function calculateAndDisplayCost() {
     // Get values from input fields, ensuring they are valid numbers
     const selectedMaterialOption = materialSelect.value;
@@ -114,7 +116,7 @@ function calculateAndDisplayCost() {
     const isInvalidInput = !selectedMaterialOption || isNaN(peso) || isNaN(tiempo) || isNaN(postProcesado) || peso < 0 || tiempo < 0 || postProcesado < 0;
     const isDimensionInvalid = isNaN(largo) || isNaN(ancho) || isNaN(alto) || largo < 0 || ancho < 0 || alto < 0;
 
-    let totalCost = 0.00; // Initialize totalCost here
+    let totalCost = 0.00;
 
     if (isInvalidInput || isDimensionInvalid) {
         // Reset all display spans
@@ -127,7 +129,7 @@ function calculateAndDisplayCost() {
         ajusteFalloSpan.textContent = '0.00';
         margenGananciaSpan.textContent = '0.00';
         costoTotalSpan.textContent = '0.00';
-        enviarWhatsAppBtn.style.display = 'none'; // Hide the button if there are errors
+        enviarWhatsAppBtn.style.display = 'none'; // Hide the manual quote button
         return;
     }
 
@@ -178,14 +180,14 @@ function calculateAndDisplayCost() {
     // Final Total Cost of the Piece
     costoTotalSpan.textContent = totalCost.toFixed(2);
 
-    // --- WhatsApp Button Logic ---
-    enviarWhatsAppBtn.style.display = 'block'; // Ensure the button is visible if all inputs are valid
+    // --- WhatsApp Button Logic for Manual Quote ---
+    enviarWhatsAppBtn.style.display = 'block'; // Show the manual quote button if inputs are valid
     enviarWhatsAppBtn.onclick = () => { // Assign the action on click
         const phoneNumber = '56975297791'; // IMPORTANT: CHANGE THIS to your WhatsApp number with country code, no '+' or spaces! E.g.: '56912345678'
 
         // Construct the message with all details
         const message = `
-¡Hola! 👋 Me gustaría cotizar una impresión 3D con los siguientes detalles:
+¡Hola! 👋 Me gustaría cotizar una impresión 3D con los siguientes detalles (ingresados manualmente):
 
 *Material:* ${materialSelect.options[materialSelect.selectedIndex].text}
 *Color:* ${colorSelect.value || 'No especificado'}
@@ -222,27 +224,72 @@ function calculateAndDisplayCost() {
     };
 }
 
+
 // --- EVENT LISTENERS ---
 
-// Listener for the breakdown toggle (shows/hides cost details)
+// Listener for the STL file input
+stlFileInput.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        enviarStlWhatsAppBtn.style.display = 'block'; // Show the button when a file is selected
+        // Optionally, you can disable manual inputs here if a file is uploaded
+        // pesoInput.disabled = true;
+        // tiempoInput.disabled = true;
+        // ... and so on for other inputs
+    } else {
+        enviarStlWhatsAppBtn.style.display = 'none'; // Hide if no file selected
+        // Optionally, re-enable manual inputs
+        // pesoInput.disabled = false;
+        // ...
+    }
+});
+
+// Listener for the "Enviar Archivo 3D para Cotización" button
+enviarStlWhatsAppBtn.addEventListener('click', () => {
+    const file = stlFileInput.files[0];
+    if (!file) {
+        alert('Por favor, selecciona un archivo 3D primero.');
+        return;
+    }
+
+    const phoneNumber = 'TU_NUMERO_DE_WHATSAPP'; // IMPORTANT: USE THE SAME NUMBER HERE
+    const fileName = file.name;
+
+    const message = `
+¡Hola! 👋 Te envío un archivo 3D para cotización.
+
+*Nombre del archivo:* ${fileName}
+
+Por favor, revisa el archivo adjunto (que enviaré por separado en WhatsApp) y envíame una cotización.
+
+¡Gracias!
+    `;
+
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+    window.open(whatsappLink, '_blank');
+
+    alert(`Por favor, recuerda adjuntar el archivo "${fileName}" directamente en el chat de WhatsApp después de hacer clic en Aceptar.`);
+});
+
+
+// Listener for the breakdown toggle
 toggleDesgloseBtn.addEventListener('click', () => {
     desgloseContenidoDiv.classList.toggle('visible');
     toggleDesgloseBtn.classList.toggle('active');
 });
 
-// Update color options and recalculate when material changes
+// Listeners for manual input changes (trigger recalculation)
 materialSelect.addEventListener('change', actualizarOpcionesColor);
-
-// Recalculate cost in real-time when any numeric input field changes
 pesoInput.addEventListener('input', calculateAndDisplayCost);
 tiempoInput.addEventListener('input', calculateAndDisplayCost);
 postProcesadoInput.addEventListener('input', calculateAndDisplayCost);
 largoInput.addEventListener('input', calculateAndDisplayCost);
 anchoInput.addEventListener('input', calculateAndDisplayCost);
 altoInput.addEventListener('input', calculateAndDisplayCost);
-colorSelect.addEventListener('change', calculateAndDisplayCost); // Recalculate even if color has no direct cost (for completeness)
+colorSelect.addEventListener('change', calculateAndDisplayCost);
 
-// Ensure the form does not actually submit (which would reload the page)
+// Prevent form submission (which would reload the page)
 document.getElementById('calculoForm').addEventListener('submit', function(event) {
     event.preventDefault();
     calculateAndDisplayCost();
