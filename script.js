@@ -10,12 +10,14 @@ document.addEventListener('DOMContentLoaded', () => {
             menuToggle.setAttribute('aria-expanded', isActive ? 'true' : 'false');
         });
 
-        // Opcional: cerrar el menú al hacer clic en un enlace de navegación
+        // Cierra el menú solo en móvil/tablet al hacer clic en un enlace
         navList.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
-                navList.classList.remove('menu-active');
-                menuToggle.classList.remove('open');
-                menuToggle.setAttribute('aria-expanded', 'false');
+                if (window.innerWidth <= 768) {
+                    navList.classList.remove('menu-active');
+                    menuToggle.classList.remove('open');
+                    menuToggle.setAttribute('aria-expanded', 'false');
+                }
             });
         });
     }
@@ -39,30 +41,21 @@ const MATERIAL_DATA = {
 };
 
 const FIXED_COSTS = {
-    machineOperatingCostPerHour: 2000,           // Fixed cost per hour of printing (electricity, machine wear, etc.)
-    laborCostPerHour: 2000,                     // Labor cost per hour (for post-processing)
-    profitMargin: 0.50,                         // 50% Profit Margin!
-    supportMaterialFactor: 0.10,                // 10% of main material cost for support material
-    failureRateFactor: 0.05,                    // 5% factor to cover failed prints
-
-    // Packaging costs based on volume.
-    // The 'cost' here should include the cost of the box, adhesive tape, bubble wrap,
-    // labor time for packaging, and a small margin for packaging.
+    machineOperatingCostPerHour: 2000,
+    laborCostPerHour: 2000,
+    profitMargin: 0.50,
+    supportMaterialFactor: 0.10,
+    failureRateFactor: 0.05,
     packagingCostsByVolume: [
-        // IMPORTANT! Adjust these values to your actual packaging costs:
-        { maxVolumeCm3: 100, cost: 650 },     // Small items (e.g., envelope or small box)
-        { maxVolumeCm3: 500, cost: 1300 },    // Medium items
-        { maxVolumeCm3: 2000, cost: 2500 },   // Large items
-        { maxVolumeCm3: Infinity, cost: 4000 } // Very large items
+        { maxVolumeCm3: 100, cost: 650 },
+        { maxVolumeCm3: 500, cost: 1300 },
+        { maxVolumeCm3: 2000, cost: 2500 },
+        { maxVolumeCm3: Infinity, cost: 4000 }
     ]
 };
 
 // --- Your WhatsApp Number (Ofuscated for basic protection) ---
-// IMPORTANT: Replace these parts with YOUR ACTUAL NUMBER!
-// Example: If your number is 56912345678, you could split it like this.
-// Use your own segments to make it harder to guess or scrape.
-const WHATSAPP_PHONE_NUMBER = "569" + "752" + "977" + "891"; // Reconstructs to "569876543210" in this example
-
+const WHATSAPP_PHONE_NUMBER = "569" + "752" + "977" + "891";
 
 // --- DOM ELEMENTS ---
 const materialSelect = document.getElementById('materialSelect');
@@ -90,17 +83,16 @@ const toggleDesgloseBtn = document.getElementById('toggleDesglose');
 const desgloseContenidoDiv = document.getElementById('desgloseContenido');
 
 // Buttons for WhatsApp integration
-const enviarWhatsAppBtn = document.getElementById('enviarWhatsAppBtn');           // For manual quote
-const stlFileInput = document.getElementById('stlFileInput');                     // Input for 3D file
-const enviarStlWhatsAppBtn = document.getElementById('enviarStlWhatsAppBtn');     // Button for 3D file
-
+const enviarWhatsAppBtn = document.getElementById('enviarWhatsAppBtn');
+const stlFileInput = document.getElementById('stlFileInput');
+const enviarStlWhatsAppBtn = document.getElementById('enviarStlWhatsAppBtn');
 
 // --- FUNCTIONS ---
 
 // Updates color options based on selected material
 function actualizarOpcionesColor() {
     const selectedMaterialValue = materialSelect.value;
-    colorSelect.innerHTML = '<option value="">Selecciona un color</option>'; // Reset options
+    colorSelect.innerHTML = '<option value="">Selecciona un color</option>';
 
     if (selectedMaterialValue) {
         const materialType = selectedMaterialValue.split('_')[1];
@@ -115,7 +107,7 @@ function actualizarOpcionesColor() {
             });
         }
     }
-    calculateAndDisplayCost(); // Recalculate when material changes
+    calculateAndDisplayCost();
 }
 
 // Function to calculate packaging cost based on calculated volume
@@ -159,7 +151,7 @@ function calculateAndDisplayCost() {
         ajusteFalloSpan.textContent = '0.00';
         margenGananciaSpan.textContent = '0.00';
         costoTotalSpan.textContent = '0.00';
-        enviarWhatsAppBtn.style.display = 'none'; // Hide the manual quote button
+        enviarWhatsAppBtn.style.display = 'none';
         return;
     }
 
@@ -172,50 +164,38 @@ function calculateAndDisplayCost() {
     const materialCostPerGram = materialData ? materialData.baseCost : 0;
 
     // --- Calculate and display individual costs with operations ---
-
-    // Base Material Cost: (Cost per gram * Weight)
     const baseMaterialCost = materialCostPerGram * peso;
     costoMaterialBaseSpan.textContent = `${materialCostPerGram} [CLP/g] * ${peso} [g] = $${baseMaterialCost.toFixed(2)}`;
 
-    // Support Material Cost: (Base material cost * Support factor)
     const supportCost = baseMaterialCost * FIXED_COSTS.supportMaterialFactor;
     costoMaterialSoporteSpan.textContent = `$${baseMaterialCost.toFixed(2)} * ${FIXED_COSTS.supportMaterialFactor * 100}% = $${supportCost.toFixed(2)}`;
 
-    // Machine Operation Cost: (Machine cost per hour * Print time)
     const machineOperatingCost = FIXED_COSTS.machineOperatingCostPerHour * tiempo;
     costoMaquinaSpan.textContent = `${FIXED_COSTS.machineOperatingCostPerHour} [CLP/h] * ${tiempo} [h] = $${machineOperatingCost.toFixed(2)}`;
 
-    // Post-Processing Cost: (Labor cost per hour * Post-processing time)
     const postProcessingCost = FIXED_COSTS.laborCostPerHour * postProcesado;
     costoPostProcesadoSpan.textContent = `${FIXED_COSTS.laborCostPerHour} [CLP/h] * ${postProcesado} [h] = $${postProcessingCost.toFixed(2)}`;
 
-    // Packaging Cost: Based on calculated volume
     const packagingCost = calculatePackagingCost(volumenCalculado);
     costoEmpaqueSpan.textContent = `${largo}cm x ${ancho}cm x ${alto}cm = ${volumenCalculado.toFixed(2)} cm³ = $${packagingCost.toFixed(2)}`;
 
-    // Subtotal (sum of all direct costs before factors and margin)
     const subTotalCostBeforeFactors = baseMaterialCost + supportCost + machineOperatingCost + postProcessingCost + packagingCost;
     subtotalInicialSpan.textContent = `$${baseMaterialCost.toFixed(2)} + $${supportCost.toFixed(2)} + $${machineOperatingCost.toFixed(2)} + $${postProcessingCost.toFixed(2)} + $${packagingCost.toFixed(2)} = $${subTotalCostBeforeFactors.toFixed(2)}`;
 
-    // Failure Rate Adjustment: (Initial subtotal * Failure factor)
     const failureAdjustmentAmount = subTotalCostBeforeFactors * FIXED_COSTS.failureRateFactor;
     const subTotalCostWithFailure = subTotalCostBeforeFactors + failureAdjustmentAmount;
     ajusteFalloSpan.textContent = `$${subTotalCostBeforeFactors.toFixed(2)} * ${FIXED_COSTS.failureRateFactor * 100}% = $${failureAdjustmentAmount.toFixed(2)} (Subtotal con fallo: $${subTotalCostWithFailure.toFixed(2)})`;
 
-    // Profit Margin: (Subtotal with failure * Profit margin)
     const profitAmount = subTotalCostWithFailure * FIXED_COSTS.profitMargin;
-    totalCost = subTotalCostWithFailure + profitAmount; // Assign value to totalCost variable
+    totalCost = subTotalCostWithFailure + profitAmount;
     margenGananciaSpan.textContent = `$${subTotalCostWithFailure.toFixed(2)} * ${FIXED_COSTS.profitMargin * 100}% = $${profitAmount.toFixed(2)}`;
 
-    // Final Total Cost of the Piece
     costoTotalSpan.textContent = totalCost.toFixed(2);
 
     // --- WhatsApp Button Logic for Manual Quote ---
-    enviarWhatsAppBtn.style.display = 'block'; // Show the manual quote button if inputs are valid
-    enviarWhatsAppBtn.onclick = () => { // Assign the action on click
-        const phoneNumber = WHATSAPP_PHONE_NUMBER; 
-
-        // Construct the message with all details
+    enviarWhatsAppBtn.style.display = 'block';
+    enviarWhatsAppBtn.onclick = () => {
+        const phoneNumber = WHATSAPP_PHONE_NUMBER;
         const message = `
 ¡Hola! 👋 Me gustaría cotizar una impresión 3D con los siguientes detalles (ingresados manualmente):
 
@@ -242,18 +222,11 @@ function calculateAndDisplayCost() {
 
 ¡Espero tu confirmación!
         `;
-
-        // Encode the message for the URL
         const encodedMessage = encodeURIComponent(message);
-
-        // Create the WhatsApp link
         const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-
-        // Open WhatsApp in a new tab/window
         window.open(whatsappLink, '_blank');
     };
 }
-
 
 // --- EVENT LISTENERS ---
 
@@ -261,9 +234,9 @@ function calculateAndDisplayCost() {
 stlFileInput.addEventListener('change', (event) => {
     const file = event.target.files[0];
     if (file) {
-        enviarStlWhatsAppBtn.style.display = 'block'; // Show the button when a file is selected
+        enviarStlWhatsAppBtn.style.display = 'block';
     } else {
-        enviarStlWhatsAppBtn.style.display = 'none'; // Hide if no file selected
+        enviarStlWhatsAppBtn.style.display = 'none';
     }
 });
 
@@ -275,7 +248,7 @@ enviarStlWhatsAppBtn.addEventListener('click', () => {
         return;
     }
 
-    const phoneNumber = WHATSAPP_PHONE_NUMBER; 
+    const phoneNumber = WHATSAPP_PHONE_NUMBER;
     const fileName = file.name;
 
     const message = `
@@ -287,14 +260,11 @@ Por favor, revisa el archivo adjunto (que enviaré por separado en WhatsApp) y e
 
 ¡Gracias!
     `;
-
     const encodedMessage = encodeURIComponent(message);
     const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
     window.open(whatsappLink, '_blank');
-
     alert(`Por favor, recuerda adjuntar el archivo "${fileName}" directamente en el chat de WhatsApp después de hacer clic en Aceptar.`);
 });
-
 
 // Listener for the breakdown toggle
 toggleDesgloseBtn.addEventListener('click', () => {
