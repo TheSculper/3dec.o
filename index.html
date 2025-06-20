@@ -4,7 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Servicio de Impresión 3D - 3deco</title>
-    <link rel="stylesheet" href="styles.css">
+
+    <meta name="description" content="Servicio profesional de impresión 3D en [Tu Ciudad/Región]. Impresión 3D personalizada, prototipado rápido, modelado 3D y tienda de modelos físicos y STL. ¡Haz tus ideas realidad con 3deco!">
+    <meta name="keywords" content="impresión 3D, servicio impresión 3D, prototipado rápido, modelado 3D, tienda 3D, modelos STL, filamento PLA, PETG, ABS, TPU, 3deco, [tu ciudad], [tu región]">
+
+    <meta property="og:title" content="Servicio de Impresión 3D - 3deco">
+    <meta property="og:description" content="Haz realidad tus ideas con precisión y atención al detalle. Impresión 3D personalizada, prototipado y modelos STL.">
+    <meta property="og:image" content="https://tudominio.com/logo.jpg"> <meta property="og:url" content="https://tudominio.com/index.html"> <meta property="og:type" content="website">
+
+    <link rel="icon" type="image/x-icon" href="favicon.ico"> <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
@@ -13,7 +21,6 @@
         </div>
         <h1>Servicio de Impresión 3D</h1>
 
-        <!-- Hamburger menu button -->
         <button id="menu-toggle" aria-label="Abrir menú" aria-expanded="false">
             <span class="hamburger"></span>
             <span class="hamburger"></span>
@@ -34,109 +41,110 @@
         </nav>
     </header>
 
-    <section id="inicio">
-        <h2>Bienvenido a nuestro servicio de impresión 3D</h2>
-        <p>Ofrecemos servicios de impresión 3D de alta calidad para todas tus necesidades. ¡Haz realidad tus ideas con precisión y atención al detalle!</p>
-        <div class="main-cta-buttons">
-            <a href="calculo.html" class="boton-principal">Calcula tu Cotización</a>
-            <a href="https://wa.me/56975297791?text=Hola%2C%20me%20gustaria%20obtener%20una%20cotizacion%20de%20impresion%203D." class="boton-whatsapp-inicio">Cotiza por WhatsApp</a>
-        </div>
-    </section>
-
-    <!-- ... Resto de secciones igual que antes ... -->
-
-    <section id="servicios">
-        <h2>Nuestros Servicios</h2>
-        <ul>
-            <li>Impresión 3D personalizada con diversos materiales y colores.</li>
-            <li>Prototipado rápido para desarrollo de productos.</li>
-            <li>Modelado 3D desde tus ideas o bocetos.</li>
-            <li>Asesoramiento profesional en diseño y optimización para impresión 3D.</li>
-        </ul>
-    </section>
-
-    <section id="galeria">
-        <h2>Galería de Trabajos</h2>
-        <div class="galeria">
-            <img src="conejo.png" alt="Modelado de piezas en Fusion360">
-            <img src="Protesis.png" alt="Modelado de prótesis">
-            <img src="Grogu.png" alt="Modelado de Grogu">
-        </div>
-    </section>
-
-    <section id="sobre-nosotros">
-        <h2>Sobre Nosotros</h2>
-        <p>Somos una empresa dedicada a ofrecer soluciones integrales de impresión 3D. Con años de experiencia en el sector, estamos comprometidos a proporcionar servicios de alta calidad, atención personalizada y resultados que superen las expectativas de nuestros clientes.</p>
-    </section>
-
-    <section id="tienda-fisica">
-        <h2>Tienda de Modelos Físicos</h2>
-        <p>Descarga y compra nuestros productos impresos en 3D, postprocesados y pintados a mano.</p>
-        <div class="catalogo-productos">
-            <div class="producto">
-                <img src="assets/imagenes/cuchara.jpg" alt="Cuchara ergonómica">
-                <h3>Cuchara Ergonómica</h3>
-                <p>Diseño minimalista para imprimir fácilmente. Ideal para niños o personas con movilidad reducida.</p>
-                <a href="https://payhip.com/tuusuario/cuchara" target="_blank" class="boton-tienda">Comprar - 1,57 EUR</a>
+    <main>
+        <section id="inicio" class="hero">
+            <img src="banner.jpg" alt="Impresora 3D funcionando" class="hero-image">
+            <div class="hero-content">
+                <h2>Tu visión, nuestra impresión.</h2>
+                <p>En 3deco, transformamos tus ideas en realidad con la última tecnología en impresión 3D.</p>
+                <div class="main-cta-buttons">
+                    <a href="#contacto" class="boton-principal">Solicitar Cotización</a>
+                    <a href="https://wa.me/34685002931?text=Hola,%20me%20interesa%20un%20servicio%20de%20impresión%203D." target="_blank" class="boton-whatsapp-inicio">WhatsApp</a>
+                </div>
             </div>
-            <div class="producto">
-                <img src="assets/imagenes/exhibidor.jpg" alt="Exhibidor de llaveros">
-                <h3>Exhibidor Rotativo</h3>
-                <p>Soporte práctico y elegante para tus llaveros, joyas pequeñas u objetos coleccionables.</p>
-                <a href="https://payhip.com/tuusuario/exhibidor" target="_blank" class="boton-tienda">Comprar - 2,40 EUR</a>
-            </div>
-            <div class="producto">
-                <img src="charmander.jpg" alt="Charmander">
-                <h3>Charmander</h3>
-                <p>Clásico Pokémon, impreso en PLA de alta calidad y pintado a mano para coleccionistas.</p>
-                <a href="https://payhip.com/b/FYGP1" target="_blank" class="boton-tienda">Comprar - 7 EUR</a>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <section id="tienda-stl">
-        <h2>Tienda de Modelos STL</h2>
-        <p>Descarga y compra nuestros modelos 3D listos para imprimir en tu propia impresora.</p>
-        <div class="catalogo-productos">
-            <div class="producto">
-                <img src="assets/imagenes/cuchara.jpg" alt="Cuchara ergonómica">
-                <h3>Cuchara Ergonómica (Archivo STL)</h3>
-                <p>Diseño minimalista en formato STL, listo para que lo imprimas en casa.</p>
-                <a href="https://payhip.com/tuusuario/cuchara" target="_blank" class="boton-tienda">Comprar STL - 1,57 EUR</a>
+        <section id="servicios" class="container">
+            <h2>Nuestros Servicios</h2>
+            <div class="servicios-grid">
+                <div class="servicio-item">
+                    <img src="servicio_impresion.png" alt="Icono de impresora 3D">
+                    <h3>Impresión 3D Personalizada</h3>
+                    <p>Desde prototipos hasta piezas finales, imprimimos tus diseños con precisión en una variedad de materiales.</p>
+                </div>
+                <div class="servicio-item">
+                    <img src="servicio_diseno.png" alt="Icono de software de diseño 3D">
+                    <h3>Diseño y Modelado 3D</h3>
+                    <p>¿Necesitas una pieza desde cero? Nuestro equipo de diseño puede convertir tus bocetos o ideas en modelos 3D listos para imprimir.</p>
+                </div>
+                <div class="servicio-item">
+                    <img src="servicio_prototipado.png" alt="Icono de prototipo">
+                    <h3>Prototipado Rápido</h3>
+                    <p>Acelera tus ciclos de desarrollo con prototipos funcionales y estéticos en tiempo récord.</p>
+                </div>
+                <div class="servicio-item">
+                    <img src="servicio_educacion.png" alt="Icono de educación">
+                    <h3>Asesoría y Capacitación</h3>
+                    <p>Te guiamos en el mundo de la impresión 3D, desde la elección del material hasta la optimización de tus modelos.</p>
+                </div>
             </div>
-            <div class="producto">
-                <img src="assets/imagenes/exhibidor.jpg" alt="Exhibidor de llaveros">
-                <h3>Exhibidor Rotativo (Archivo STL)</h3>
-                <p>El archivo STL para que imprimas tu propio soporte práctico para llaveros.</p>
-                <a href="https://payhip.com/tuusuario/exhibidor" target="_blank" class="boton-tienda">Comprar STL - 2,40 EUR</a>
-            </div>
-            <div class="producto">
-                <img src="espada.jpg" alt="Espada de Minecraft">
-                <h3>Espada Minecraft (Archivo STL)</h3>
-                <p>Réplica en formato STL para cosplay o decoración, ideal para impresión en PLA.</p>
-                <a href="https://payhip.com/b/NJRFf" target="_blank" class="boton-tienda">Comprar STL - 1,99 EUR</a>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <section id="contacto">
-        <h2>Contáctanos</h2>
-        <p>¿Tienes una idea, necesitas una cotización detallada o una consulta? ¡Envíanos un mensaje!</p>
-        <form action="https://formspree.io/f/mrbzbyra" method="POST">
-            <label for="nombre">Nombre:</label>
-            <input type="text" id="nombre" name="nombre" required>
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-            <label for="mensaje">Mensaje:</label>
-            <textarea id="mensaje" name="mensaje" required></textarea>
-            <button type="submit">Enviar</button>
-        </form>
-    </section>
+        <section id="galeria" class="container">
+            <h2>Galería de Proyectos</h2>
+            <div class="galeria">
+                <img src="conejo.png" alt="Modelado de piezas en Fusion360">
+                <img src="piezas.png" alt="Piezas técnicas impresas en 3D">
+                <img src="casco.png" alt="Casco impreso en 3D para cosplay">
+                <img src="soportes.png" alt="Soportes organizadores impresos en 3D">
+                <img src="plantas.png" alt="Macetas y figuras decorativas impresas en 3D">
+                <img src="letras.png" alt="Letras y logotipos impresos en 3D">
+            </div>
+        </section>
 
+        <section id="sobre-nosotros" class="container">
+            <h2>Sobre Nosotros</h2>
+            <p>En 3deco, somos un equipo apasionado por la tecnología de impresión 3D. Combinamos creatividad, experiencia técnica y atención al detalle para ofrecer soluciones personalizadas que superan las expectativas de nuestros clientes. Nuestra misión es hacer que la fabricación aditiva sea accesible para todos, desde emprendedores hasta aficionados.</p>
+            <p>Trabajamos con una amplia gama de materiales como PLA, PETG, ABS y TPU, asegurando la mejor calidad y durabilidad para cada proyecto.</p>
+        </section>
+
+        <section id="tienda-fisica" class="container">
+            <h2>Nuestra Tienda Física</h2>
+            <p>¡Visítanos para ver nuestros modelos en persona o encargar tu pieza directamente!</p>
+            <div class="map-container">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12140.35411603524!2d-3.7037902!3d40.4167754!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd422998a0000000%3A0x6e9f9b0b1c0b1c0b!2sPlaza%20Mayor%2C%2028012%20Madrid!5e0!3m2!1sen!2ses!4v1678912345678!5m2!1sen!2ses" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Ubicación de 3deco en Google Maps"></iframe>
+            </div>
+            <p>Dirección: [Tu Dirección Completa], [Tu Ciudad], [Tu Código Postal]</p>
+            <p>Horario: Lunes a Viernes de 9:00 a 18:00</p>
+        </section>
+
+        <section id="tienda-stl" class="container">
+            <h2>Tienda de Archivos STL</h2>
+            <p>Explora y descarga nuestros diseños STL listos para imprimir en tu propia casa.</p>
+            <div class="catalogo-productos">
+                <div class="producto">
+                    <img src="exhibidor.jpg" alt="Soporte para llaveros impreso en 3D">
+                    <h3>Exhibidor de Llaveros (Archivo STL)</h3>
+                    <p>Archivo STL para que imprimas tu propio soporte práctico para llaveros.</p>
+                    <a href="https://payhip.com/tuusuario/exhibidor" target="_blank" class="boton-tienda">Comprar STL - 2,40 EUR</a>
+                </div>
+                <div class="producto">
+                    <img src="espada.jpg" alt="Espada de Minecraft">
+                    <h3>Espada Minecraft (Archivo STL)</h3>
+                    <p>Réplica en formato STL para cosplay o decoración, ideal para impresión en PLA.</p>
+                    <a href="https://payhip.com/b/NJRFf" target="_blank" class="boton-tienda">Comprar STL - 1,99 EUR</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="contacto" class="container">
+            <h2>Contáctanos</h2>
+            <p>¿Tienes una idea, necesitas una cotización detallada o una consulta? ¡Envíanos un mensaje!</p>
+            <form action="https://formspree.io/f/mrbzbyra" method="POST">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" required>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <label for="mensaje">Mensaje:</label>
+                <textarea id="mensaje" name="mensaje" required></textarea>
+                <button type="submit">Enviar</button>
+            </form>
+        </section>
+    </main>
     <footer>
-        <p>&copy; 2025 Servicio de Impresión 3D. Todos los derechos reservados.</p>
+        <p>© 2025 3deco. Todos los derechos reservados.</p>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
 </body>
 </html>
