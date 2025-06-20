@@ -9,20 +9,30 @@
 </head>
 <body>
     <header>
+        <div class="logo">
+            <img src="logo.jpg" alt="Logo de 3deco">
+        </div>
         <h1>Calculadora de Costos de Impresión 3D</h1>
+        <button id="menu-toggle" aria-label="Abrir menú" aria-expanded="false">
+            <span class="hamburger"></span>
+            <span class="hamburger"></span>
+            <span class="hamburger"></span>
+        </button>
         <nav>
-            <ul>
+            <ul id="main-menu">
                 <li><a href="index.html#inicio">Inicio</a></li>
                 <li><a href="index.html#servicios">Servicios</a></li>
                 <li><a href="index.html#galeria">Galería</a></li>
                 <li><a href="index.html#sobre-nosotros">Sobre Nosotros</a></li>
+                <li><a href="index.html#tienda-fisica">Tienda Física</a></li>
+                <li><a href="index.html#tienda-stl">Tienda STL</a></li>
                 <li><a href="index.html#contacto">Contacto</a></li>
                 <li><a href="calculo.html">Calculadora</a></li>
             </ul>
         </nav>
     </header>
-    
-    <section id="calculo">
+
+    <section id="calculadora" class="container">
         <h2>Calcula el Costo de tu Pieza</h2>
         <form id="calculoForm">
             <label for="stlFileInput">¿Tienes el archivo 3D (STL, OBJ, 3MF)?</label>
@@ -34,11 +44,19 @@
             <label for="materialSelect">Material:</label>
             <select id="materialSelect" name="material" required>
                 <option value="">Selecciona un material</option>
-                <option value="17_PLA">PLA (17 CLP/gramo)</option>
-                <option value="20_PLA">PLA (20 CLP/gramo)</option>
-                <option value="23_PETG">PETG (23 CLP/gramo)</option>
-                <option value="30_ABS">ABS (30 CLP/gramo)</option>
-                <option value="40_TPU">TPU (40 CLP/gramo)</option>
+                <optgroup label="PLA">
+                    <option value="PLA_17">PLA (17 €/kg)</option>
+                    <option value="PLA_20">PLA Colores Especiales (20 €/kg)</option>
+                </optgroup>
+                <optgroup label="PETG">
+                    <option value="PETG_23">PETG (23 €/kg)</option>
+                </optgroup>
+                <optgroup label="ABS">
+                    <option value="ABS_25">ABS (25 €/kg)</option>
+                </optgroup>
+                <optgroup label="TPU">
+                    <option value="TPU_30">TPU (30 €/kg)</option>
+                </optgroup>
             </select>
 
             <label for="colorSelect">Color:</label>
@@ -63,32 +81,34 @@
 
             <label for="altoInput">Alto de la pieza (cm):</label>
             <input type="number" id="altoInput" name="alto" step="0.1" min="0" placeholder="Ej: 5" value="0" required>
-            
-            <button type="submit" style="display: none;">Calcular</button> 
+
+            <div id="errorMessages" class="error-messages"></div>
+
+            <button type="submit" style="display: none;">Calcular</button>
         </form>
 
-        ---
-        <h3 id="toggleDesglose">
-            Desglose de Costos <span class="arrow">&#9660;</span>
-        </h3>
-        <div id="desgloseContenido" class="hidden">
-            <p>Costo del Material Base: <span id="costoMaterialBase">0.00</span></p>
-            <p>Costo Material de Soporte: <span id="costoMaterialSoporte">0.00</span></p>
-            <p>Costo de Operación de Máquina: <span id="costoMaquina">0.00</span></p>
-            <p>Costo de Post-Procesado: <span id="costoPostProcesado">0.00</span></p>
-            <p>Costo de Empaque: <span id="costoEmpaque">0.00</span></p>
-            <p>Subtotal (antes de margen y fallos): <span id="subtotalInicial">0.00</span></p>
-            <p>Ajuste por Tasa de Fallo: <span id="ajusteFallo">0.00</span></p>
-            <p>Margen de Ganancia: <span id="margenGanancia">0.00</span></p>
+        <div class="resultados">
+            <h3 id="toggleDesglose" style="cursor: pointer;">
+                Desglose de Costos <span class="arrow">&#9660;</span>
+            </h3>
+            <div id="desgloseContenido" class="hidden">
+                <p>Costo Material Base: <span id="costoMaterialBase">0.00</span> €</p>
+                <p>Costo Material de Soporte: <span id="costoMaterialSoporte">0.00</span> €</p>
+                <p>Costo de Máquina: <span id="costoMaquina">0.00</span> €</p>
+                <p>Costo de Post-Procesado: <span id="costoPostProcesado">0.00</span> €</p>
+                <p>Costo de Empaque: <span id="costoEmpaque">0.00</span> €</p>
+                <p class="subtotal">Subtotal Inicial: <span id="subtotalInicial">0.00</span> €</p>
+                <p>Ajuste por posibles fallos (5%): <span id="ajusteFallo">0.00</span> €</p>
+                <p>Margen de Ganancia (35%): <span id="margenGanancia">0.00</span> €</p>
+            </div>
+            <p class="total">Costo Total Estimado: <span id="costoTotal">0.00</span> €</p>
         </div>
 
-        <h3>Costo Total Estimado: $<span id="costoTotal">0.00</span></h3>
-        
         <button id="enviarWhatsAppBtn" class="boton-whatsapp" style="display: none;">Enviar Cotización a WhatsApp</button>
     </section>
 
     <footer>
-        <p>&copy; 2024 Servicio de Impresión 3D. Todos los derechos reservados.</p>
+        <p>&copy; 2025 3deco. Todos los derechos reservados.</p>
     </footer>
 </body>
 </html>
