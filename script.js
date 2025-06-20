@@ -2,7 +2,7 @@
 const MATERIAL_DATA = {
     'PLA': {
         '17_PLA': { baseCost: 17, colors: ['Negro', 'Blanco', 'Gris', 'Azul'] },
-        '20_PLA': { baseCost: 20, colors: ['Rojo brillante', 'Verde limón', 'Naranja'] }
+        '20_PLA': { baseCost: 20, colors: ['Rojo brillante', 'Verde limón', 'Naranja'] } // Ejemplo de PLA más caro por colores especiales
     },
     'PETG': {
         '23_PETG': { baseCost: 23, colors: ['Negro', 'Transparente', 'Verde oscuro'] }
@@ -18,7 +18,7 @@ const MATERIAL_DATA = {
 const FIXED_COSTS = {
     machineOperatingCostPerHour: 2000, // Costo fijo por hora de impresión (luz, desgaste máquina, etc.)
     laborCostPerHour: 2000,           // Costo de mano de obra por hora (para post-procesado)
-    profitMargin: 0.5,               // Margen de ganancia del 50%
+    profitMargin: 0.50,               // ¡Margen de ganancia del 50%!
     supportMaterialFactor: 0.10,      // 10% del costo del material principal para material de soporte
     failureRateFactor: 0.05           // Factor del 5% para cubrir impresiones fallidas
 };
@@ -40,13 +40,19 @@ const ajusteFalloSpan = document.getElementById('ajusteFallo');
 const margenGananciaSpan = document.getElementById('margenGanancia');
 const costoTotalSpan = document.getElementById('costoTotal');
 
+// Nuevos elementos para el dropdown del desglose
+const toggleDesgloseBtn = document.getElementById('toggleDesglose');
+const desgloseContenidoDiv = document.getElementById('desgloseContenido');
+
 // --- FUNCIONES ---
 
+// Actualiza las opciones de color basadas en el material seleccionado
 function actualizarOpcionesColor() {
     const selectedMaterialValue = materialSelect.value;
     colorSelect.innerHTML = '<option value="">Selecciona un color</option>'; // Restablecer opciones
 
     if (selectedMaterialValue) {
+        // Extraemos el tipo de material (ej. 'PLA', 'PETG')
         const materialType = selectedMaterialValue.split('_')[1]; 
         const materialOption = MATERIAL_DATA[materialType]?.[selectedMaterialValue];
 
@@ -54,14 +60,15 @@ function actualizarOpcionesColor() {
             materialOption.colors.forEach(color => {
                 const option = document.createElement('option');
                 option.textContent = color;
-                option.value = color;
+                option.value = color; // El valor del color es el mismo que el texto
                 colorSelect.appendChild(option);
             });
         }
     }
-    calculateAndDisplayCost(); // Recalcular al cambiar el material
+    calculateAndDisplayCost(); // Recalcular al cambiar el material (y, por ende, el color)
 }
 
+// Función principal de cálculo y visualización
 function calculateAndDisplayCost() {
     // Obtener valores de los campos de entrada
     const selectedMaterialOption = materialSelect.value;
@@ -79,7 +86,7 @@ function calculateAndDisplayCost() {
         ajusteFalloSpan.textContent = '0.00';
         margenGananciaSpan.textContent = '0.00';
         costoTotalSpan.textContent = '0.00';
-        return;
+        return; // Detiene la ejecución si hay valores inválidos
     }
 
     // Extraer el costo base por gramo del material seleccionado
@@ -125,15 +132,27 @@ function calculateAndDisplayCost() {
 
 // --- LISTENERS DE EVENTOS ---
 
+// Listener para el toggle del desglose
+toggleDesgloseBtn.addEventListener('click', () => {
+    // Alternar la clase 'visible' en el contenido
+    desgloseContenidoDiv.classList.toggle('visible');
+    // Alternar la clase 'active' en el botón para rotar la flecha
+    toggleDesgloseBtn.classList.toggle('active');
+});
+
+// Actualizar opciones de color cuando cambia el material
 materialSelect.addEventListener('change', actualizarOpcionesColor);
+
+// Actualizar el cálculo en tiempo real cuando cualquier campo de input cambia
 pesoInput.addEventListener('input', calculateAndDisplayCost);
 tiempoInput.addEventListener('input', calculateAndDisplayCost);
 postProcesadoInput.addEventListener('input', calculateAndDisplayCost);
-colorSelect.addEventListener('change', calculateAndDisplayCost); 
+colorSelect.addEventListener('change', calculateAndDisplayCost); // Recalcular incluso si el color no tiene costo directo (por completitud)
 
+// Asegurarse de que el formulario no intente enviarse (por si se mantiene el botón submit)
 document.getElementById('calculoForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-    calculateAndDisplayCost();
+    event.preventDefault(); // Evita el envío del formulario
+    calculateAndDisplayCost(); // Llama a la función de cálculo
 });
 
 // Inicializar la calculadora al cargar la página
