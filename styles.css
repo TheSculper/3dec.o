@@ -13,7 +13,7 @@ header {
 }
 
 .logo img {
-    width: 100px; /* Adjust logo size as needed */
+    width: 100px; /* Ajusta el tamaño del logo según tus necesidades */
     height: auto;
     margin-right: 10px;
     vertical-align: middle;
@@ -22,7 +22,7 @@ header {
 nav ul {
     list-style-type: none;
     padding: 0;
-    margin: 0; /* Ensure no default margin pushes content */
+    margin: 0; /* Asegura que no haya margen predeterminado que empuje el contenido */
 }
 
 nav ul li {
@@ -53,10 +53,10 @@ section#sobre-nosotros {
 
 section#contacto {
     background-color: #e4e4e4;
-    padding-bottom: 100px; /* Ensures space above the footer for this section */
+    padding-bottom: 100px; /* Asegura espacio encima del footer para esta sección */
 }
 
-/* General form styles - applied to all forms */
+/* Estilos generales para formularios */
 form {
     display: flex;
     flex-direction: column;
@@ -68,7 +68,7 @@ form label {
 
 form input, 
 form textarea,
-form select { /* Added select to general form styles */
+form select { /* Se añadió select a los estilos generales de formulario */
     padding: 0.5rem;
     margin-bottom: 1rem;
     border: 1px solid #ccc;
@@ -88,7 +88,7 @@ form button:hover {
     background-color: #555;
 }
 
-/* Gallery styles */
+/* Estilos para la galería */
 section#galeria {
     background-color: #f4f4f4;
     padding: 2rem;
@@ -109,26 +109,26 @@ section#galeria {
     border-radius: 5px;
 }
 
-/* Calculator specific styles */
+/* Estilos para la calculadora de costos */
 section#calculo {
     background-color: #f4f4f4;
     padding: 2rem;
     text-align: center;
-    padding-bottom: 100px; /* Ensures space below the calculator content for the footer */
+    padding-bottom: 100px; /* Asegura espacio debajo del contenido de la calculadora para el footer */
 }
 
-section#calculo form { /* Override general form for calculator page specific alignment */
+section#calculo form { /* Sobreescribe el formulario general para alineación específica de la calculadora */
     align-items: center;
     max-width: 400px;
     margin: 0 auto;
 }
 
 section#calculo form input,
-section#calculo form select { /* Ensures width 100% for inputs and selects within calculator form */
+section#calculo form select { /* Asegura ancho del 100% para inputs y selects dentro del formulario de la calculadora */
     width: 100%;
 }
 
-/* Cost breakdown result display */
+/* Visualización del resultado del desglose de costos */
 #resultado {
     margin-top: 20px;
     padding: 10px;
@@ -137,7 +137,7 @@ section#calculo form select { /* Ensures width 100% for inputs and selects withi
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
-/* Collapsible breakdown styles */
+/* Estilos para el desglose colapsable */
 #toggleDesglose {
     cursor: pointer;
     display: flex;
@@ -148,7 +148,7 @@ section#calculo form select { /* Ensures width 100% for inputs and selects withi
     border-radius: 5px;
     margin-top: 20px;
     user-select: none;
-    text-align: left; /* Align text left within the toggle button */
+    text-align: left; /* Alinea el texto a la izquierda dentro del botón de alternar */
 }
 
 #toggleDesglose .arrow {
@@ -166,20 +166,20 @@ section#calculo form select { /* Ensures width 100% for inputs and selects withi
     max-height: 0;
     opacity: 0;
     padding: 0 15px; /* Quita el padding vertical cuando está oculto */
-    text-align: left; /* Align text left within the content */
+    text-align: left; /* Alinea el texto a la izquierda dentro del contenido */
 }
 
 #desgloseContenido.visible {
-    max-height: 500px; /* Adjust if your breakdown content is very long */
+    max-height: 500px; /* Ajusta si el contenido de tu desglose es muy largo */
     opacity: 1;
     padding-top: 10px;
     padding-bottom: 10px;
 }
 
-/* Store sections styles */
+/* Estilos para las secciones de la tienda */
 section#tienda-fisica,
 section#tienda {
-    background-color: #e4e4e4; /* Or whatever color fits your design */
+    background-color: #e4e4e4; /* O el color que se ajuste a tu diseño */
     padding: 2rem;
     text-align: center;
 }
@@ -226,13 +226,34 @@ section#tienda {
     background-color: #1d60bb;
 }
 
+/* --- Estilos para el botón de WhatsApp --- */
+.boton-whatsapp {
+    background-color: #25D366; /* Color verde de WhatsApp */
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-top: 25px; /* Espacio arriba del botón */
+    transition: background-color 0.3s ease;
+    text-decoration: none; /* Asegura que no tenga subrayado si es un <a> */
+    display: inline-block; /* Para que el padding y margin funcionen correctamente */
+}
+
+.boton-whatsapp:hover {
+    background-color: #1DA851; /* Un verde un poco más oscuro al pasar el ratón */
+}
+
+
 footer {
     background-color: #333;
     color: white;
     text-align: center;
     padding: 1rem 0;
-    position: fixed; /* Keep it fixed at the bottom */
+    position: fixed; /* Mantiene el footer fijo en la parte inferior */
     width: 100%;
     bottom: 0;
-    z-index: 1000; /* Ensure footer is on top of other content if scrolled */
+    z-index: 1000; /* Asegura que el footer esté por encima de otro contenido si hay desplazamiento */
 }
