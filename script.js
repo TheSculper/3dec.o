@@ -38,7 +38,7 @@ const FIXED_COSTS = {
 // IMPORTANT: Replace these parts with YOUR ACTUAL NUMBER!
 // Example: If your number is 56912345678, you could split it like this.
 // Use your own segments to make it harder to guess or scrape.
-const WHATSAPP_PHONE_NUMBER = "569" + "876" + "543" + "210"; // Reconstructs to "569876543210" in this example
+const WHATSAPP_PHONE_NUMBER = "569" + "752" + "977" + "891"; // Reconstructs to "569876543210" in this example
 
 
 // --- DOM ELEMENTS ---
@@ -190,7 +190,7 @@ function calculateAndDisplayCost() {
     // --- WhatsApp Button Logic for Manual Quote ---
     enviarWhatsAppBtn.style.display = 'block'; // Show the manual quote button if inputs are valid
     enviarWhatsAppBtn.onclick = () => { // Assign the action on click
-        const phoneNumber = WHATSAPP_PHONE_NUMBER; // Uses the obfuscated number
+        const phoneNumber = WHATSAPP_PHONE_NUMBER; 
 
         // Construct the message with all details
         const message = `
@@ -252,7 +252,7 @@ enviarStlWhatsAppBtn.addEventListener('click', () => {
         return;
     }
 
-    const phoneNumber = WHATSAPP_PHONE_NUMBER; // Uses the obfuscated number
+    const phoneNumber = WHATSAPP_PHONE_NUMBER; 
     const fileName = file.name;
 
     const message = `
