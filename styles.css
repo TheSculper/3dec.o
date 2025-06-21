@@ -109,7 +109,7 @@ nav ul li a:hover {
     background-position: center;
     color: white; /* Color del texto del hero */
     text-align: center; /* Centrar el texto */
-    /* overflow: hidden; */ /* Lo mantenemos comentado si quieres depurar, si no, puedes reactivarlo después de que todo funcione */
+    overflow: hidden; /* Lo mantenemos comentado si quieres depurar, si no, puedes reactivarlo después de que todo funcione */
 
     /* CAMBIOS AQUI: Usar Flexbox para centrar el contenido */
     display: flex; /* Habilitar flexbox */
