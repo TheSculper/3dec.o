@@ -134,7 +134,7 @@ nav ul li a:hover {
 
 .hero-content {
     position: absolute;
-    top: 300px; /* Esto evita que el hero sea ocultado por el menu en navegador, probare usar 150px en lugar de 70%*/
+    top: 600px; /* Esto evita que el hero sea ocultado por el menu en navegador, probare usar 150px en lugar de 70%*/
     left: 50%;
     /* probare cambiar este ajuste */
     /* transform: translate(-50%, -50%); */
