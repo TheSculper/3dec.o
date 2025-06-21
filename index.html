@@ -10,23 +10,25 @@
 
     <meta property="og:title" content="Servicio de Impresión 3D - 3deco">
     <meta property="og:description" content="Haz realidad tus ideas con precisión y atención al detalle. Impresión 3D personalizada, prototipado y modelos STL.">
-    <meta property="og:image" content="https://tudominio.com/logo.jpg"> <meta property="og:url" content="https://tudominio.com/index.html"> <meta property="og:type" content="website">
+    <meta property="og:image" content="https://tudominio.com/logo.jpg">
+    <meta property="og:url" content="https://tudominio.com/index.html">
+    <meta property="og:type" content="website">
 
-    <link rel="icon" type="image/x-icon" href="favicon.ico"> <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <header>
         <div class="logo">
             <img src="logo.jpg" alt="Logo de 3deco">
         </div>
-        <h1>Servicio de Impresión 3D</h1>
-
+        <h1>3deco Impresión 3D</h1>
         <button id="menu-toggle" aria-label="Abrir menú" aria-expanded="false">
             <span class="hamburger"></span>
             <span class="hamburger"></span>
             <span class="hamburger"></span>
         </button>
-
         <nav>
             <ul id="main-menu">
                 <li><a href="#inicio">Inicio</a></li>
@@ -43,79 +45,103 @@
 
     <main>
         <section id="inicio" class="hero">
-            <img src="banner.jpg" alt="Impresora 3D funcionando" class="hero-image">
             <div class="hero-content">
                 <h2>Tu visión, nuestra impresión.</h2>
                 <p>En 3deco, transformamos tus ideas en realidad con la última tecnología en impresión 3D.</p>
                 <div class="main-cta-buttons">
-                    <a href="#contacto" class="boton-principal">Solicitar Cotización</a>
-                    <a href="https://wa.me/56975297791?text=Hola,%20me%20interesa%20un%20servicio%20de%20impresión%203D." target="_blank" class="boton-whatsapp-inicio">WhatsApp</a>
+                    <a href="calculo.html" class="boton-principal">Solicitar Cotización</a>
+                    <a href="https://wa.me/tunumerodetelefono" target="_blank" class="boton-whatsapp-inicio">
+                        <i class="fab fa-whatsapp"></i> WhatsApp
+                    </a>
                 </div>
             </div>
         </section>
 
         <section id="servicios" class="container">
             <h2>Nuestros Servicios</h2>
+            <p>Ofrecemos una gama completa de servicios de impresión 3D para satisfacer todas tus necesidades.</p>
             <div class="servicios-grid">
-                <div class="servicio-item">
-                    <img src="servicio_impresion.png" alt="Icono de impresora 3D">
+                <div class="servicio">
+                    <i class="fas fa-print"></i>
                     <h3>Impresión 3D Personalizada</h3>
-                    <p>Desde prototipos hasta piezas finales, imprimimos tus diseños con precisión en una variedad de materiales.</p>
+                    <p>Desde prototipos hasta piezas finales, imprimimos tus diseños con alta precisión.</p>
                 </div>
-                <div class="servicio-item">
-                    <img src="servicio_diseno.png" alt="Icono de software de diseño 3D">
-                    <h3>Diseño y Modelado 3D</h3>
-                    <p>¿Necesitas una pieza desde cero? Nuestro equipo de diseño puede convertir tus bocetos o ideas en modelos 3D listos para imprimir.</p>
-                </div>
-                <div class="servicio-item">
-                    <img src="servicio_prototipado.png" alt="Icono de prototipo">
+                <div class="servicio">
+                    <i class="fas fa-magic"></i>
                     <h3>Prototipado Rápido</h3>
-                    <p>Acelera tus ciclos de desarrollo con prototipos funcionales y estéticos en tiempo récord.</p>
+                    <p>Convierte tus ideas en prototipos físicos en tiempo récord para tus proyectos.</p>
                 </div>
-                <div class="servicio-item">
-                    <img src="servicio_educacion.png" alt="Icono de educación">
+                <div class="servicio">
+                    <i class="fas fa-cube"></i>
+                    <h3>Modelado 3D y Diseño</h3>
+                    <p>¿No tienes un diseño? Te ayudamos a crear modelos 3D desde cero o a optimizar los existentes.</p>
+                </div>
+                <div class="servicio">
+                    <i class="fas fa-tools"></i>
+                    <h3>Post-procesado y Acabado</h3>
+                    <p>Ofrecemos servicios de post-procesado para dar a tus impresiones el acabado perfecto.</p>
+                </div>
+                <div class="servicio">
+                    <i class="fas fa-chalkboard-teacher"></i>
                     <h3>Asesoría y Capacitación</h3>
-                    <p>Te guiamos en el mundo de la impresión 3D, desde la elección del material hasta la optimización de tus modelos.</p>
+                    <p>Te guiamos en el mundo de la impresión 3D y te capacitamos para tus propios proyectos.</p>
+                </div>
+                <div class="servicio">
+                    <i class="fas fa-truck"></i>
+                    <h3>Envío a Domicilio</h3>
+                    <p>Recibe tus impresiones directamente en tu casa o negocio de forma segura y rápida.</p>
                 </div>
             </div>
         </section>
 
         <section id="galeria" class="container">
-            <h2>Galería de Proyectos</h2>
+            <h2>Nuestra Galería</h2>
+            <p>Echa un vistazo a algunos de nuestros trabajos y proyectos destacados.</p>
             <div class="galeria">
-                <img src="conejo.png" alt="Modelado de piezas en Fusion360">
-                <img src="piezas.png" alt="Piezas técnicas impresas en 3D">
-                <img src="casco.png" alt="Casco impreso en 3D para cosplay">
-                <img src="soportes.png" alt="Soportes organizadores impresos en 3D">
-                <img src="plantas.png" alt="Macetas y figuras decorativas impresas en 3D">
-                <img src="letras.png" alt="Letras y logotipos impresos en 3D">
+                <img src="galeria1.jpg" alt="Impresión 3D de un personaje">
+                <img src="galeria2.jpg" alt="Impresión 3D de un prototipo">
+                <img src="galeria3.jpg" alt="Impresión 3D de una pieza mecánica">
+                <img src="galeria4.jpg" alt="Impresión 3D de una figura abstracta">
+                <img src="galeria5.jpg" alt="Impresión 3D de un logo">
+                <img src="galeria6.jpg" alt="Impresión 3D de un objeto decorativo">
             </div>
         </section>
 
         <section id="sobre-nosotros" class="container">
             <h2>Sobre Nosotros</h2>
-            <p>En 3deco, somos un equipo apasionado por la tecnología de impresión 3D. Combinamos creatividad, experiencia técnica y atención al detalle para ofrecer soluciones personalizadas que superan las expectativas de nuestros clientes.</p>
-            <p>Trabajamos con una amplia gama de materiales como PLA, PETG, ABS y TPU, asegurando la mejor calidad y durabilidad para cada proyecto.</p>
+            <div class="sobre-nosotros-content">
+                <img src="sobre-nosotros.jpg" alt="Equipo de 3deco">
+                <p>En 3deco, somos apasionados por la innovación y la tecnología 3D. Nuestro equipo está comprometido en ofrecer soluciones de impresión 3D de alta calidad, transformando ideas en realidades tangibles. Creemos en el poder de la fabricación aditiva para revolucionar industrias y permitir la creación personalizada para todos.</p>
+                <p>Con años de experiencia en el sector y equipos de última generación, garantizamos resultados excepcionales, atención al detalle y un servicio al cliente inigualable. ¡Déjanos ayudarte a construir el futuro, una capa a la vez!</p>
+            </div>
         </section>
 
         <section id="tienda-fisica" class="container">
             <h2>Nuestra Tienda Física</h2>
-            <p>¡Visítanos para ver nuestros modelos en persona o encargar tu pieza directamente!</p>
-            <div class="map-container">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12140.35411603524!2d-3.7037902!3d40.4167754!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd422998a0000000%3A0x6e9f9b0b1c0b1c0b!2sPlaza%20Mayor%2C%2028012%20Madrid!5e0!3m2!1sen!2ses!4v1678912345678!5m2!1sen!2ses" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Ubicación de 3deco en Google Maps"></iframe>
+            <div class="tienda-info">
+                <p>¡Visítanos en nuestra tienda física para ver nuestros productos, discutir tus proyectos o simplemente explorar el mundo de la impresión 3D!</p>
+                <p><strong>Dirección:</strong> [Tu Dirección Completa de Tienda Física]</p>
+                <p><strong>Horario:</strong> Lunes - Viernes: 9:00 - 18:00 | Sábado: 10:00 - 14:00</p>
             </div>
-            <p>Dirección: [Tu Dirección Completa], [Tu Ciudad], [Tu Código Postal]</p>
-            <p>Horario: Lunes a Viernes de 9:00 a 18:00</p>
+            <div class="mapa-container">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1dXXXXX.XXXXX!2dXXX.XXXXX!3dXXX.XXXXX!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCoDQwJzM1LjMiTiAxMsKwNTUnMTIuNSJF!5e0!3m2!1ses!2ses!4v1678901234567!5m2!1ses!2ses" allowfullscreen="" loading="lazy"></iframe>
+            </div>
         </section>
 
         <section id="tienda-stl" class="container">
             <h2>Tienda de Archivos STL</h2>
-            <p>Explora y descarga nuestros diseños STL listos para imprimir en tu propia casa.</p>
+            <p>Descarga nuestros modelos 3D exclusivos en formato STL listos para imprimir.</p>
             <div class="catalogo-productos">
                 <div class="producto">
-                    <img src="exhibidor.jpg" alt="Soporte para llaveros impreso en 3D">
-                    <h3>Exhibidor de Llaveros (Archivo STL)</h3>
-                    <p>Archivo STL para que imprimas tu propio soporte práctico para llaveros.</p>
+                    <img src="maceta.jpg" alt="Maceta Geométrica">
+                    <h3>Maceta Geométrica (Archivo STL)</h3>
+                    <p>Diseño moderno y elegante para tus plantas, optimizado para impresión 3D.</p>
+                    <a href="https://payhip.com/tuusuario/maceta" target="_blank" class="boton-tienda">Comprar STL - 2,99 EUR</a>
+                </div>
+                <div class="producto">
+                    <img src="exhibidor.jpg" alt="Exhibidor de Joyas">
+                    <h3>Exhibidor de Joyas (Archivo STL)</h3>
+                    <p>Organiza tus accesorios con este práctico y decorativo exhibidor.</p>
                     <a href="https://payhip.com/tuusuario/exhibidor" target="_blank" class="boton-tienda">Comprar STL - 2,40 EUR</a>
                 </div>
                 <div class="producto">
@@ -141,10 +167,16 @@
             </form>
         </section>
     </main>
+
     <footer>
         <p>© 2025 3deco. Todos los derechos reservados.</p>
+        <div class="social-links">
+            <a href="https://www.instagram.com/tu_usuario" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.facebook.com/tu_usuario" target="_blank"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://twitter.com/tu_usuario" target="_blank"><i class="fab fa-twitter"></i></a>
+        </div>
     </footer>
 
-    <script src="script.js" defer></script>
+    <script src="script.js"></script>
 </body>
 </html>
