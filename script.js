@@ -76,7 +76,7 @@ const FIXED_COSTS = {
 };
 
 // --- Your WhatsApp Number (Ofuscated for basic protection) ---
-const WHATSAPP_PHONE_NUMBER = "34685002931"; // Número real de WhatsApp
+const WHATSAPP_PHONE_NUMBER = "975297791"; // Número real de WhatsApp
 
 // --- DOM ELEMENTS (calculo.html specific) ---
 const materialSelect = document.getElementById('materialSelect');
