@@ -118,8 +118,8 @@ nav ul li a:hover {
     align-items: center; /* Centrar horizontalmente los elementos hijos */
 
     /* Añadir un padding-top para dejar espacio para el header fijo */
-    /* Ajusta '100px' para que sea ligeramente más alto que tu header */
-    padding-top: 100px; /* Esto empujará el contenido hacia abajo, debajo del header */
+    /* Ajusta '90px' para que sea ligeramente más alto que tu header */
+    padding-top: 90px; /* Esto empujará el contenido hacia abajo, debajo del header */
     box-sizing: border-box; /* Asegura que el padding no añada altura extra a los 100vh */
 }
 
