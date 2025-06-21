@@ -136,7 +136,9 @@ nav ul li a:hover {
     position: absolute;
     top: 70%; /* Esto evita que el hero sea ocultado por el menu en navegador*/
     left: 50%;
-    transform: translate(-50%, -50%);
+    /* probare cambiar este ajuste */
+    /* transform: translate(-50%, -50%); */
+    transform: translateX(-50%);
     z-index: 1;
     width: 90%; /* Ancho para el contenido */
     max-width: 1200px; /* Ancho máximo, debe ser 1200 para que no haya problema con computador, en 800px hay problemas*/
