@@ -3,112 +3,1267 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Costos - Impresión 3D</title>
-    <link rel="stylesheet" href="styles.css">
-    <script defer src="script.js"></script>
+    <title>Calculadora de Costos — 3deco</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        :root {
+            --cyan: #00E5C8;
+            --cyan-dark: #00B8A0;
+            --ink: #0E1117;
+            --ink-mid: #1C2333;
+            --ink-soft: #2C3347;
+            --gray-1: #8892A4;
+            --gray-2: #C4CDD8;
+            --gray-3: #E8ECF0;
+            --white: #FFFFFF;
+            --danger: #FF4D4D;
+            --success: #00C896;
+            --card-bg: #131923;
+            --card-border: rgba(255,255,255,0.07);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--ink);
+            color: var(--white);
+            min-height: 100vh;
+            padding-bottom: 60px;
+        }
+
+        /* ─── HEADER ─── */
+        header {
+            background: var(--ink-mid);
+            border-bottom: 1px solid var(--card-border);
+            padding: 0 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-area img {
+            height: 36px;
+            width: 36px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .logo-area .brand {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 20px;
+            color: var(--cyan);
+            letter-spacing: -0.5px;
+        }
+
+        nav a {
+            color: var(--gray-2);
+            text-decoration: none;
+            font-size: 14px;
+            margin-left: 24px;
+            transition: color 0.2s;
+        }
+        nav a:hover { color: var(--white); }
+        nav a.active { color: var(--cyan); }
+
+        /* ─── HERO STRIP ─── */
+        .hero-strip {
+            background: linear-gradient(135deg, var(--ink-mid) 0%, var(--ink-soft) 100%);
+            border-bottom: 1px solid var(--card-border);
+            padding: 40px 32px 32px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-strip::before {
+            content: '';
+            position: absolute;
+            top: -60px; right: -60px;
+            width: 240px; height: 240px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,229,200,0.12) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-strip h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(24px, 4vw, 40px);
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.1;
+        }
+
+        .hero-strip h1 span { color: var(--cyan); }
+
+        .hero-strip p {
+            color: var(--gray-1);
+            font-size: 15px;
+            margin-top: 8px;
+            max-width: 500px;
+        }
+
+        /* ─── MAIN LAYOUT ─── */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 24px;
+            max-width: 1200px;
+            margin: 32px auto;
+            padding: 0 32px;
+        }
+
+        /* ─── CARD ─── */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 28px;
+        }
+
+        .card-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--cyan);
+            margin-bottom: 20px;
+        }
+
+        /* ─── FORM ELEMENTS ─── */
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--gray-1);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 7px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            background: var(--ink-soft);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            color: var(--white);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px;
+            padding: 11px 14px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--cyan);
+            box-shadow: 0 0 0 3px rgba(0,229,200,0.12);
+        }
+
+        select option { background: var(--ink-mid); }
+
+        .dim-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+        }
+
+        .dim-grid .form-group { margin-bottom: 0; }
+
+        /* ─── FILE DROP ZONE ─── */
+        .drop-zone {
+            border: 1.5px dashed rgba(0,229,200,0.3);
+            border-radius: 12px;
+            padding: 28px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .drop-zone:hover, .drop-zone.dragover {
+            border-color: var(--cyan);
+            background: rgba(0,229,200,0.05);
+        }
+
+        .drop-zone input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            padding: 0;
+            border: none;
+            width: 100%;
+            height: 100%;
+        }
+
+        .drop-zone-icon {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto 12px;
+            background: rgba(0,229,200,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .drop-zone-icon svg { width: 20px; height: 20px; }
+
+        .drop-zone p {
+            font-size: 14px;
+            color: var(--gray-2);
+            line-height: 1.5;
+        }
+
+        .drop-zone p strong { color: var(--cyan); }
+
+        .drop-zone small {
+            font-size: 12px;
+            color: var(--gray-1);
+        }
+
+        .file-chosen {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0,229,200,0.08);
+            border: 1px solid rgba(0,229,200,0.25);
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin-bottom: 14px;
+            font-size: 13px;
+            color: var(--cyan);
+        }
+
+        /* ─── DIVIDER ─── */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 20px 0;
+            color: var(--gray-1);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255,255,255,0.08);
+        }
+
+        /* ─── SIDEBAR / RESULTS ─── */
+        .results-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* Total display */
+        .total-card {
+            background: linear-gradient(135deg, rgba(0,229,200,0.15) 0%, rgba(0,229,200,0.05) 100%);
+            border: 1px solid rgba(0,229,200,0.3);
+            border-radius: 16px;
+            padding: 28px;
+            text-align: center;
+        }
+
+        .total-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--cyan);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .total-amount {
+            font-family: 'Syne', sans-serif;
+            font-size: 52px;
+            font-weight: 800;
+            color: var(--white);
+            letter-spacing: -2px;
+            line-height: 1;
+        }
+
+        .total-amount .currency {
+            font-size: 24px;
+            vertical-align: super;
+            font-weight: 600;
+            color: var(--cyan);
+        }
+
+        .total-currency-label {
+            font-size: 13px;
+            color: var(--gray-1);
+            margin-top: 6px;
+        }
+
+        /* Breakdown rows */
+        .breakdown-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 9px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 14px;
+        }
+
+        .breakdown-row:last-child { border-bottom: none; }
+
+        .breakdown-row .row-label { color: var(--gray-2); }
+
+        .breakdown-row .row-value {
+            font-weight: 500;
+            font-family: 'Syne', sans-serif;
+            font-size: 15px;
+        }
+
+        .breakdown-row.subtotal .row-label,
+        .breakdown-row.subtotal .row-value {
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        .breakdown-row .row-badge {
+            font-size: 10px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 4px;
+            padding: 2px 6px;
+            color: var(--gray-1);
+            margin-left: 6px;
+        }
+
+        /* ─── BUTTONS ─── */
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: none;
+            border-radius: 12px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 13px 20px;
+            width: 100%;
+            transition: all 0.2s;
+        }
+
+        .btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+        .btn-primary {
+            background: var(--cyan);
+            color: var(--ink);
+            font-weight: 700;
+        }
+
+        .btn-primary:hover { background: var(--cyan-dark); transform: translateY(-1px); }
+        .btn-primary:active { transform: translateY(0); }
+
+        .btn-whatsapp {
+            background: #25D366;
+            color: white;
+            font-weight: 600;
+        }
+
+        .btn-whatsapp:hover { background: #1da851; }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.15);
+            color: var(--gray-2);
+        }
+
+        .btn-outline:hover {
+            border-color: rgba(255,255,255,0.3);
+            color: var(--white);
+        }
+
+        /* ─── CLIENT DATA PANEL ─── */
+        .client-section {
+            margin-top: 20px;
+        }
+
+        .client-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            padding: 12px 0;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            user-select: none;
+        }
+
+        .client-toggle span {
+            font-size: 13px;
+            color: var(--gray-2);
+            font-weight: 500;
+        }
+
+        .toggle-arrow {
+            color: var(--gray-1);
+            transition: transform 0.2s;
+            font-size: 12px;
+        }
+
+        .toggle-arrow.open { transform: rotate(180deg); }
+
+        .client-fields { display: none; padding-top: 12px; }
+        .client-fields.open { display: block; }
+
+        /* ─── NOTES ─── */
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* ─── STATUS ─── */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        .status-valid {
+            background: rgba(0,200,150,0.12);
+            color: var(--success);
+            border: 1px solid rgba(0,200,150,0.2);
+        }
+
+        .status-empty {
+            background: rgba(255,255,255,0.05);
+            color: var(--gray-1);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        /* ─── FOOTER ─── */
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--gray-1);
+            font-size: 13px;
+            border-top: 1px solid var(--card-border);
+            margin-top: 40px;
+        }
+
+        footer a { color: var(--cyan); text-decoration: none; }
+
+        /* ─── MOBILE ─── */
+        @media (max-width: 900px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+                padding: 0 16px;
+            }
+
+            .results-panel { order: -1; }
+
+            .total-amount { font-size: 42px; }
+
+            header { padding: 0 16px; }
+            nav { display: none; }
+
+            .hero-strip { padding: 28px 16px 24px; }
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <div class="logo">
-            <img src="logo.jpg" alt="Logo de 3deco">
-        </div>
-        <h1>Calculadora de Costos de Impresión 3D</h1>
-        <button id="menu-toggle" aria-label="Abrir menú" aria-expanded="false">
-            <span class="hamburger"></span>
-            <span class="hamburger"></span>
-            <span class="hamburger"></span>
-        </button>
-        <nav>
-            <ul id="main-menu">
-                <li><a href="index.html#inicio">Inicio</a></li>
-                <li><a href="index.html#servicios">Servicios</a></li>
-                <li><a href="index.html#galeria">Galería</a></li>
-                <li><a href="index.html#sobre-nosotros">Sobre Nosotros</a></li>
-                <li><a href="index.html#tienda-fisica">Tienda Física</a></li>
-                <li><a href="index.html#tienda-stl">Tienda STL</a></li>
-                <li><a href="index.html#contacto">Contacto</a></li>
-                <li><a href="calculo.html">Calculadora</a></li>
-            </ul>
-        </nav>
-    </header>
 
-    <section id="calculadora" class="container">
-        <h2>Calcula el Costo de tu Pieza</h2>
-        <form id="calculoForm">
-            <label for="stlFileInput">¿Tienes el archivo 3D (STL, OBJ, 3MF)?</label>
-            <input type="file" id="stlFileInput" accept=".stl,.obj,.3mf">
-            <small>Sube tu archivo para una cotización personalizada o rellena manualmente.</small>
-            <button type="button" id="enviarStlWhatsAppBtn" class="boton-whatsapp" style="display: none; margin-bottom: 20px;">Enviar Archivo 3D para Cotización</button>
-            <hr> <p style="font-weight: bold; margin-bottom: 15px;">O rellena los datos manualmente:</p>
+<header>
+    <div class="logo-area">
+        <img src="logo.jpg" alt="3deco logo">
+        <span class="brand">3deco</span>
+    </div>
+    <nav>
+        <a href="index.html#inicio">Inicio</a>
+        <a href="index.html#servicios">Servicios</a>
+        <a href="index.html#galeria">Galería</a>
+        <a href="index.html#contacto">Contacto</a>
+        <a href="calculo.html" class="active">Calculadora</a>
+    </nav>
+</header>
 
-            <label for="materialSelect">Material:</label>
-            <select id="materialSelect" name="material" required>
-                <option value="">Selecciona un material</option>
-                <optgroup label="PLA">
-                    <option value="PLA_17">PLA (17 €/kg)</option>
-                    <option value="PLA_20">PLA Colores Especiales (20 €/kg)</option>
-                </optgroup>
-                <optgroup label="PETG">
-                    <option value="PETG_23">PETG (23 €/kg)</option>
-                </optgroup>
-                <optgroup label="ABS">
-                    <option value="ABS_25">ABS (25 €/kg)</option>
-                </optgroup>
-                <optgroup label="TPU">
-                    <option value="TPU_30">TPU (30 €/kg)</option>
-                </optgroup>
-            </select>
+<div class="hero-strip">
+    <h1>Calcula tu <span>cotización</span><br>de impresión 3D</h1>
+    <p>Ingresa los datos de tu pieza y obtén un presupuesto detallado al instante. Descárgalo en PDF para compartir con tu cliente.</p>
+</div>
 
-            <label for="colorSelect">Color:</label>
-            <select id="colorSelect" name="color">
-                <option value="">Selecciona un color</option>
-            </select>
+<div class="main-grid">
 
-            <label for="pesoInput">Peso de la pieza (gramos):</label>
-            <input type="number" id="pesoInput" name="peso" step="0.01" min="0" placeholder="Ej: 50" required>
+    <!-- ── LEFT: FORM ── -->
+    <div>
+        <div class="card">
+            <p class="card-title">Datos de la pieza</p>
 
-            <label for="tiempoInput">Tiempo de impresión (horas):</label>
-            <input type="number" id="tiempoInput" name="tiempo" step="0.1" min="0" placeholder="Ej: 3.5" required>
-
-            <label for="postProcesadoInput">Tiempo de Post-Procesado (horas):</label>
-            <input type="number" id="postProcesadoInput" name="postProcesado" step="0.1" min="0" placeholder="Ej: 1" value="0">
-
-            <label for="largoInput">Largo de la pieza (cm):</label>
-            <input type="number" id="largoInput" name="largo" step="0.1" min="0" placeholder="Ej: 10" value="0" required>
-
-            <label for="anchoInput">Ancho de la pieza (cm):</label>
-            <input type="number" id="anchoInput" name="ancho" step="0.1" min="0" placeholder="Ej: 8" value="0" required>
-
-            <label for="altoInput">Alto de la pieza (cm):</label>
-            <input type="number" id="altoInput" name="alto" step="0.1" min="0" placeholder="Ej: 5" value="0" required>
-
-            <div id="errorMessages" class="error-messages"></div>
-
-            <button type="submit" style="display: none;">Calcular</button>
-        </form>
-
-        <div class="resultados">
-            <h3 id="toggleDesglose" style="cursor: pointer;">
-                Desglose de Costos <span class="arrow">&#9660;</span>
-            </h3>
-            <div id="desgloseContenido" class="hidden">
-                <p>Costo Material Base: <span id="costoMaterialBase">0.00</span> €</p>
-                <p>Costo Material de Soporte: <span id="costoMaterialSoporte">0.00</span> €</p>
-                <p>Costo de Máquina: <span id="costoMaquina">0.00</span> €</p>
-                <p>Costo de Post-Procesado: <span id="costoPostProcesado">0.00</span> €</p>
-                <p>Costo de Empaque: <span id="costoEmpaque">0.00</span> €</p>
-                <p class="subtotal">Subtotal Inicial: <span id="subtotalInicial">0.00</span> €</p>
-                <p>Ajuste por posibles fallos (5%): <span id="ajusteFallo">0.00</span> €</p>
-                <p>Margen de Ganancia (35%): <span id="margenGanancia">0.00</span> €</p>
+            <!-- File upload -->
+            <div class="drop-zone" id="dropZone">
+                <input type="file" id="stlFileInput" accept=".stl,.obj,.3mf">
+                <div class="drop-zone-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--cyan)">
+                        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+                    </svg>
+                </div>
+                <p><strong>Sube tu archivo 3D</strong> o arrastra aquí</p>
+                <small>STL, OBJ, 3MF — para cotización personalizada vía WhatsApp</small>
             </div>
-            <p class="total">Costo Total Estimado: <span id="costoTotal">0.00</span> €</p>
+
+            <div class="file-chosen" id="fileChosen">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span id="fileName">archivo.stl</span>
+                <button id="sendStlBtn" class="btn btn-whatsapp" style="width:auto;padding:6px 14px;font-size:13px;">
+                    Enviar por WhatsApp
+                </button>
+            </div>
+
+            <div class="divider">O completa manualmente</div>
+
+            <!-- Material + color -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+                <div class="form-group">
+                    <label>Material</label>
+                    <select id="materialSelect">
+                        <option value="">Selecciona</option>
+                        <optgroup label="PLA">
+                            <option value="PLA_20000">PLA Estándar — $20.000/kg</option>
+                            <option value="PLA_24000">PLA Colores Especiales — $24.000/kg</option>
+                        </optgroup>
+                        <optgroup label="PETG">
+                            <option value="PETG_28000">PETG — $28.000/kg</option>
+                        </optgroup>
+                        <optgroup label="ABS">
+                            <option value="ABS_30000">ABS — $30.000/kg</option>
+                        </optgroup>
+                        <optgroup label="TPU">
+                            <option value="TPU_36000">TPU — $36.000/kg</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Color</label>
+                    <select id="colorSelect" disabled>
+                        <option value="">Selecciona material primero</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Nombre pieza -->
+            <div class="form-group">
+                <label>Nombre de la pieza</label>
+                <input type="text" id="nombrePieza" placeholder="Ej: Soporte pared, Prótesis dedos...">
+            </div>
+
+            <!-- Units + infill -->
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+                <div class="form-group">
+                    <label>Unidades</label>
+                    <input type="number" id="unidades" value="1" min="1" step="1">
+                </div>
+                <div class="form-group">
+                    <label>Relleno %</label>
+                    <select id="relleno">
+                        <option value="15">15% — Ligero</option>
+                        <option value="20">20% — Estándar</option>
+                        <option value="50" selected>50% — Medio</option>
+                        <option value="70">70% — Fuerte</option>
+                        <option value="100">100% — Sólido</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Impresora</label>
+                    <select id="impresora">
+                        <option value="Ender 5">Ender 5</option>
+                        <option value="CR-10">CR-10</option>
+                        <option value="Otra">Otra</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Peso + tiempo -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+                <div class="form-group">
+                    <label>Peso (gramos)</label>
+                    <input type="number" id="pesoInput" step="0.1" min="0" placeholder="Ej: 50">
+                </div>
+                <div class="form-group">
+                    <label>Tiempo impresión (hrs)</label>
+                    <input type="number" id="tiempoInput" step="0.1" min="0" placeholder="Ej: 3.5">
+                </div>
+            </div>
+
+            <!-- Post-procesado -->
+            <div class="form-group">
+                <label>Tiempo post-procesado (hrs)</label>
+                <input type="number" id="postProcesadoInput" step="0.1" min="0" value="0" placeholder="0">
+            </div>
+
+            <!-- Dimensiones -->
+            <div class="form-group">
+                <label>Dimensiones (cm)</label>
+                <div class="dim-grid">
+                    <div class="form-group">
+                        <label style="font-size:11px">Largo</label>
+                        <input type="number" id="largoInput" step="0.1" min="0" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label style="font-size:11px">Ancho</label>
+                        <input type="number" id="anchoInput" step="0.1" min="0" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label style="font-size:11px">Alto</label>
+                        <input type="number" id="altoInput" step="0.1" min="0" placeholder="0">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notas -->
+            <div class="form-group">
+                <label>Notas adicionales (opcional)</label>
+                <textarea id="notasInput" placeholder="Acabado especial, color exacto, urgencia..."></textarea>
+            </div>
+
+            <!-- Client data -->
+            <div class="client-section">
+                <div class="client-toggle" id="clientToggle">
+                    <span>Datos del cliente (para cotización PDF)</span>
+                    <span class="toggle-arrow" id="toggleArrow">▼</span>
+                </div>
+                <div class="client-fields" id="clientFields">
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                        <div class="form-group">
+                            <label>Nombre cliente</label>
+                            <input type="text" id="clientNombre" placeholder="Juan Pérez">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="clientEmail" placeholder="juan@email.com">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Teléfono</label>
+                        <input type="tel" id="clientTel" placeholder="+56 9 1234 5678">
+                    </div>
+                    <div class="form-group">
+                        <label>N° Cotización</label>
+                        <input type="text" id="cotizacionNum" placeholder="COT-001">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── RIGHT: RESULTS ── -->
+    <div class="results-panel">
+
+        <!-- Total -->
+        <div class="total-card">
+            <div class="total-label">Total estimado</div>
+            <div class="total-amount">
+                <span class="currency">$</span><span id="costoTotal">0</span>
+            </div>
+            <div class="total-currency-label">Pesos chilenos (CLP) · IVA no incluido</div>
+            <div style="margin-top:12px">
+                <span class="status-badge status-empty" id="statusBadge">Completa los campos</span>
+            </div>
         </div>
 
-        <button id="enviarWhatsAppBtn" class="boton-whatsapp" style="display: none;">Enviar Cotización a WhatsApp</button>
-    </section>
+        <!-- Breakdown -->
+        <div class="card">
+            <p class="card-title">Desglose</p>
 
-    <footer>
-        <p>&copy; 2025 3deco. Todos los derechos reservados.</p>
-    </footer>
+            <div class="breakdown-row">
+                <span class="row-label">Material base</span>
+                <span class="row-value" id="costoMaterialBase">$0</span>
+            </div>
+            <div class="breakdown-row">
+                <span class="row-label">Material soporte <span class="row-badge">10%</span></span>
+                <span class="row-value" id="costoMaterialSoporte">$0</span>
+            </div>
+            <div class="breakdown-row">
+                <span class="row-label">Operación máquina</span>
+                <span class="row-value" id="costoMaquina">$0</span>
+            </div>
+            <div class="breakdown-row">
+                <span class="row-label">Post-procesado</span>
+                <span class="row-value" id="costoPostProcesado">$0</span>
+            </div>
+            <div class="breakdown-row">
+                <span class="row-label">Empaque</span>
+                <span class="row-value" id="costoEmpaque">$0</span>
+            </div>
+            <div class="breakdown-row subtotal">
+                <span class="row-label">Subtotal</span>
+                <span class="row-value" id="subtotalInicial">$0</span>
+            </div>
+            <div class="breakdown-row">
+                <span class="row-label">Ajuste por fallos <span class="row-badge">5%</span></span>
+                <span class="row-value" id="ajusteFallo">$0</span>
+            </div>
+            <div class="breakdown-row">
+                <span class="row-label">Margen ganancia <span class="row-badge">35%</span></span>
+                <span class="row-value" id="margenGanancia">$0</span>
+            </div>
+            <div class="breakdown-row" style="padding-top:4px;margin-top:4px;border-top:1px solid rgba(0,229,200,0.2)">
+                <span class="row-label" style="color:var(--cyan);font-weight:600">Por unidad</span>
+                <span class="row-value" style="color:var(--cyan)" id="porUnidad">$0</span>
+            </div>
+            <div class="breakdown-row" style="padding-top:4px">
+                <span class="row-label" style="font-weight:600;color:var(--white)">Unidades: <span id="unidadesResumen">1</span></span>
+                <span class="row-value" style="color:var(--white);font-size:18px" id="costoTotalFinal">$0</span>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div style="display:flex;flex-direction:column;gap:10px">
+            <button class="btn btn-primary" id="downloadPdfBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+                </svg>
+                Descargar cotización PDF
+            </button>
+            <button class="btn btn-whatsapp" id="enviarWhatsAppBtn">
+                <svg viewBox="0 0 24 24" fill="currentColor" style="width:18px;height:18px">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.998 2C6.477 2 2 6.477 2 11.998c0 1.76.456 3.414 1.256 4.853L2 22l5.294-1.232A10 10 0 1011.998 2z"/>
+                </svg>
+                Enviar cotización por WhatsApp
+            </button>
+            <button class="btn btn-outline" id="resetBtn">
+                Limpiar formulario
+            </button>
+        </div>
+
+        <!-- Info card -->
+        <div class="card" style="padding:18px">
+            <p style="font-size:12px;color:var(--gray-1);line-height:1.6">
+                <strong style="color:var(--gray-2)">Costos base utilizados:</strong><br>
+                Máquina: $2.400/hr · Mano de obra: $2.400/hr<br>
+                Mantenimiento mensual: $240.000<br>
+                Los valores son estimados. El precio final puede variar según complejidad.
+            </p>
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    <p>&copy; 2025 3deco · <a href="index.html">Volver al inicio</a> · <a href="https://wa.me/56975297791" target="_blank">WhatsApp</a></p>
+</footer>
+
+<script>
+// ── CONFIGURATION ──
+const MATERIAL_DATA = {
+    'PLA_20000':  { cost: 20000, label: 'PLA Estándar', colors: ['Negro','Blanco','Gris','Azul','Rojo','Amarillo','Verde'] },
+    'PLA_24000':  { cost: 24000, label: 'PLA Colores Especiales', colors: ['Rojo Brillante','Verde Limón','Naranja','Rosa','Dorado','Plateado'] },
+    'PETG_28000': { cost: 28000, label: 'PETG', colors: ['Negro','Transparente','Verde Oscuro','Azul Transparente','Naranja'] },
+    'ABS_30000':  { cost: 30000, label: 'ABS', colors: ['Negro','Gris','Blanco','Rojo'] },
+    'TPU_36000':  { cost: 36000, label: 'TPU (Flexible)', colors: ['Negro','Translúcido','Rojo','Azul','Natural'] }
+};
+
+const COSTS = {
+    machinePerHour:  2400,   // CLP/hr
+    laborPerHour:    2400,   // CLP/hr
+    supportFactor:   0.10,
+    failureFactor:   0.05,
+    profitMargin:    0.35,
+    packaging: [
+        { maxVol: 100,      cost: 800 },
+        { maxVol: 500,      cost: 1500 },
+        { maxVol: 2000,     cost: 3000 },
+        { maxVol: Infinity, cost: 5000 }
+    ]
+};
+
+const WA_NUMBER = '56975297791';
+
+// ── HELPERS ──
+const clp = n => '$' + Math.round(n).toLocaleString('es-CL');
+const $ = id => document.getElementById(id);
+
+function getPackaging(vol) {
+    for (const r of COSTS.packaging) if (vol <= r.maxVol) return r.cost;
+    return COSTS.packaging.at(-1).cost;
+}
+
+// ── COLOR OPTIONS ──
+function updateColors() {
+    const sel = $('materialSelect').value;
+    const cs = $('colorSelect');
+    cs.innerHTML = '<option value="">Selecciona un color</option>';
+    cs.disabled = !sel;
+    if (sel && MATERIAL_DATA[sel]) {
+        MATERIAL_DATA[sel].colors.forEach(c => {
+            const o = document.createElement('option');
+            o.value = o.textContent = c;
+            cs.appendChild(o);
+        });
+    }
+    calculate();
+}
+
+// ── CALCULATION ──
+let lastResult = null;
+
+function calculate() {
+    const mat   = $('materialSelect').value;
+    const peso  = parseFloat($('pesoInput').value);
+    const tiempo= parseFloat($('tiempoInput').value);
+    const post  = parseFloat($('postProcesadoInput').value) || 0;
+    const largo = parseFloat($('largoInput').value) || 0;
+    const ancho = parseFloat($('anchoInput').value) || 0;
+    const alto  = parseFloat($('altoInput').value) || 0;
+    const units = parseInt($('unidades').value) || 1;
+
+    const valid = mat && !isNaN(peso) && peso > 0 && !isNaN(tiempo) && tiempo > 0;
+
+    const badge = $('statusBadge');
+
+    if (!valid) {
+        badge.className = 'status-badge status-empty';
+        badge.textContent = 'Completa los campos';
+        ['costoTotal','costoMaterialBase','costoMaterialSoporte','costoMaquina',
+         'costoPostProcesado','costoEmpaque','subtotalInicial','ajusteFallo',
+         'margenGanancia','porUnidad','costoTotalFinal'].forEach(id => $(id).textContent = id === 'costoTotal' ? '0' : '$0');
+        $('unidadesResumen').textContent = units;
+        lastResult = null;
+        return;
+    }
+
+    const matCostPerG = MATERIAL_DATA[mat].cost / 1000;
+    const vol = largo * ancho * alto;
+
+    const cMat     = matCostPerG * peso;
+    const cSoporte = cMat * COSTS.supportFactor;
+    const cMaq     = COSTS.machinePerHour * tiempo;
+    const cPost    = COSTS.laborPerHour * post;
+    const cEmp     = getPackaging(vol);
+    const subtotal = cMat + cSoporte + cMaq + cPost + cEmp;
+    const cFallo   = subtotal * COSTS.failureFactor;
+    const subtotal2= subtotal + cFallo;
+    const cMargen  = subtotal2 * COSTS.profitMargin;
+    const totalUnit = subtotal2 + cMargen;
+    const total    = totalUnit * units;
+
+    $('costoTotal').textContent         = Math.round(totalUnit).toLocaleString('es-CL');
+    $('costoMaterialBase').textContent  = clp(cMat);
+    $('costoMaterialSoporte').textContent = clp(cSoporte);
+    $('costoMaquina').textContent       = clp(cMaq);
+    $('costoPostProcesado').textContent = clp(cPost);
+    $('costoEmpaque').textContent       = clp(cEmp);
+    $('subtotalInicial').textContent    = clp(subtotal);
+    $('ajusteFallo').textContent        = clp(cFallo);
+    $('margenGanancia').textContent     = clp(cMargen);
+    $('porUnidad').textContent          = clp(totalUnit);
+    $('unidadesResumen').textContent    = units;
+    $('costoTotalFinal').textContent    = clp(total);
+
+    badge.className = 'status-badge status-valid';
+    badge.textContent = 'Cotización lista';
+
+    lastResult = {
+        mat, peso, tiempo, post, largo, ancho, alto, vol,
+        cMat, cSoporte, cMaq, cPost, cEmp, subtotal, cFallo, cMargen,
+        totalUnit, total, units,
+        matLabel: MATERIAL_DATA[mat].label,
+        color: $('colorSelect').value || 'No especificado',
+        relleno: $('relleno').value + '%',
+        impresora: $('impresora').value,
+        nombre: $('nombrePieza').value || 'Pieza personalizada',
+        notas: $('notasInput').value,
+        clientNombre: $('clientNombre').value,
+        clientEmail: $('clientEmail').value,
+        clientTel: $('clientTel').value,
+        cotNum: $('cotizacionNum').value || ('COT-' + Date.now().toString().slice(-4))
+    };
+}
+
+// ── PDF GENERATION ──
+function generarPDF() {
+    const r = lastResult;
+    if (!r) { alert('Completa los datos de la pieza primero.'); return; }
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+
+    const W = 210, H = 297;
+    const cyan = [0, 229, 200];
+    const ink = [14, 17, 23];
+    const inkMid = [28, 35, 51];
+    const white = [255, 255, 255];
+    const gray1 = [136, 146, 164];
+    const gray2 = [196, 205, 216];
+
+    // BG
+    doc.setFillColor(...ink);
+    doc.rect(0, 0, W, H, 'F');
+
+    // Header bar
+    doc.setFillColor(...inkMid);
+    doc.rect(0, 0, W, 42, 'F');
+
+    // Accent line
+    doc.setFillColor(...cyan);
+    doc.rect(0, 42, W, 2, 'F');
+
+    // Logo area circle
+    doc.setFillColor(...cyan);
+    doc.circle(22, 21, 12, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(12);
+    doc.setTextColor(...ink);
+    doc.text('3D', 22, 23.5, { align: 'center' });
+
+    // Brand name
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(22);
+    doc.setTextColor(...cyan);
+    doc.text('3deco', 40, 18);
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(...gray2);
+    doc.text('Impresión 3D Profesional', 40, 25);
+
+    // Doc title
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(16);
+    doc.setTextColor(...white);
+    doc.text('COTIZACIÓN', W - 16, 16, { align: 'right' });
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(...cyan);
+    doc.text(`N° ${r.cotNum}`, W - 16, 23, { align: 'right' });
+    const today = new Date().toLocaleDateString('es-CL', { day:'2-digit', month:'long', year:'numeric' });
+    doc.setTextColor(...gray2);
+    doc.text(`Fecha: ${today}`, W - 16, 30, { align: 'right' });
+
+    let y = 54;
+
+    // Client / Company row
+    const hasClient = r.clientNombre || r.clientEmail;
+
+    // Left: FROM
+    doc.setFillColor(28, 35, 51);
+    doc.roundedRect(14, y, 84, hasClient ? 32 : 22, 3, 3, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(7);
+    doc.setTextColor(...cyan);
+    doc.text('DE', 20, y + 7);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor(...white);
+    doc.text('3deco Impresión 3D', 20, y + 14);
+    doc.setFontSize(8);
+    doc.setTextColor(...gray1);
+    doc.text('impresion3deco@gmail.com', 20, y + 20);
+    doc.text('+56 9 7529 7791', 20, y + 26);
+
+    // Right: TO
+    if (hasClient) {
+        doc.setFillColor(28, 35, 51);
+        doc.roundedRect(110, y, 86, 32, 3, 3, 'F');
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(7);
+        doc.setTextColor(...cyan);
+        doc.text('PARA', 116, y + 7);
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(9);
+        doc.setTextColor(...white);
+        doc.text(r.clientNombre || 'Cliente', 116, y + 14);
+        doc.setFontSize(8);
+        doc.setTextColor(...gray1);
+        if (r.clientEmail) doc.text(r.clientEmail, 116, y + 20);
+        if (r.clientTel) doc.text(r.clientTel, 116, y + 26);
+    }
+
+    y += hasClient ? 40 : 30;
+
+    // Piece info card
+    doc.setFillColor(...inkMid);
+    doc.roundedRect(14, y, 182, 38, 3, 3, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(7);
+    doc.setTextColor(...cyan);
+    doc.text('DESCRIPCIÓN DE LA PIEZA', 20, y + 8);
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(12);
+    doc.setTextColor(...white);
+    doc.text(r.nombre, 20, y + 17);
+
+    // Meta row
+    const metas = [
+        { label: 'Material', val: r.matLabel },
+        { label: 'Color', val: r.color },
+        { label: 'Peso', val: r.peso.toFixed(1) + ' g' },
+        { label: 'Impresora', val: r.impresora },
+        { label: 'Relleno', val: r.relleno },
+    ];
+
+    let mx = 20;
+    doc.setFontSize(7);
+    metas.forEach(m => {
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(...gray1);
+        doc.text(m.label.toUpperCase(), mx, y + 26);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(...white);
+        doc.text(m.val, mx, y + 32);
+        mx += 37;
+    });
+
+    if (r.largo && r.ancho && r.alto) {
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(7);
+        doc.setTextColor(...gray1);
+        doc.text(`Dimensiones: ${r.largo}×${r.ancho}×${r.alto} cm`, 20, y + 38.5);
+    }
+
+    y += 46;
+
+    // ── BREAKDOWN TABLE ──
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(7);
+    doc.setTextColor(...cyan);
+    doc.text('DESGLOSE DE COSTOS', 14, y + 6);
+    y += 12;
+
+    const rows = [
+        ['Material base', clp(r.cMat)],
+        ['Material de soporte (10%)', clp(r.cSoporte)],
+        ['Operación de máquina', clp(r.cMaq)],
+        ['Post-procesado', clp(r.cPost)],
+        ['Empaque y envío', clp(r.cEmp)],
+    ];
+
+    rows.forEach((row, i) => {
+        if (i % 2 === 0) {
+            doc.setFillColor(28, 35, 51);
+            doc.rect(14, y - 2, 182, 9, 'F');
+        }
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(9);
+        doc.setTextColor(...gray2);
+        doc.text(row[0], 20, y + 4.5);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(...white);
+        doc.text(row[1], W - 20, y + 4.5, { align: 'right' });
+        y += 10;
+    });
+
+    // Subtotals
+    y += 3;
+    doc.setFillColor(14, 17, 23);
+    doc.rect(14, y - 2, 182, 10, 'F');
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(...gray1);
+    doc.text('Subtotal inicial', 20, y + 5);
+    doc.setTextColor(...gray2);
+    doc.text(clp(r.subtotal), W - 20, y + 5, { align: 'right' });
+    y += 11;
+
+    doc.text('Ajuste por fallos (5%)', 20, y + 5);
+    doc.setTextColor(...gray2);
+    doc.text(clp(r.cFallo), W - 20, y + 5, { align: 'right' });
+    y += 11;
+
+    doc.setTextColor(...gray1);
+    doc.text('Margen de ganancia (35%)', 20, y + 5);
+    doc.setTextColor(...gray2);
+    doc.text(clp(r.cMargen), W - 20, y + 5, { align: 'right' });
+    y += 15;
+
+    // TOTAL BOX
+    doc.setFillColor(...cyan);
+    doc.roundedRect(14, y, 182, 22, 3, 3, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(10);
+    doc.setTextColor(...ink);
+    doc.text('PRECIO POR UNIDAD (CLP)', 20, y + 9);
+    doc.setFontSize(16);
+    doc.text(clp(r.totalUnit), W - 20, y + 13, { align: 'right' });
+
+    y += 28;
+
+    if (r.units > 1) {
+        doc.setFillColor(28, 35, 51);
+        doc.roundedRect(14, y, 182, 16, 3, 3, 'F');
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(9);
+        doc.setTextColor(...white);
+        doc.text(`Total por ${r.units} unidades`, 20, y + 9);
+        doc.setTextColor(...cyan);
+        doc.text(clp(r.total), W - 20, y + 9, { align: 'right' });
+        y += 22;
+    }
+
+    // Notes
+    if (r.notas) {
+        y += 6;
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(7);
+        doc.setTextColor(...cyan);
+        doc.text('NOTAS', 14, y);
+        y += 5;
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8);
+        doc.setTextColor(...gray2);
+        const lines = doc.splitTextToSize(r.notas, 182);
+        doc.text(lines, 14, y);
+        y += lines.length * 5 + 4;
+    }
+
+    // Terms
+    y = Math.max(y, H - 40);
+    doc.setFillColor(28, 35, 51);
+    doc.rect(0, H - 34, W, 34, 'F');
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(7);
+    doc.setTextColor(...gray1);
+    doc.text('• Esta cotización tiene validez de 15 días hábiles.', 14, H - 26);
+    doc.text('• Los precios no incluyen IVA (19%).', 14, H - 21);
+    doc.text('• El tiempo de entrega puede variar según disponibilidad de stock y complejidad del proyecto.', 14, H - 16);
+    doc.setTextColor(...cyan);
+    doc.text('impresion3deco@gmail.com  ·  +56 9 7529 7791  ·  instagram: @3dec.o', W / 2, H - 8, { align: 'center' });
+
+    doc.save(`Cotizacion_3deco_${r.cotNum}.pdf`);
+}
+
+// ── WHATSAPP ──
+function enviarWhatsApp() {
+    const r = lastResult;
+    if (!r) { alert('Completa los datos primero.'); return; }
+
+    const msg = `¡Hola 3deco! 👋 Solicito cotización con los siguientes datos:
+
+*Pieza:* ${r.nombre}
+*Material:* ${r.matLabel}
+*Color:* ${r.color}
+*Peso:* ${r.peso.toFixed(1)} g
+*Tiempo impresión:* ${r.tiempo.toFixed(1)} hrs
+*Post-procesado:* ${r.post.toFixed(1)} hrs
+*Dimensiones:* ${r.largo}×${r.ancho}×${r.alto} cm
+*Relleno:* ${r.relleno}
+*Impresora:* ${r.impresora}
+*Unidades:* ${r.units}
+
+*Desglose estimado:*
+• Material: ${clp(r.cMat)}
+• Soporte: ${clp(r.cSoporte)}
+• Máquina: ${clp(r.cMaq)}
+• Post-proc: ${clp(r.cPost)}
+• Empaque: ${clp(r.cEmp)}
+• Ajuste fallos: ${clp(r.cFallo)}
+• Margen: ${clp(r.cMargen)}
+
+*Total por unidad: ${clp(r.totalUnit)}*
+${r.units > 1 ? `*Total ${r.units} unidades: ${clp(r.total)}*` : ''}
+${r.notas ? '\n*Notas:* ' + r.notas : ''}
+
+¡Gracias!`;
+
+    window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+// ── FILE INPUT ──
+$('stlFileInput').addEventListener('change', e => {
+    const f = e.target.files[0];
+    const fc = $('fileChosen');
+    if (f) {
+        $('fileName').textContent = f.name;
+        fc.style.display = 'flex';
+    } else {
+        fc.style.display = 'none';
+    }
+});
+
+$('sendStlBtn').addEventListener('click', () => {
+    const f = $('stlFileInput').files[0];
+    if (!f) return;
+    const msg = `¡Hola! Te envío mi archivo 3D para cotización.\n\nArchivo: ${f.name}\n\nPor favor revisar el adjunto que enviaré por WhatsApp. ¡Gracias!`;
+    window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+    alert(`Recuerda adjuntar el archivo "${f.name}" en el chat de WhatsApp.`);
+});
+
+// ── DRAG & DROP ──
+const dz = $('dropZone');
+dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('dragover'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
+dz.addEventListener('drop', e => {
+    e.preventDefault();
+    dz.classList.remove('dragover');
+    const f = e.dataTransfer.files[0];
+    if (f && /\.(stl|obj|3mf)$/i.test(f.name)) {
+        $('stlFileInput').files = e.dataTransfer.files;
+        $('fileName').textContent = f.name;
+        $('fileChosen').style.display = 'flex';
+    }
+});
+
+// ── CLIENT TOGGLE ──
+$('clientToggle').addEventListener('click', () => {
+    const fields = $('clientFields');
+    const arrow = $('toggleArrow');
+    fields.classList.toggle('open');
+    arrow.classList.toggle('open');
+});
+
+// ── RESET ──
+$('resetBtn').addEventListener('click', () => {
+    document.querySelectorAll('input, select, textarea').forEach(el => {
+        if (el.type === 'file') return;
+        if (el.id === 'unidades') { el.value = 1; return; }
+        if (el.id === 'postProcesadoInput') { el.value = 0; return; }
+        if (el.id === 'relleno') { el.value = 50; return; }
+        el.value = '';
+    });
+    $('colorSelect').innerHTML = '<option value="">Selecciona material primero</option>';
+    $('colorSelect').disabled = true;
+    $('fileChosen').style.display = 'none';
+    lastResult = null;
+    calculate();
+});
+
+// ── EVENTS ──
+$('downloadPdfBtn').addEventListener('click', generarPDF);
+$('enviarWhatsAppBtn').addEventListener('click', enviarWhatsApp);
+$('materialSelect').addEventListener('change', updateColors);
+['pesoInput','tiempoInput','postProcesadoInput','largoInput','anchoInput',
+ 'altoInput','unidades','relleno','impresora','nombrePieza',
+ 'notasInput','clientNombre','clientEmail','clientTel','cotizacionNum','colorSelect']
+    .forEach(id => {
+        const el = $(id);
+        if (el) el.addEventListener('input', calculate);
+        if (el && el.tagName === 'SELECT') el.addEventListener('change', calculate);
+    });
+
+calculate();
+</script>
+
 </body>
 </html>
