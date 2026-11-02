@@ -303,6 +303,7 @@ h2 {
 }
 
 .producto {
+    position: relative;
     background-color: #f9f9f9;
     padding: 15px;
     border-radius: 8px;
@@ -311,6 +312,28 @@ h2 {
     flex: 1 1 calc(33% - 20px); /* Tres productos por fila */
     box-sizing: border-box;
     min-width: 250px;
+}
+
+.producto-destacado {
+    border: 2px solid #007bff;
+    box-shadow: 0 4px 14px rgba(0, 123, 255, 0.18);
+}
+
+.producto-etiqueta {
+    display: inline-block;
+    margin-bottom: 12px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    background-color: #007bff;
+    color: white;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.producto-destacado img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
 }
 
 .producto img {
@@ -329,6 +352,12 @@ h2 {
     font-size: 0.9em;
     color: #555;
     margin-bottom: 15px;
+}
+
+.producto-precio {
+    color: #333;
+    font-size: 1.2rem;
+    font-weight: bold;
 }
 
 .boton-tienda {
