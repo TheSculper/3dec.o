@@ -102,11 +102,10 @@ nav ul li a:hover {
 
 /* --- Hero Section --- */
 .hero {
-    position: relative; /* Necesario para que background-image se relacione con él */
     height: 100vh; /* Que ocupe toda la altura de la ventana */
-    background-image: url('impresora-3d.jpg'); /* La imagen de fondo del hero */
+    background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.35)), url('Protesis.png');
     background-size: cover;
-    background-position: center;
+    background-position: center 45%;
     color: white; /* Color del texto del hero */
     text-align: center; /* Centrar el texto */
     overflow: hidden; /* Lo mantenemos comentado si quieres depurar, si no, puedes reactivarlo después de que todo funcione */
@@ -236,24 +235,37 @@ h2 {
 
 /* --- Galería --- */
 .galeria {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px; /* Espacio entre imágenes */
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
 }
 
-.galeria img {
-    max-width: calc(33% - 15px); /* Tres imágenes por fila */
-    height: auto;
+.galeria-item {
+    overflow: hidden;
+    margin: 0;
     border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    object-fit: cover; /* Asegura que las imágenes llenen el espacio sin distorsionarse */
-    cursor: zoom-in; /* Indica que la imagen es clicable */
-    transition: transform 0.2s ease;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }
 
-.galeria img:hover {
-    transform: scale(1.03);
+.galeria-item img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    background-color: #eee;
+    transition: transform 0.25s ease;
+}
+
+.galeria-item:hover img {
+    transform: scale(1.04);
+}
+
+.galeria-item figcaption {
+    padding: 12px 14px;
+    color: #444;
+    font-weight: bold;
+    text-align: center;
 }
 
 /* --- Sobre Nosotros --- */
@@ -564,12 +576,6 @@ footer.visible-footer {
         max-width: 400px; /* Limita el ancho máximo */
     }
 
-    .galeria img {
-        max-width: 45%; /* Dos imágenes por fila */
-        width: unset;
-        height: auto;
-    }
-
     .catalogo-productos {
         flex-direction: column;
         align-items: center;
@@ -606,9 +612,6 @@ footer.visible-footer {
         gap: 10px; /* Menor espacio entre botones */
     }
 
-    .galeria img {
-        max-width: 90%; /* Una imagen por fila en el móvil más pequeño */
-    }
 }
 
 /* Reglas específicas para el header-scrolled (movil) */
