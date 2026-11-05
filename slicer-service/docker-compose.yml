@@ -1,0 +1,19 @@
+services:
+  slicer:
+    build:
+      context: ..
+      dockerfile: slicer-service/Dockerfile
+    environment:
+      HOST: 0.0.0.0
+      PORT: 8001
+      PROFILES_DIR: /app/profiles
+      CORS_ORIGINS: https://thesculper.github.io,http://localhost:8000,http://127.0.0.1:8000
+      MAX_UPLOAD_BYTES: 52428800
+      SLICE_TIMEOUT_SECONDS: 180
+      MAX_CONCURRENT_SLICES: 1
+    ports:
+      - "127.0.0.1:8001:8001"
+    volumes:
+      - ./profiles:/app/profiles:ro
+    mem_limit: 3g
+    pids_limit: 128
