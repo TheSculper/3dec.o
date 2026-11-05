@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Administrador (demo) — 3deco</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <header class="admin-header">
+        <a class="brand" href="index.html" aria-label="Volver a 3deco">
+            <img src="logo.jpg" alt="" width="42" height="42">
+            <span>3deco <small>ADMIN · DEMO</small></span>
+        </a>
+        <nav aria-label="Navegación principal">
+            <a href="index.html">Volver al sitio</a>
+            <a href="calculo.html">Calculadora</a>
+        </nav>
+    </header>
+
+    <main class="admin-main">
+        <div class="demo-banner" role="note">
+            <strong>Prototipo visual — no es un sistema seguro.</strong>
+            <span>Esta página es pública. No uses credenciales ni datos de clientes reales. El acceso es simulado y los pedidos son ejemplos ficticios.</span>
+        </div>
+
+        <section class="login-card" id="loginPanel" aria-labelledby="loginTitle">
+            <div class="login-mark" aria-hidden="true">3D</div>
+            <p class="eyebrow">PORTAL DE ADMINISTRACIÓN</p>
+            <h1 id="loginTitle">Bienvenido</h1>
+            <p class="login-intro">Vista previa de la gestión y priorización de pedidos.</p>
+            <form id="demoLoginForm">
+                <label for="demoUser">Usuario de muestra</label>
+                <input id="demoUser" name="username" type="text" autocomplete="off" placeholder="Escribe cualquier texto" required>
+                <label for="demoPassword">Contraseña de muestra</label>
+                <input id="demoPassword" name="password" type="password" autocomplete="new-password" placeholder="Solo para ver el prototipo" required>
+                <button class="primary-button login-button" type="submit">Entrar al prototipo</button>
+            </form>
+            <p class="login-footnote">No hay una cuenta ni contraseña real. Lo que escribas no se envía ni se guarda.</p>
+        </section>
+
+        <section class="dashboard" id="dashboardPanel" hidden aria-labelledby="dashboardTitle">
+            <div class="dashboard-heading">
+                <div>
+                    <p class="eyebrow">PANEL DE CONTROL · DATOS DE EJEMPLO</p>
+                    <h1 id="dashboardTitle" tabindex="-1">Pedidos</h1>
+                    <p class="dashboard-subtitle">Clasifica cada pedido por destino de fabricación y prioriza sus entregas o ganancias.</p>
+                </div>
+                <button class="secondary-button" id="logoutButton" type="button">Salir del demo</button>
+            </div>
+
+            <div class="metric-grid" aria-label="Resumen de pedidos de ejemplo">
+                <article class="metric-card">
+                    <span class="metric-label">Pedidos en cola</span>
+                    <strong id="openOrdersMetric">0</strong>
+                    <span class="metric-detail">En esta lista de muestra</span>
+                </article>
+                <article class="metric-card">
+                    <span class="metric-label">Vencen en 48 horas</span>
+                    <strong id="urgentOrdersMetric">0</strong>
+                    <span class="metric-detail">Incluye pedidos vencidos</span>
+                </article>
+                <article class="metric-card metric-card-highlight">
+                    <span class="metric-label">Ganancia estimada pendiente</span>
+                    <strong id="profitMetric">$0</strong>
+                    <span class="metric-detail">Suma ficticia de esta muestra</span>
+                </article>
+            </div>
+
+            <section class="analytics-card" aria-labelledby="analyticsTitle">
+                <div class="analytics-copy">
+                    <p class="eyebrow">ESTADÍSTICAS AGREGADAS</p>
+                    <h2 id="analyticsTitle">Visitas del sitio</h2>
+                    <p id="analyticsSummary">Configura Cloudflare Web Analytics para consultar visitas y páginas más vistas en sus informes.</p>
+                    <span class="analytics-status" id="analyticsStatus" role="status">Pendiente de configuración</span>
+                </div>
+                <div class="analytics-actions">
+                    <a class="analytics-button" href="https://dash.cloudflare.com/?to=/:account/web-analytics" target="_blank" rel="noopener noreferrer">Abrir informes en Cloudflare</a>
+                    <a class="analytics-help" href="https://developers.cloudflare.com/web-analytics/get-started/" target="_blank" rel="noopener noreferrer">Ver instrucciones de configuración</a>
+                </div>
+            </section>
+
+            <section class="orders-card" aria-labelledby="ordersTitle">
+                <div class="orders-toolbar">
+                    <div>
+                        <h2 id="ordersTitle">Fila de pedidos</h2>
+                        <p>La ganancia es estimada y solo tiene fines ilustrativos.</p>
+                    </div>
+                    <label class="search-control" for="orderSearch">
+                        <span>Buscar</span>
+                        <input id="orderSearch" type="search" placeholder="Pedido o cliente">
+                    </label>
+                </div>
+
+                <div class="queue-tabs" role="group" aria-label="Colas de fabricación">
+                    <button class="queue-tab is-active" data-queue="ender5" type="button" aria-pressed="true">
+                        Ender 5 <span class="queue-count" data-queue-count="ender5">0</span>
+                    </button>
+                    <button class="queue-tab" data-queue="cr10" type="button" aria-pressed="false">
+                        Creality CR-10 <span class="queue-count" data-queue-count="cr10">0</span>
+                    </button>
+                    <button class="queue-tab" data-queue="partner" type="button" aria-pressed="false">
+                        Empresa colaboradora <span class="queue-count" data-queue-count="partner">0</span>
+                    </button>
+                </div>
+
+                <div class="sort-controls" role="group" aria-label="Ordenar pedidos">
+                    <span>Priorizar por:</span>
+                    <button class="sort-button is-active" id="sortDueButton" type="button" aria-pressed="true">Fecha de entrega</button>
+                    <button class="sort-button" id="sortProfitButton" type="button" aria-pressed="false">Ganancia económica</button>
+                </div>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th scope="col">Pedido</th>
+                                <th scope="col">Cliente</th>
+                                <th scope="col">Entrega estimada</th>
+                                <th scope="col">Estado</th>
+                                <th scope="col">Destino de fabricación</th>
+                                <th scope="col" class="numeric-cell">Ganancia / comisión</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTableBody"></tbody>
+                    </table>
+                    <p class="empty-state" id="emptyOrdersMessage" hidden>No hay pedidos que coincidan con la búsqueda.</p>
+                </div>
+                <p class="table-footnote">Todos los nombres, fechas y montos son ficticios. La categoría y comisión solo se mantienen mientras esta página está abierta; no se guardan.</p>
+            </section>
+        </section>
+    </main>
+
+    <footer class="admin-footer">© 2026 3deco · Prototipo de administración</footer>
+    <script src="analytics-config.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>

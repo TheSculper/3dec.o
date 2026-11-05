@@ -1,0 +1,4 @@
+/slicer-service/profiles/*
+!/slicer-service/profiles/.gitkeep
+__pycache__/
+*.py[cod]
