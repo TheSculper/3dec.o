@@ -12,6 +12,16 @@ const categories = {
     partner: 'Empresa colaboradora'
 };
 
+const printerNames = {
+    ender5: 'Ender 5',
+    cr10: 'Creality CR-10'
+};
+
+const printerStates = {
+    ender5: 'available',
+    cr10: 'available'
+};
+
 const demoDate = offset => {
     const date = new Date();
     date.setHours(12, 0, 0, 0);
@@ -49,6 +59,7 @@ const tableBody = document.getElementById('ordersTableBody');
 const searchInput = document.getElementById('orderSearch');
 let sortMode = 'due';
 let selectedQueue = 'ender5';
+let demoOrderSequence = 1053;
 
 function updateQueueCounts() {
     document.querySelectorAll('[data-queue-count]').forEach(counter => {
@@ -62,6 +73,63 @@ function updateMetrics() {
         sampleOrders.filter(order => order.daysUntilDue <= 1).length;
     document.getElementById('profitMetric').textContent =
         formatCLP(sampleOrders.reduce((total, order) => total + getOrderGain(order), 0));
+}
+
+function getNewOrderCategory() {
+    const availablePrinters = Object.keys(printerNames).filter(printer => printerStates[printer] === 'available');
+    if (availablePrinters.length === 0) return 'partner';
+    if (availablePrinters.length === 1) return availablePrinters[0];
+    return availablePrinters.sort((a, b) =>
+        sampleOrders.filter(order => order.category === a).length -
+        sampleOrders.filter(order => order.category === b).length
+    )[0];
+}
+
+function updatePrinterRoutingStatus() {
+    const availablePrinters = Object.keys(printerNames).filter(printer => printerStates[printer] === 'available');
+    const routingStatus = document.getElementById('automaticRoutingStatus');
+    const message = document.getElementById('printerRoutingMessage');
+
+    if (availablePrinters.length === 0) {
+        routingStatus.dataset.state = 'partner';
+        routingStatus.textContent = 'Derivación automática a colaborador';
+        message.textContent = 'Ambas impresoras están ocupadas o fuera de servicio. Los pedidos nuevos se asignarán a la empresa colaboradora; los pedidos ya asignados no se moverán.';
+    } else if (availablePrinters.length === 1) {
+        routingStatus.dataset.state = 'available';
+        routingStatus.textContent = 'Impresión propia disponible';
+        message.textContent = `Los pedidos nuevos se asignarán a ${printerNames[availablePrinters[0]]}. Los pedidos ya asignados no se moverán.`;
+    } else {
+        routingStatus.dataset.state = 'available';
+        routingStatus.textContent = 'Impresión propia disponible';
+        message.textContent = 'Ambas impresoras están disponibles. Los pedidos nuevos se asignan al equipo con menos pedidos en cola; en caso de empate, se asignan a Ender 5.';
+    }
+}
+
+function simulateNewOrder() {
+    const id = `DEMO-${demoOrderSequence++}`;
+    const category = getNewOrderCategory();
+    const order = {
+        id,
+        client: `Cliente de muestra ${id.slice(-4)}`,
+        daysUntilDue: 5,
+        profit: 0,
+        status: 'Nueva solicitud',
+        category
+    };
+    if (category === 'partner') {
+        order.supplierQuote = 0;
+        order.commissionRate = 20;
+    }
+
+    sampleOrders.push(order);
+    updateMetrics();
+    updateQueueCounts();
+    searchInput.value = '';
+    setQueue(category);
+
+    const routingMessage = document.getElementById('newOrderRoutingStatus');
+    routingMessage.hidden = false;
+    routingMessage.textContent = `Pedido ficticio ${id} asignado a ${categories[category]}.`;
 }
 
 function createRouteCell(order) {
@@ -250,6 +318,78 @@ function updateOrderField(event) {
     tableBody.querySelector(`[data-order-id="${order.id}"][data-order-field="${field}"]`)?.focus();
 }
 
+const courseVideoForm = document.getElementById('courseVideoForm');
+const courseVideoList = document.getElementById('courseVideoList');
+const emptyCourseVideos = document.getElementById('emptyCourseVideos');
+const courseVideoStatus = document.getElementById('courseVideoStatus');
+const demoVideoUrls = new Set();
+const maxDemoVideoSize = 200 * 1024 * 1024;
+
+function clearDemoVideos() {
+    demoVideoUrls.forEach(url => URL.revokeObjectURL(url));
+    demoVideoUrls.clear();
+    courseVideoList.querySelectorAll('.course-video-item').forEach(item => item.remove());
+    emptyCourseVideos.hidden = false;
+    courseVideoStatus.textContent = '';
+    delete courseVideoStatus.dataset.state;
+}
+
+function addDemoVideo(event) {
+    event.preventDefault();
+    const title = document.getElementById('courseVideoTitle').value.trim();
+    const access = document.getElementById('courseVideoAccess').value;
+    const file = document.getElementById('courseVideoFile').files[0];
+
+    if (!title || !file) {
+        courseVideoStatus.dataset.state = 'error';
+        courseVideoStatus.textContent = 'Completa el título y selecciona un archivo de video.';
+        return;
+    }
+    if (!file.type.startsWith('video/')) {
+        courseVideoStatus.dataset.state = 'error';
+        courseVideoStatus.textContent = 'El archivo seleccionado no parece ser un video compatible.';
+        return;
+    }
+    if (file.size > maxDemoVideoSize) {
+        courseVideoStatus.dataset.state = 'error';
+        courseVideoStatus.textContent = 'El video supera el límite de 200 MB para esta demostración.';
+        return;
+    }
+
+    const url = URL.createObjectURL(file);
+    demoVideoUrls.add(url);
+
+    const item = document.createElement('article');
+    item.className = 'course-video-item';
+    const heading = document.createElement('h3');
+    heading.textContent = title;
+    const accessLabel = document.createElement('p');
+    accessLabel.textContent = access === 'subscriber' ? 'Acceso de muestra: suscriptores' : 'Acceso de muestra: básico';
+    const preview = document.createElement('video');
+    preview.controls = true;
+    preview.preload = 'metadata';
+    preview.src = url;
+    preview.setAttribute('aria-label', `Vista previa del video ${title}`);
+    const removeButton = document.createElement('button');
+    removeButton.type = 'button';
+    removeButton.textContent = 'Quitar de la vista previa';
+    removeButton.addEventListener('click', () => {
+        URL.revokeObjectURL(url);
+        demoVideoUrls.delete(url);
+        item.remove();
+        emptyCourseVideos.hidden = courseVideoList.querySelectorAll('.course-video-item').length !== 0;
+        courseVideoStatus.dataset.state = 'success';
+        courseVideoStatus.textContent = 'Video quitado de esta demostración.';
+    });
+
+    item.append(heading, accessLabel, preview, removeButton);
+    courseVideoList.appendChild(item);
+    emptyCourseVideos.hidden = true;
+    courseVideoStatus.dataset.state = 'success';
+    courseVideoStatus.textContent = 'Video agregado a la vista previa local. No se subió ni se compartió.';
+    courseVideoForm.reset();
+}
+
 document.getElementById('demoLoginForm').addEventListener('submit', event => {
     event.preventDefault();
     document.getElementById('loginPanel').hidden = true;
@@ -257,11 +397,13 @@ document.getElementById('demoLoginForm').addEventListener('submit', event => {
     updateAnalyticsStatus();
     updateMetrics();
     updateQueueCounts();
+    updatePrinterRoutingStatus();
     setQueue(selectedQueue);
     document.getElementById('dashboardTitle').focus();
 });
 
 document.getElementById('logoutButton').addEventListener('click', () => {
+    clearDemoVideos();
     document.getElementById('dashboardPanel').hidden = true;
     document.getElementById('loginPanel').hidden = false;
     document.getElementById('demoLoginForm').reset();
@@ -276,5 +418,13 @@ document.querySelectorAll('[data-queue]').forEach(button => {
 });
 document.getElementById('sortDueButton').addEventListener('click', () => setSortMode('due'));
 document.getElementById('sortProfitButton').addEventListener('click', () => setSortMode('profit'));
+document.querySelectorAll('[data-printer-state]').forEach(select => {
+    select.addEventListener('change', () => {
+        printerStates[select.dataset.printerState] = select.value;
+        updatePrinterRoutingStatus();
+    });
+});
+document.getElementById('simulateOrderButton').addEventListener('click', simulateNewOrder);
+courseVideoForm.addEventListener('submit', addDemoVideo);
 tableBody.addEventListener('change', updateOrderField);
 searchInput.addEventListener('input', renderOrders);

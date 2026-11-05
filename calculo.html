@@ -185,6 +185,20 @@
             max-width: 500px;
         }
 
+        .hero-strip .payment-notice {
+            max-width: 900px;
+            margin: 18px auto 0;
+            padding: 13px 16px;
+            color: var(--white);
+            background: var(--soft-blue-bg-light);
+            border: 1px solid var(--soft-blue-border);
+            border-radius: 9px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .payment-notice a { color: var(--cyan); font-weight: 700; }
+
         /* ─── MAIN LAYOUT ─── */
         .main-grid {
             display: grid;
@@ -612,6 +626,7 @@
 <div class="hero-strip">
     <h1>Calcula tu <span>cotización</span><br>de impresión 3D</h1>
     <p>Ingresa los datos de tu pieza y obtén un presupuesto detallado al instante. Descárgalo en PDF para compartir con tu cliente.</p>
+    <p class="payment-notice"><strong>Condición de impresión:</strong> el pedido comienza tras recibir el pago del 100% por adelantado. Para solicitar los datos de transferencia, escríbenos por <a href="https://wa.me/56975297791?text=Hola%2C%20quiero%20solicitar%20los%20datos%20para%20realizar%20una%20transferencia%20por%20un%20pedido%20de%20impresi%C3%B3n%203D." target="_blank" rel="noopener noreferrer">WhatsApp</a>.</p>
 </div>
 
 <div class="main-grid">
@@ -1391,15 +1406,16 @@ function generarPDF() {
     // Terms
     y = Math.max(y, H - 40);
     doc.setFillColor(28, 35, 51);
-    doc.rect(0, H - 34, W, 34, 'F');
+    doc.rect(0, H - 40, W, 40, 'F');
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(7);
     doc.setTextColor(...gray1);
-    doc.text('• Esta cotización tiene validez de 15 días hábiles.', 14, H - 26);
-    doc.text('• Los precios no incluyen IVA (19%).', 14, H - 21);
-    doc.text('• El tiempo de entrega puede variar según disponibilidad de stock y complejidad del proyecto.', 14, H - 16);
+    doc.text('• Esta cotización tiene validez de 15 días hábiles.', 14, H - 33);
+    doc.text('• Los precios no incluyen IVA (19%).', 14, H - 27);
+    doc.text('• La producción inicia con el pago del 100%; solicita los datos de transferencia por WhatsApp.', 14, H - 21);
+    doc.text('• El tiempo de entrega puede variar según disponibilidad de stock y complejidad del proyecto.', 14, H - 15);
     doc.setTextColor(...cyan);
-    doc.text('impresion3deco@gmail.com  ·  +56 9 7529 7791  ·  instagram: @3dec.o', W / 2, H - 8, { align: 'center' });
+    doc.text('impresion3deco@gmail.com  ·  +56 9 7529 7791  ·  instagram: @3dec.o', W / 2, H - 7, { align: 'center' });
 
     doc.save(`Cotizacion_3deco_${r.cotNum}.pdf`);
 }
@@ -1436,6 +1452,8 @@ function enviarWhatsApp() {
 *Total por unidad: ${clp(r.totalUnit)}*
 ${r.units > 1 ? `*Total ${r.units} unidades: ${clp(r.total)}*` : ''}
 ${r.notas ? '\n*Notas:* ' + r.notas : ''}
+
+Si apruebas la cotización, la impresión comienza tras recibir el pago del 100% por adelantado. Solicita los datos de transferencia por este WhatsApp.
 
 ¡Gracias!`;
 
@@ -1543,7 +1561,7 @@ $('sliceStlBtn').addEventListener('click', async () => {
 $('sendStlBtn').addEventListener('click', () => {
     const f = $('stlFileInput').files[0];
     if (!f) return;
-    const msg = `¡Hola! Te envío mi archivo 3D para cotización.\n\nArchivo: ${f.name}\n\nPor favor revisar el adjunto que enviaré por WhatsApp. ¡Gracias!`;
+    const msg = `¡Hola! Te envío mi archivo 3D para cotización.\n\nArchivo: ${f.name}\n\nPor favor revisaré el archivo adjunto que enviaré por este chat. Si apruebo la cotización, entiendo que la impresión se inicia tras recibir el pago del 100% por adelantado. Por favor, envíame los datos de transferencia cuando corresponda.\n\n¡Gracias!`;
     window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
     alert(`Recuerda adjuntar el archivo "${f.name}" en el chat de WhatsApp.`);
 });

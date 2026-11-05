@@ -23,7 +23,7 @@
     <main class="admin-main">
         <div class="demo-banner" role="note">
             <strong>Prototipo visual — no es un sistema seguro.</strong>
-            <span>Esta página es pública. No uses credenciales ni datos de clientes reales. El acceso es simulado y los pedidos son ejemplos ficticios.</span>
+            <span>Esta página es pública. No uses credenciales ni datos de clientes reales. El acceso, los pedidos, los estados de impresora y la asignación automática son solo una demostración; no conecta con equipos reales.</span>
         </div>
 
         <section class="login-card" id="loginPanel" aria-labelledby="loginTitle">
@@ -69,6 +69,41 @@
                 </article>
             </div>
 
+            <section class="printer-status-card" aria-labelledby="printerStatusTitle">
+                <div class="printer-status-heading">
+                    <div>
+                        <p class="eyebrow">CAPACIDAD DE PRODUCCIÓN · DEMO</p>
+                        <h2 id="printerStatusTitle">Estado de impresoras</h2>
+                        <p>Indica si cada equipo puede recibir un pedido nuevo. Estos controles solo afectan la asignación de pedidos de muestra.</p>
+                    </div>
+                    <span class="routing-status" id="automaticRoutingStatus" role="status">Asignación automática activa</span>
+                </div>
+                <div class="printer-status-grid">
+                    <label class="printer-status-item" for="ender5Status">
+                        <span>Ender 5</span>
+                        <select id="ender5Status" data-printer-state="ender5">
+                            <option value="available">Operativa · disponible</option>
+                            <option value="busy">Ocupada · no disponible</option>
+                            <option value="offline">Fuera de servicio · falla técnica</option>
+                        </select>
+                    </label>
+                    <label class="printer-status-item" for="cr10Status">
+                        <span>Creality CR-10</span>
+                        <select id="cr10Status" data-printer-state="cr10">
+                            <option value="available">Operativa · disponible</option>
+                            <option value="busy">Ocupada · no disponible</option>
+                            <option value="offline">Fuera de servicio · falla técnica</option>
+                        </select>
+                    </label>
+                </div>
+                <p class="printer-routing-message" id="printerRoutingMessage"></p>
+                <div class="demo-intake">
+                    <span>Prueba la regla creando una solicitud ficticia; nunca se envía ni se guarda.</span>
+                    <button class="secondary-button" id="simulateOrderButton" type="button">Simular pedido nuevo</button>
+                </div>
+                <p class="new-order-message" id="newOrderRoutingStatus" role="status" hidden></p>
+            </section>
+
             <section class="analytics-card" aria-labelledby="analyticsTitle">
                 <div class="analytics-copy">
                     <p class="eyebrow">ESTADÍSTICAS AGREGADAS</p>
@@ -79,6 +114,42 @@
                 <div class="analytics-actions">
                     <a class="analytics-button" href="https://dash.cloudflare.com/?to=/:account/web-analytics" target="_blank" rel="noopener noreferrer">Abrir informes en Cloudflare</a>
                     <a class="analytics-help" href="https://developers.cloudflare.com/web-analytics/get-started/" target="_blank" rel="noopener noreferrer">Ver instrucciones de configuración</a>
+                </div>
+            </section>
+
+            <section class="orders-card course-admin-card" aria-labelledby="courseAdminTitle">
+                <div class="orders-toolbar">
+                    <div>
+                        <p class="eyebrow">BIBLIOTECA DE CAPACITACIÓN · DEMO</p>
+                        <h2 id="courseAdminTitle">Videos de asesoría y capacitación</h2>
+                        <p>Previsualiza videos en este navegador y define si serían material básico o para suscriptores.</p>
+                    </div>
+                    <a class="analytics-help" href="capacitacion.html">Ver portal de estudiantes</a>
+                </div>
+                <div class="course-upload-notice" role="note">
+                    <strong>Solo demostración:</strong> los archivos no se suben al sitio, no se guardan y no aparecen en el portal de estudiantes. Al cerrar o recargar esta página se eliminan.
+                </div>
+                <form id="courseVideoForm" class="course-video-form">
+                    <label>
+                        Título del video
+                        <input id="courseVideoTitle" name="title" type="text" maxlength="100" required placeholder="Ej.: Primeros pasos con impresión 3D">
+                    </label>
+                    <label>
+                        Acceso de muestra
+                        <select id="courseVideoAccess" name="access">
+                            <option value="basic">Vista básica</option>
+                            <option value="subscriber">Suscriptores</option>
+                        </select>
+                    </label>
+                    <label class="course-file-label">
+                        Archivo de video (máx. 200 MB)
+                        <input id="courseVideoFile" name="video" type="file" accept="video/*" required>
+                    </label>
+                    <button class="primary-button" type="submit">Agregar video de muestra</button>
+                </form>
+                <p class="course-video-status" id="courseVideoStatus" role="status" aria-live="polite"></p>
+                <div class="course-video-list" id="courseVideoList" aria-live="polite">
+                    <p class="empty-state" id="emptyCourseVideos">Aún no agregas videos de muestra.</p>
                 </div>
             </section>
 
