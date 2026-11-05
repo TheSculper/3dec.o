@@ -206,6 +206,17 @@ function setSortMode(mode) {
     renderOrders();
 }
 
+function updateAnalyticsStatus() {
+    const token = window.CLOUDFLARE_WEB_ANALYTICS_TOKEN;
+    const isConfigured = typeof token === 'string' && token.trim() !== '';
+    const status = document.getElementById('analyticsStatus');
+    status.dataset.configured = String(isConfigured);
+    status.textContent = isConfigured ? 'Token público configurado' : 'Pendiente de configuración';
+    document.getElementById('analyticsSummary').textContent = isConfigured
+        ? 'El sitio está preparado para registrar métricas agregadas de la portada y la calculadora. Los informes pueden tardar unos minutos en aparecer y se consultan en Cloudflare.'
+        : 'Aún no se registran visitas. Configura el token público de Cloudflare Web Analytics para consultar visitas y páginas más vistas en sus informes.';
+}
+
 function updateOrderField(event) {
     const field = event.target.dataset.orderField;
     const order = sampleOrders.find(item => item.id === event.target.dataset.orderId);
@@ -243,6 +254,7 @@ document.getElementById('demoLoginForm').addEventListener('submit', event => {
     event.preventDefault();
     document.getElementById('loginPanel').hidden = true;
     document.getElementById('dashboardPanel').hidden = false;
+    updateAnalyticsStatus();
     updateMetrics();
     updateQueueCounts();
     setQueue(selectedQueue);

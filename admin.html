@@ -69,6 +69,19 @@
                 </article>
             </div>
 
+            <section class="analytics-card" aria-labelledby="analyticsTitle">
+                <div class="analytics-copy">
+                    <p class="eyebrow">ESTADÍSTICAS AGREGADAS</p>
+                    <h2 id="analyticsTitle">Visitas del sitio</h2>
+                    <p id="analyticsSummary">Configura Cloudflare Web Analytics para consultar visitas y páginas más vistas en sus informes.</p>
+                    <span class="analytics-status" id="analyticsStatus" role="status">Pendiente de configuración</span>
+                </div>
+                <div class="analytics-actions">
+                    <a class="analytics-button" href="https://dash.cloudflare.com/?to=/:account/web-analytics" target="_blank" rel="noopener noreferrer">Abrir informes en Cloudflare</a>
+                    <a class="analytics-help" href="https://developers.cloudflare.com/web-analytics/get-started/" target="_blank" rel="noopener noreferrer">Ver instrucciones de configuración</a>
+                </div>
+            </section>
+
             <section class="orders-card" aria-labelledby="ordersTitle">
                 <div class="orders-toolbar">
                     <div>
@@ -121,6 +134,7 @@
     </main>
 
     <footer class="admin-footer">© 2026 3deco · Prototipo de administración</footer>
+    <script src="analytics-config.js"></script>
     <script src="admin.js"></script>
 </body>
 </html>

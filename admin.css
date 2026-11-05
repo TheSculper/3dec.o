@@ -245,6 +245,58 @@ button { cursor: pointer; }
 .metric-card-highlight { background: linear-gradient(140deg, #fff, #eef6ff); }
 .metric-card-highlight strong { color: var(--blue-dark); }
 
+.analytics-card {
+    margin-bottom: 23px;
+    padding: 21px 23px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 13px;
+    box-shadow: 0 4px 16px rgba(32, 54, 82, 0.035);
+}
+
+.analytics-copy .eyebrow { margin-bottom: 7px; }
+.analytics-copy h2 { margin: 0; color: var(--ink); font-size: 18px; }
+.analytics-copy > p:not(.eyebrow) {
+    max-width: 610px;
+    margin: 7px 0 10px;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.analytics-status {
+    display: inline-flex;
+    padding: 5px 9px;
+    color: #825a14;
+    background: #fff5dc;
+    border-radius: 99px;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.analytics-status[data-configured="true"] { color: #26734b; background: #e8f7ef; }
+.analytics-actions { display: grid; flex: 0 0 auto; justify-items: start; gap: 9px; }
+.analytics-button {
+    min-height: 39px;
+    padding: 0 13px;
+    display: inline-flex;
+    align-items: center;
+    color: white;
+    background: var(--blue);
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.analytics-button:hover { background: var(--blue-dark); }
+.analytics-help { color: var(--blue-dark); font-size: 10px; text-decoration: none; }
+.analytics-help:hover { text-decoration: underline; }
+
 .orders-card {
     padding: 22px;
     background: var(--surface);
@@ -463,6 +515,8 @@ td.numeric-cell { color: #18764b; font-weight: 700; }
     .admin-main { width: min(100% - 28px, 600px); margin-top: 18px; }
     .metric-grid { grid-template-columns: 1fr; gap: 10px; }
     .metric-card { min-height: 100px; }
+    .analytics-card { align-items: flex-start; flex-direction: column; padding: 18px; }
+    .analytics-actions { width: 100%; }
     .orders-card { padding: 17px 13px; }
     .orders-toolbar { align-items: stretch; flex-direction: column; gap: 14px; }
     .search-control { width: 100%; }
