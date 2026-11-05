@@ -46,14 +46,14 @@
                 <div>
                     <p class="eyebrow">PANEL DE CONTROL · DATOS DE EJEMPLO</p>
                     <h1 id="dashboardTitle" tabindex="-1">Pedidos</h1>
-                    <p class="dashboard-subtitle">Organiza la cola según la fecha comprometida o la ganancia estimada.</p>
+                    <p class="dashboard-subtitle">Clasifica cada pedido por destino de fabricación y prioriza sus entregas o ganancias.</p>
                 </div>
                 <button class="secondary-button" id="logoutButton" type="button">Salir del demo</button>
             </div>
 
             <div class="metric-grid" aria-label="Resumen de pedidos de ejemplo">
                 <article class="metric-card">
-                    <span class="metric-label">Pedidos abiertos</span>
+                    <span class="metric-label">Pedidos en cola</span>
                     <strong id="openOrdersMetric">0</strong>
                     <span class="metric-detail">En esta lista de muestra</span>
                 </article>
@@ -81,6 +81,18 @@
                     </label>
                 </div>
 
+                <div class="queue-tabs" role="group" aria-label="Colas de fabricación">
+                    <button class="queue-tab is-active" data-queue="ender5" type="button" aria-pressed="true">
+                        Ender 5 <span class="queue-count" data-queue-count="ender5">0</span>
+                    </button>
+                    <button class="queue-tab" data-queue="cr10" type="button" aria-pressed="false">
+                        Creality CR-10 <span class="queue-count" data-queue-count="cr10">0</span>
+                    </button>
+                    <button class="queue-tab" data-queue="partner" type="button" aria-pressed="false">
+                        Empresa colaboradora <span class="queue-count" data-queue-count="partner">0</span>
+                    </button>
+                </div>
+
                 <div class="sort-controls" role="group" aria-label="Ordenar pedidos">
                     <span>Priorizar por:</span>
                     <button class="sort-button is-active" id="sortDueButton" type="button" aria-pressed="true">Fecha de entrega</button>
@@ -95,14 +107,15 @@
                                 <th scope="col">Cliente</th>
                                 <th scope="col">Entrega estimada</th>
                                 <th scope="col">Estado</th>
-                                <th scope="col" class="numeric-cell">Ganancia estimada</th>
+                                <th scope="col">Destino de fabricación</th>
+                                <th scope="col" class="numeric-cell">Ganancia / comisión</th>
                             </tr>
                         </thead>
                         <tbody id="ordersTableBody"></tbody>
                     </table>
                     <p class="empty-state" id="emptyOrdersMessage" hidden>No hay pedidos que coincidan con la búsqueda.</p>
                 </div>
-                <p class="table-footnote">Todos los nombres, fechas y montos mostrados son ficticios.</p>
+                <p class="table-footnote">Todos los nombres, fechas y montos son ficticios. La categoría y comisión solo se mantienen mientras esta página está abierta; no se guardan.</p>
             </section>
         </section>
     </main>

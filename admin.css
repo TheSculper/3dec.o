@@ -301,6 +301,45 @@ button { cursor: pointer; }
     font-weight: 700;
 }
 
+.queue-tabs {
+    margin-top: 21px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 9px;
+}
+
+.queue-tab {
+    min-height: 53px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    color: #43566f;
+    background: #fff;
+    border: 1px solid #dce5ef;
+    border-radius: 9px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.queue-tab:hover { background: #f6faff; border-color: #b7d5f4; }
+.queue-tab.is-active { color: #075fba; background: #edf6ff; border-color: #8fc5fb; }
+.queue-count {
+    min-width: 24px;
+    height: 24px;
+    padding: 0 6px;
+    display: inline-grid;
+    place-items: center;
+    color: #52657b;
+    background: #edf1f5;
+    border-radius: 99px;
+    font-size: 10px;
+}
+
+.queue-tab.is-active .queue-count { color: white; background: var(--blue); }
+
 .sort-button {
     min-height: 33px;
     padding: 0 12px;
@@ -355,6 +394,47 @@ tbody tr:hover { background: #fbfdff; }
 .numeric-cell { text-align: right; }
 td.numeric-cell { color: #18764b; font-weight: 700; }
 
+.route-cell { min-width: 235px; white-space: normal; }
+.route-select, .partner-fields input {
+    min-height: 34px;
+    padding: 0 9px;
+    color: #3d5067;
+    background: #fff;
+    border: 1px solid #d7e0e9;
+    border-radius: 6px;
+    font-size: 11px;
+}
+
+.route-select { width: 100%; }
+.partner-fields {
+    margin-top: 8px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 7px;
+}
+
+.partner-fields label {
+    display: grid;
+    gap: 4px;
+    color: #68788d;
+    font-size: 9px;
+}
+
+.partner-fields input { width: 100%; min-width: 0; }
+.partner-summary {
+    margin-top: 7px;
+    color: #53647a;
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+.partner-summary strong { color: #176fcb; }
+.commission-value { color: #18764b; font-weight: 700; }
+.route-select:focus-visible, .partner-fields input:focus-visible, .queue-tab:focus-visible, .sort-button:focus-visible {
+    outline: 3px solid rgba(8, 120, 232, 0.22);
+    outline-offset: 2px;
+}
+
 .empty-state {
     margin: 0;
     padding: 30px 12px;
@@ -388,7 +468,9 @@ td.numeric-cell { color: #18764b; font-weight: 700; }
     .search-control { width: 100%; }
     .sort-controls { align-items: flex-start; }
     .sort-controls > span { width: 100%; }
-    table { min-width: 660px; }
+    .queue-tabs { grid-template-columns: 1fr; gap: 7px; }
+    .queue-tab { min-height: 44px; }
+    table { min-width: 930px; }
 }
 
 @media (max-width: 390px) {

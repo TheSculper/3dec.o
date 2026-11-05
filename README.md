@@ -4,7 +4,7 @@ Sitio estático de 3deco publicado en GitHub Pages. GitHub Pages no ejecuta el l
 
 ## Portal administrador (prototipo)
 
-`admin.html` es una maqueta de interfaz: el ingreso acepta cualquier texto, no autentica usuarios ni almacena credenciales, y la lista contiene pedidos y ganancias ficticios. No ingreses información real. GitHub Pages no puede mantener una cola privada; antes de usar este portal con clientes reales hace falta implementar un backend con autenticación y almacenamiento seguros.
+`admin.html` es una maqueta de interfaz: el ingreso acepta cualquier texto, no autentica usuarios ni almacena credenciales, y la lista contiene pedidos y ganancias ficticios. Los pedidos de muestra se pueden clasificar en colas Ender 5, Creality CR-10 o empresa colaboradora; para estos últimos, la cotización externa y la comisión (20% inicial editable) calculan una comisión y un precio sugerido. Los cambios solo viven en memoria mientras la página está abierta. No ingreses información real. GitHub Pages no puede mantener una cola privada; antes de usar este portal con clientes reales hace falta implementar un backend con autenticación y almacenamiento seguros.
 
 ## Probar el servicio de laminado local
 
