@@ -392,6 +392,76 @@ button { cursor: pointer; }
 .analytics-help { color: var(--blue-dark); font-size: 10px; text-decoration: none; }
 .analytics-help:hover { text-decoration: underline; }
 
+.todo-card {
+    margin-bottom: 23px;
+    padding: 21px 23px;
+}
+.todo-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+}
+.todo-heading h2 { margin: 0; color: var(--ink); font-size: 18px; }
+.todo-heading p:not(.eyebrow) { margin: 7px 0 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+.todo-progress-summary { min-width: 150px; display: grid; gap: 7px; color: var(--blue-dark); font-size: 11px; }
+.todo-progress-summary progress { width: 100%; height: 8px; accent-color: var(--blue); }
+.todo-demo-notice {
+    margin: 15px 0;
+    padding: 10px 12px;
+    color: #70480a;
+    background: #fff6dd;
+    border: 1px solid #f3dfaa;
+    border-radius: 8px;
+    font-size: 11px;
+    line-height: 1.5;
+}
+.todo-list { margin: 0; padding: 0; display: grid; gap: 9px; list-style: none; counter-reset: todo; }
+.todo-item {
+    position: relative;
+    padding: 12px 13px;
+    background: #f8fafc;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    counter-increment: todo;
+}
+.todo-item::before {
+    content: counter(todo, decimal-leading-zero);
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    color: #8a98aa;
+    font-size: 10px;
+    font-weight: 700;
+}
+.todo-item label { display: flex; align-items: flex-start; gap: 10px; padding-right: 27px; cursor: pointer; }
+.todo-item input { flex: 0 0 auto; width: 17px; height: 17px; margin: 2px 0 0; accent-color: var(--blue); }
+.todo-copy { display: grid; gap: 4px; }
+.todo-copy strong { color: var(--ink); font-size: 12px; line-height: 1.4; }
+.todo-copy > span { color: var(--muted); font-size: 11px; line-height: 1.5; }
+.todo-item[data-done="true"] { background: #f2faf5; border-color: #cbe8d5; }
+.todo-item[data-done="true"] .todo-copy strong { color: #567363; text-decoration: line-through; }
+.todo-storage-status { min-height: 14px; margin: 10px 0 0; color: var(--muted); font-size: 10px; }
+.todo-storage-status[data-state="error"] { color: #a33b36; }
+
+.idea-card { margin-bottom: 23px; padding: 21px 23px; }
+.idea-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
+.idea-heading h2 { margin: 0; color: var(--ink); font-size: 18px; }
+.idea-heading p:not(.eyebrow) { margin: 7px 0 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+.idea-demo-badge { flex: 0 0 auto; padding: 6px 10px; color: #825a14; background: #fff5dc; border-radius: 99px; font-size: 10px; font-weight: 700; }
+.idea-suggestion { margin-top: 16px; padding: 19px; background: linear-gradient(140deg, #f1f7ff, #fff); border: 1px solid #d9eaff; border-radius: 11px; }
+.idea-meta { display: flex; justify-content: space-between; gap: 12px; color: var(--blue-dark); font-size: 10px; font-weight: 700; }
+.idea-meta span:last-child { color: var(--muted); }
+.idea-suggestion h3 { margin: 12px 0 6px; color: var(--ink); font-size: 17px; }
+.idea-suggestion > p { margin: 0; color: #52657b; font-size: 12px; line-height: 1.55; }
+.idea-suggestion .idea-test { margin-top: 12px; padding-top: 11px; border-top: 1px solid #dce8f5; }
+.idea-test strong { color: var(--ink); }
+.idea-controls { margin-top: 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.idea-controls > span { color: var(--muted); font-size: 10px; }
+.idea-controls > div { display: flex; flex-wrap: wrap; gap: 8px; }
+.idea-controls button { min-height: 36px; font-size: 10px; }
+.idea-disclaimer { margin: 11px 0 0; color: #8793a3; font-size: 10px; line-height: 1.5; }
+
 .course-admin-card {
     margin-bottom: 23px;
     padding: 21px 23px;
@@ -677,6 +747,13 @@ td.numeric-cell { color: #18764b; font-weight: 700; }
     .demo-intake { align-items: stretch; flex-direction: column; }
     .analytics-card { align-items: flex-start; flex-direction: column; padding: 18px; }
     .analytics-actions { width: 100%; }
+    .todo-card { padding: 18px; }
+    .todo-heading { flex-direction: column; }
+    .todo-progress-summary { width: 100%; }
+    .idea-card { padding: 18px; }
+    .idea-heading { flex-direction: column; }
+    .idea-controls { align-items: stretch; flex-direction: column; }
+    .idea-controls > div { display: grid; grid-template-columns: 1fr 1fr; }
     .course-admin-card { padding: 18px; }
     .course-video-form { grid-template-columns: 1fr; }
     .course-video-form .course-file-label { grid-column: auto; }

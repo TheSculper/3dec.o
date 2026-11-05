@@ -10,11 +10,17 @@ La sección de ideas enlaza búsquedas en Thingiverse y Cults3D en vez de copiar
 
 Las cotizaciones para pedidos de impresión 3D informan que la producción comienza después de recibir el pago completo (100% por adelantado). Los datos de transferencia se solicitan directamente por WhatsApp; no se publican datos bancarios en el sitio.
 
+El sitio también ofrece solicitudes de corte por plasma coordinadas con empresas colaboradoras. La factibilidad, materiales, espesores, plazos y precio se confirman para cada proyecto; 3deco no opera directamente el equipo de plasma.
+
 ## Portal administrador (prototipo)
 
 `admin.html` es una maqueta de interfaz: el ingreso acepta cualquier texto, no autentica usuarios ni almacena credenciales, y la lista contiene pedidos y ganancias ficticios. Los pedidos de muestra se pueden clasificar en colas Ender 5, Creality CR-10 o empresa colaboradora; para estos últimos, la cotización externa y la comisión (20% inicial editable) calculan una comisión y un precio sugerido. Los cambios solo viven en memoria mientras la página está abierta. No ingreses información real. GitHub Pages no puede mantener una cola privada; antes de usar este portal con clientes reales hace falta implementar un backend con autenticación y almacenamiento seguros.
 
 El panel también muestra estados ficticios para Ender 5 y CR-10 y permite simular la llegada de pedidos. Para pedidos nuevos, asigna una impresora marcada como disponible; si ambas están ocupadas o fuera de servicio, asigna la solicitud a la empresa colaboradora. Cambiar estados no mueve pedidos existentes. Esta regla no controla impresoras reales ni se conecta con la calculadora o un sistema de pagos.
+
+El panel incluye una lista priorizada de trabajo para preparar la operación real: reglas comerciales, backend y acceso, pagos, videos protegidos, conexión de impresoras, políticas y métricas/recomendaciones. Las casillas se guardan únicamente en el almacenamiento local del navegador actual; no se sincronizan con otros dispositivos ni están protegidas por una cuenta real.
+
+También presenta una lluvia de ideas de muestra: ocho propuestas predefinidas rotan cada 30 segundos y vuelven a empezar mientras el panel demo está abierto. Se puede pausar/reanudar o avanzar manualmente; al salir, la rotación se detiene. No está conectada a un modelo de IA ni analiza métricas. Una IA real requiere backend, presupuesto y límites de uso, además de proteger datos comerciales y personales.
 
 ## Asesoría y capacitación (prototipo)
 

@@ -117,6 +117,117 @@
                 </div>
             </section>
 
+            <section class="orders-card todo-card" aria-labelledby="todoTitle">
+                <div class="todo-heading">
+                    <div>
+                        <p class="eyebrow">PRÓXIMOS PASOS · LISTA DE TRABAJO</p>
+                        <h2 id="todoTitle">Pendientes para llevar 3deco a producción</h2>
+                        <p>Un orden sugerido para pasar de las maquetas actuales a servicios reales y seguros.</p>
+                    </div>
+                    <div class="todo-progress-summary">
+                        <strong id="todoProgressLabel">0 de 7 completadas</strong>
+                        <progress id="todoProgress" max="7" value="0" aria-label="Progreso de tareas pendientes"></progress>
+                    </div>
+                </div>
+                <div class="todo-demo-notice" role="note">
+                    El progreso se guarda solo en este navegador. No se comparte entre dispositivos ni reemplaza un sistema de administración privado.
+                </div>
+                <ol class="todo-list" id="adminTodoList">
+                    <li class="todo-item" data-priority="Decisión">
+                        <label>
+                            <input type="checkbox" data-admin-todo="business-rules">
+                            <span class="todo-copy">
+                                <strong>Definir cómo vender los servicios y cursos</strong>
+                                <span>Elegir precios, proveedor de pago, periodicidad de la suscripción, cancelaciones y condiciones de devolución.</span>
+                            </span>
+                        </label>
+                    </li>
+                    <li class="todo-item" data-priority="Base técnica">
+                        <label>
+                            <input type="checkbox" data-admin-todo="secure-backend">
+                            <span class="todo-copy">
+                                <strong>Crear backend privado y acceso real</strong>
+                                <span>Autenticar administradores y estudiantes, gestionar permisos y guardar pedidos y datos fuera de GitHub Pages.</span>
+                            </span>
+                        </label>
+                    </li>
+                    <li class="todo-item" data-priority="Pagos">
+                        <label>
+                            <input type="checkbox" data-admin-todo="payment-verification">
+                            <span class="todo-copy">
+                                <strong>Verificar pagos antes de habilitar producción o cursos</strong>
+                                <span>Procesar notificaciones firmadas del proveedor en el servidor; validar pedido y monto, y evitar procesar un pago dos veces.</span>
+                            </span>
+                        </label>
+                    </li>
+                    <li class="todo-item" data-priority="Capacitación">
+                        <label>
+                            <input type="checkbox" data-admin-todo="protected-videos">
+                            <span class="todo-copy">
+                                <strong>Publicar videos con acceso protegido</strong>
+                                <span>Subida desde el admin, almacenamiento privado y autorización en servidor según el estado de suscripción.</span>
+                            </span>
+                        </label>
+                    </li>
+                    <li class="todo-item" data-priority="Impresión">
+                        <label>
+                            <input type="checkbox" data-admin-todo="printer-connection">
+                            <span class="todo-copy">
+                                <strong>Conectar pedidos e impresoras de forma segura</strong>
+                                <span>Confirmar modelos y firmware, crear una cola real y probar un gestor de impresión con revisión humana antes de automatizar.</span>
+                            </span>
+                        </label>
+                    </li>
+                    <li class="todo-item" data-priority="Operación">
+                        <label>
+                            <input type="checkbox" data-admin-todo="operations-policies">
+                            <span class="todo-copy">
+                                <strong>Preparar políticas y operación de clientes</strong>
+                                <span>Documentar privacidad, términos del servicio, tiempos, soporte, garantías y manejo de archivos de clientes.</span>
+                            </span>
+                        </label>
+                    </li>
+                    <li class="todo-item" data-priority="Crecimiento">
+                        <label>
+                            <input type="checkbox" data-admin-todo="business-insights">
+                            <span class="todo-copy">
+                                <strong>Agregar métricas y recomendaciones para el negocio</strong>
+                                <span>Conectar analítica privada y, más adelante, generar sugerencias de IA en un backend sin exponer claves ni datos personales.</span>
+                            </span>
+                        </label>
+                    </li>
+                </ol>
+                <p class="todo-storage-status" id="todoStorageStatus" role="status" aria-live="polite"></p>
+            </section>
+
+            <section class="orders-card idea-card" aria-labelledby="ideaTitle">
+                <div class="idea-heading">
+                    <div>
+                        <p class="eyebrow">LLUVIA DE IDEAS CONTINUA · DEMO</p>
+                        <h2 id="ideaTitle">Ideas para mejorar 3deco</h2>
+                        <p>Propuestas para explorar. Valida cada idea con tus clientes antes de invertir tiempo o dinero.</p>
+                    </div>
+                    <span class="idea-demo-badge">Sin IA conectada</span>
+                </div>
+                <article class="idea-suggestion" aria-labelledby="ideaSuggestionTitle">
+                    <div class="idea-meta">
+                        <span id="ideaCategory">Capacitación</span>
+                        <span id="ideaCounter">Idea 1 de 8</span>
+                    </div>
+                    <h3 id="ideaSuggestionTitle"></h3>
+                    <p id="ideaDescription"></p>
+                    <p class="idea-test"><strong>Prueba pequeña:</strong> <span id="ideaTest"></span></p>
+                </article>
+                <div class="idea-controls">
+                    <span id="ideaRotationStatus" role="status">Rotación pausada hasta entrar al panel demo.</span>
+                    <div>
+                        <button class="secondary-button" id="toggleIdeaRotation" type="button" aria-pressed="false">Pausar rotación</button>
+                        <button class="primary-button" id="nextIdeaButton" type="button">Siguiente idea</button>
+                    </div>
+                </div>
+                <p class="idea-disclaimer">Las ideas son una lista predefinida que se repite mientras el demo está abierto; no son análisis de ventas ni recomendaciones generadas por IA.</p>
+            </section>
+
             <section class="orders-card course-admin-card" aria-labelledby="courseAdminTitle">
                 <div class="orders-toolbar">
                     <div>
