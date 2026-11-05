@@ -643,7 +643,7 @@
 
             <div id="sliceControls" hidden>
                 <p style="font-size:12px;color:var(--gray-1);margin-bottom:10px">
-                    El STL se procesa en el servicio local y se elimina al terminar. El resultado depende del perfil OrcaSlicer configurado.
+                    El STL se procesa en el servicio local de tu computador y se elimina al terminar. Puedes abrir esta calculadora desde GitHub Pages o en localhost, pero Docker y OrcaSlicer deben estar activos en tu computador. El resultado depende de los perfiles configurados.
                 </p>
                 <button id="sliceStlBtn" class="btn btn-primary" type="button">Calcular desde STL</button>
                 <p id="sliceStatus" role="status" aria-live="polite" style="font-size:13px;color:var(--gray-2);margin-top:10px"></p>
@@ -988,6 +988,7 @@ let sliceEstimateApplied = false;
 let sliceSupportGrams = null;
 let sliceInProgress = false;
 let selectedFileGeneration = 0;
+let slicerCheckGeneration = 0;
 
 function clearSliceEstimate(clearValues) {
     sliceEstimateApplied = false;
@@ -1002,6 +1003,66 @@ function invalidateSliceEstimate() {
     clearSliceEstimate(true);
     $('sliceStatus').textContent = 'Cambiaste material, impresora o relleno. Vuelve a laminar para actualizar la estimación.';
     calculate();
+}
+
+async function checkSlicerAvailability(fileGeneration = selectedFileGeneration) {
+    const checkGeneration = ++slicerCheckGeneration;
+    const file = $('stlFileInput').files[0];
+    if (!file || !/\.stl$/i.test(file.name) || $('sliceControls').hidden) return;
+
+    const material = $('materialSelect').value;
+    const printer = { 'Ender 5': 'ender-5', 'CR-10': 'cr-10' }[$('impresora').value];
+    const materialSlug = {
+        PLA_20000: 'pla',
+        PLA_24000: 'pla',
+        PETG_28000: 'petg',
+        ABS_30000: 'abs',
+        TPU_36000: 'tpu'
+    }[material];
+
+    if (!printer || !materialSlug) {
+        $('sliceStatus').textContent = 'Selecciona la impresora y el material para revisar si el laminado está listo.';
+        return;
+    }
+
+    $('sliceStatus').textContent = 'Revisando el servicio local de laminado…';
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
+    try {
+        const response = await fetch(`${SLICER_API_URL}/health`, { signal: controller.signal });
+        if (!response.ok) throw new Error(`El servicio local respondió con un error (${response.status}).`);
+        const status = await response.json();
+        if (
+            checkGeneration !== slicerCheckGeneration ||
+            fileGeneration !== selectedFileGeneration ||
+            $('stlFileInput').files[0] !== file
+        ) return;
+
+        if (!status.slicer_available) {
+            $('sliceStatus').textContent = 'El servicio está activo, pero OrcaSlicer no está disponible. Reconstruye el contenedor con docker compose -f slicer-service\\docker-compose.yml up --build.';
+            return;
+        }
+        if (!status.profiles.includes(`${printer}/${materialSlug}`)) {
+            $('sliceStatus').textContent = `Faltan perfiles OrcaSlicer para ${$('impresora').value} y ${$('materialSelect').selectedOptions[0].textContent}. Exporta los perfiles de máquina, proceso y filamento a slicer-service\\profiles y reinicia el contenedor.`;
+            return;
+        }
+        $('sliceStatus').textContent = 'Listo para laminar. Al calcular, el STL se procesa en este computador.';
+    } catch (error) {
+        if (
+            checkGeneration !== slicerCheckGeneration ||
+            fileGeneration !== selectedFileGeneration ||
+            $('stlFileInput').files[0] !== file
+        ) return;
+        if (error.name === 'AbortError') {
+            $('sliceStatus').textContent = 'El servicio local no respondió a tiempo. Comprueba que Docker Desktop y el contenedor estén activos.';
+        } else if (error instanceof TypeError) {
+            $('sliceStatus').textContent = 'No se pudo conectar con el servicio local. Inícialo con docker compose -f slicer-service\\docker-compose.yml up --build y vuelve a comprobar.';
+        } else {
+            $('sliceStatus').textContent = error.message || 'No se pudo comprobar el servicio local de laminado.';
+        }
+    } finally {
+        clearTimeout(timeout);
+    }
 }
 
 function calculate() {
@@ -1404,6 +1465,8 @@ function selectModelFile(file) {
     sliceControls.hidden = !isStl;
     if (!isStl) {
         $('sliceStatus').textContent = 'El cálculo automático admite STL; puedes enviar este archivo por WhatsApp.';
+    } else {
+        checkSlicerAvailability();
     }
 }
 
@@ -1533,6 +1596,7 @@ $('enviarWhatsAppBtn').addEventListener('click', enviarWhatsApp);
 $('materialSelect').addEventListener('change', () => {
     invalidateSliceEstimate();
     updateColors();
+    checkSlicerAvailability();
 });
 ['pesoInput','tiempoInput','postProcesadoInput','largoInput','anchoInput',
  'altoInput','unidades','relleno','impresora','nombrePieza',
@@ -1540,6 +1604,9 @@ $('materialSelect').addEventListener('change', () => {
     .forEach(id => {
         const el = $(id);
         if (el && ['relleno','impresora'].includes(id)) el.addEventListener('change', invalidateSliceEstimate);
+        if (el && ['relleno','impresora'].includes(id)) {
+            el.addEventListener('change', () => checkSlicerAvailability());
+        }
         if (el) el.addEventListener('input', calculate);
         if (el && el.tagName === 'SELECT') el.addEventListener('change', calculate);
     });
