@@ -2,6 +2,10 @@
 
 Sitio estático de 3deco publicado en GitHub Pages. GitHub Pages no ejecuta el laminador; el cálculo desde un archivo STL se prepara como un servicio local separado, basado en OrcaSlicer.
 
+## Portal administrador (prototipo)
+
+`admin.html` es una maqueta de interfaz: el ingreso acepta cualquier texto, no autentica usuarios ni almacena credenciales, y la lista contiene pedidos y ganancias ficticios. No ingreses información real. GitHub Pages no puede mantener una cola privada; antes de usar este portal con clientes reales hace falta implementar un backend con autenticación y almacenamiento seguros.
+
 ## Probar el servicio de laminado local
 
 Requiere Docker Desktop con contenedores Linux. OrcaSlicer 2.4.2 se descarga durante la construcción de la imagen y se verifica con SHA-256. El primer build puede tardar y descargar varios cientos de MB.
