@@ -12,6 +12,16 @@ const categories = {
     partner: 'Empresa colaboradora'
 };
 
+const printerNames = {
+    ender5: 'Ender 5',
+    cr10: 'Creality CR-10'
+};
+
+const printerStates = {
+    ender5: 'available',
+    cr10: 'available'
+};
+
 const demoDate = offset => {
     const date = new Date();
     date.setHours(12, 0, 0, 0);
@@ -49,6 +59,7 @@ const tableBody = document.getElementById('ordersTableBody');
 const searchInput = document.getElementById('orderSearch');
 let sortMode = 'due';
 let selectedQueue = 'ender5';
+let demoOrderSequence = 1053;
 
 function updateQueueCounts() {
     document.querySelectorAll('[data-queue-count]').forEach(counter => {
@@ -62,6 +73,63 @@ function updateMetrics() {
         sampleOrders.filter(order => order.daysUntilDue <= 1).length;
     document.getElementById('profitMetric').textContent =
         formatCLP(sampleOrders.reduce((total, order) => total + getOrderGain(order), 0));
+}
+
+function getNewOrderCategory() {
+    const availablePrinters = Object.keys(printerNames).filter(printer => printerStates[printer] === 'available');
+    if (availablePrinters.length === 0) return 'partner';
+    if (availablePrinters.length === 1) return availablePrinters[0];
+    return availablePrinters.sort((a, b) =>
+        sampleOrders.filter(order => order.category === a).length -
+        sampleOrders.filter(order => order.category === b).length
+    )[0];
+}
+
+function updatePrinterRoutingStatus() {
+    const availablePrinters = Object.keys(printerNames).filter(printer => printerStates[printer] === 'available');
+    const routingStatus = document.getElementById('automaticRoutingStatus');
+    const message = document.getElementById('printerRoutingMessage');
+
+    if (availablePrinters.length === 0) {
+        routingStatus.dataset.state = 'partner';
+        routingStatus.textContent = 'Derivación automática a colaborador';
+        message.textContent = 'Ambas impresoras están ocupadas o fuera de servicio. Los pedidos nuevos se asignarán a la empresa colaboradora; los pedidos ya asignados no se moverán.';
+    } else if (availablePrinters.length === 1) {
+        routingStatus.dataset.state = 'available';
+        routingStatus.textContent = 'Impresión propia disponible';
+        message.textContent = `Los pedidos nuevos se asignarán a ${printerNames[availablePrinters[0]]}. Los pedidos ya asignados no se moverán.`;
+    } else {
+        routingStatus.dataset.state = 'available';
+        routingStatus.textContent = 'Impresión propia disponible';
+        message.textContent = 'Ambas impresoras están disponibles. Los pedidos nuevos se asignan al equipo con menos pedidos en cola; en caso de empate, se asignan a Ender 5.';
+    }
+}
+
+function simulateNewOrder() {
+    const id = `DEMO-${demoOrderSequence++}`;
+    const category = getNewOrderCategory();
+    const order = {
+        id,
+        client: `Cliente de muestra ${id.slice(-4)}`,
+        daysUntilDue: 5,
+        profit: 0,
+        status: 'Nueva solicitud',
+        category
+    };
+    if (category === 'partner') {
+        order.supplierQuote = 0;
+        order.commissionRate = 20;
+    }
+
+    sampleOrders.push(order);
+    updateMetrics();
+    updateQueueCounts();
+    searchInput.value = '';
+    setQueue(category);
+
+    const routingMessage = document.getElementById('newOrderRoutingStatus');
+    routingMessage.hidden = false;
+    routingMessage.textContent = `Pedido ficticio ${id} asignado a ${categories[category]}.`;
 }
 
 function createRouteCell(order) {
@@ -257,6 +325,7 @@ document.getElementById('demoLoginForm').addEventListener('submit', event => {
     updateAnalyticsStatus();
     updateMetrics();
     updateQueueCounts();
+    updatePrinterRoutingStatus();
     setQueue(selectedQueue);
     document.getElementById('dashboardTitle').focus();
 });
@@ -276,5 +345,12 @@ document.querySelectorAll('[data-queue]').forEach(button => {
 });
 document.getElementById('sortDueButton').addEventListener('click', () => setSortMode('due'));
 document.getElementById('sortProfitButton').addEventListener('click', () => setSortMode('profit'));
+document.querySelectorAll('[data-printer-state]').forEach(select => {
+    select.addEventListener('change', () => {
+        printerStates[select.dataset.printerState] = select.value;
+        updatePrinterRoutingStatus();
+    });
+});
+document.getElementById('simulateOrderButton').addEventListener('click', simulateNewOrder);
 tableBody.addEventListener('change', updateOrderField);
 searchInput.addEventListener('input', renderOrders);

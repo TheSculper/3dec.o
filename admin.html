@@ -23,7 +23,7 @@
     <main class="admin-main">
         <div class="demo-banner" role="note">
             <strong>Prototipo visual — no es un sistema seguro.</strong>
-            <span>Esta página es pública. No uses credenciales ni datos de clientes reales. El acceso es simulado y los pedidos son ejemplos ficticios.</span>
+            <span>Esta página es pública. No uses credenciales ni datos de clientes reales. El acceso, los pedidos, los estados de impresora y la asignación automática son solo una demostración; no conecta con equipos reales.</span>
         </div>
 
         <section class="login-card" id="loginPanel" aria-labelledby="loginTitle">
@@ -68,6 +68,41 @@
                     <span class="metric-detail">Suma ficticia de esta muestra</span>
                 </article>
             </div>
+
+            <section class="printer-status-card" aria-labelledby="printerStatusTitle">
+                <div class="printer-status-heading">
+                    <div>
+                        <p class="eyebrow">CAPACIDAD DE PRODUCCIÓN · DEMO</p>
+                        <h2 id="printerStatusTitle">Estado de impresoras</h2>
+                        <p>Indica si cada equipo puede recibir un pedido nuevo. Estos controles solo afectan la asignación de pedidos de muestra.</p>
+                    </div>
+                    <span class="routing-status" id="automaticRoutingStatus" role="status">Asignación automática activa</span>
+                </div>
+                <div class="printer-status-grid">
+                    <label class="printer-status-item" for="ender5Status">
+                        <span>Ender 5</span>
+                        <select id="ender5Status" data-printer-state="ender5">
+                            <option value="available">Operativa · disponible</option>
+                            <option value="busy">Ocupada · no disponible</option>
+                            <option value="offline">Fuera de servicio · falla técnica</option>
+                        </select>
+                    </label>
+                    <label class="printer-status-item" for="cr10Status">
+                        <span>Creality CR-10</span>
+                        <select id="cr10Status" data-printer-state="cr10">
+                            <option value="available">Operativa · disponible</option>
+                            <option value="busy">Ocupada · no disponible</option>
+                            <option value="offline">Fuera de servicio · falla técnica</option>
+                        </select>
+                    </label>
+                </div>
+                <p class="printer-routing-message" id="printerRoutingMessage"></p>
+                <div class="demo-intake">
+                    <span>Prueba la regla creando una solicitud ficticia; nunca se envía ni se guarda.</span>
+                    <button class="secondary-button" id="simulateOrderButton" type="button">Simular pedido nuevo</button>
+                </div>
+                <p class="new-order-message" id="newOrderRoutingStatus" role="status" hidden></p>
+            </section>
 
             <section class="analytics-card" aria-labelledby="analyticsTitle">
                 <div class="analytics-copy">

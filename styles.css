@@ -62,14 +62,16 @@ nav ul {
     display: flex;
     flex-wrap: wrap; /* Permite que los elementos se envuelvan en pantallas pequeñas */
     justify-content: center;
-    gap: 20px; /* Espacio entre los elementos del menú */
+    gap: 8px 10px;
 }
 
 nav ul li a {
     color: white;
     text-decoration: none;
-    padding: 8px 15px;
+    padding: 6px 9px;
     border-radius: 5px;
+    font-size: 0.92rem;
+    white-space: nowrap;
     transition: background-color 0.3s ease;
 }
 
@@ -336,6 +338,127 @@ h2 {
     background-color: #218838;
 }
 
+/* --- Nuevas iniciativas de impresión 3D --- */
+.section-intro {
+    max-width: 780px;
+    margin: -12px auto 24px;
+    color: #555;
+    text-align: center;
+}
+
+.initiative-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 235px), 1fr));
+    gap: 18px;
+    margin-top: 24px;
+}
+
+.initiative-card {
+    display: flex;
+    flex-direction: column;
+    padding: 22px;
+    background: #f9f9f9;
+    border: 1px solid #e8edf2;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+.initiative-card > i {
+    margin-bottom: 12px;
+    color: #007bff;
+    font-size: 1.8rem;
+}
+
+.initiative-card h3,
+.initiative-feature h3 {
+    margin: 0 0 9px;
+    color: #24527a;
+    font-size: 1.15rem;
+}
+
+.initiative-card p,
+.initiative-feature p {
+    color: #555;
+    font-size: 0.96rem;
+}
+
+.initiative-links {
+    display: grid;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 12px;
+}
+
+.initiative-links a {
+    color: #075fba;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.initiative-links a:hover,
+.initiative-links a:focus-visible { text-decoration: underline; }
+
+.initiative-note {
+    max-width: 900px;
+    margin: 18px auto 0;
+    color: #68788d;
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+.initiative-feature {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 28px;
+    padding: clamp(20px, 4vw, 36px);
+    background: linear-gradient(120deg, #f3f8ff, #fff);
+    border: 1px solid #dfeaf6;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.initiative-feature > div { max-width: 760px; }
+.initiative-feature h3 { font-size: 1.35rem; }
+.initiative-feature p:last-child { margin-bottom: 0; }
+.initiative-kicker {
+    margin: 0 0 8px;
+    color: #0878e8 !important;
+    font-size: 0.72rem !important;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+}
+
+.initiative-button {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 11px 17px;
+    color: #fff;
+    background: #0878e8;
+    border-radius: 7px;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.initiative-button:hover { background: #075fba; transform: translateY(-1px); }
+.initiative-button:focus-visible { outline: 3px solid #9dcaff; outline-offset: 3px; }
+.initiative-action { margin-top: 20px; text-align: center; }
+
+.hero .payment-policy {
+    max-width: 850px;
+    margin: 18px auto 0;
+    color: #fff;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.hero .payment-policy a { color: #fff; font-weight: 700; text-decoration: underline; }
 
 /* --- Contacto --- */
 #contacto form {
@@ -447,7 +570,8 @@ footer.visible-footer {
     }
 
     nav ul.menu-active {
-        max-height: 300px; /* Mostrar menú */
+        max-height: calc(100vh - 72px);
+        overflow-y: auto;
     }
 
     nav ul li {
@@ -528,6 +652,14 @@ footer.visible-footer {
     .producto {
         width: 100%;
     }
+
+    .initiative-feature {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .initiative-button { width: 100%; }
 }
 
 @media (max-width: 480px) {
