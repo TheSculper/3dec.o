@@ -16,6 +16,12 @@ Las cotizaciones para pedidos de impresión 3D informan que la producción comie
 
 El panel también muestra estados ficticios para Ender 5 y CR-10 y permite simular la llegada de pedidos. Para pedidos nuevos, asigna una impresora marcada como disponible; si ambas están ocupadas o fuera de servicio, asigna la solicitud a la empresa colaboradora. Cambiar estados no mueve pedidos existentes. Esta regla no controla impresoras reales ni se conecta con la calculadora o un sistema de pagos.
 
+## Asesoría y capacitación (prototipo)
+
+`capacitacion.html` muestra el recorrido de estudiantes: ingreso de muestra, acceso básico, lecciones bloqueadas y una suscripción que se puede simular para previsualizar la experiencia completa. El acceso básico y el contenido de cursos son ilustrativos; no se crean cuentas ni se comprueba un pago. `admin.html` permite seleccionar videos locales y previsualizarlos con un título y nivel de acceso. Los archivos no se transfieren ni se guardan, y no aparecen en el portal de estudiantes; se eliminan al cerrar o recargar la página. No uses credenciales reales ni videos privados en el prototipo.
+
+Para ofrecer cursos reales hace falta un backend autenticado, almacenamiento privado de videos con entrega protegida, gestión de usuarios y suscripciones, y confirmación de pagos del lado del servidor. El control de acceso debe aplicarse al video en el servidor/CDN, no solo ocultarse con JavaScript. No guardes contraseñas, archivos ni claves privadas en GitHub Pages.
+
 ## Futuro: pedidos pagados e impresión automatizada
 
 La impresión automática en equipos físicos aún no está implementada. GitHub Pages no puede autenticar pagos, almacenar pedidos de forma privada ni enviar trabajos de impresión. Además, una transferencia solicitada por WhatsApp no notifica automáticamente al sitio que el pago se recibió; hasta integrar un proveedor con notificaciones verificables, esos pagos requieren conciliación manual.

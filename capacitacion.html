@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Asesoría y capacitación — 3deco</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="capacitacion.css">
+</head>
+<body>
+    <header class="learning-header">
+        <a class="learning-brand" href="index.html">
+            <img src="logo.jpg" alt="" width="42" height="42">
+            <span>3deco <small>ASESORÍA Y CAPACITACIÓN</small></span>
+        </a>
+        <nav aria-label="Navegación principal">
+            <a href="index.html#servicios">Servicios</a>
+            <a href="admin.html">Administrador (demo)</a>
+        </nav>
+    </header>
+
+    <main class="learning-main">
+        <div class="learning-demo-banner" role="note">
+            <strong>Portal demostrativo.</strong>
+            <span>El inicio de sesión y la suscripción son simulados. No ingreses contraseñas reales ni realices pagos aquí.</span>
+        </div>
+
+        <section class="learning-hero">
+            <p class="learning-eyebrow">APRENDE A TU RITMO</p>
+            <h1>Asesoría y capacitación en impresión 3D</h1>
+            <p>Accede a material introductorio y conoce la biblioteca de cursos para estudiantes suscritos.</p>
+        </section>
+
+        <section class="student-login" id="studentLoginPanel" aria-labelledby="studentLoginTitle">
+            <div>
+                <p class="learning-eyebrow">PORTAL DE ESTUDIANTES · DEMO</p>
+                <h2 id="studentLoginTitle">Ingresa para ver tu panel</h2>
+                <p>En una versión real, cada estudiante tendría su propia cuenta. Aquí puedes usar cualquier texto para probar el recorrido.</p>
+            </div>
+            <form id="studentLoginForm">
+                <label for="studentEmail">Correo de muestra</label>
+                <input id="studentEmail" name="email" type="email" autocomplete="off" placeholder="estudiante@ejemplo.cl" required>
+                <label for="studentPassword">Contraseña de muestra</label>
+                <input id="studentPassword" name="password" type="password" autocomplete="new-password" placeholder="No uses una contraseña real" required>
+                <button class="learning-button" type="submit">Entrar al panel demo</button>
+            </form>
+        </section>
+
+        <section class="student-dashboard" id="studentDashboard" hidden aria-labelledby="studentDashboardTitle">
+            <div class="student-dashboard-heading">
+                <div>
+                    <p class="learning-eyebrow">PANEL DEL ESTUDIANTE · DEMO</p>
+                    <h2 id="studentDashboardTitle" tabindex="-1">Tu espacio de aprendizaje</h2>
+                    <p id="studentAccessStatus" class="student-access-status">Acceso básico de muestra</p>
+                </div>
+                <button class="learning-button learning-button-secondary" id="studentLogout" type="button">Salir</button>
+            </div>
+
+            <div class="learning-plan-card">
+                <div>
+                    <h3 id="learningPlanTitle">Comienza con el acceso básico</h3>
+                    <p id="learningPlanDescription">Explora la lección introductoria. La biblioteca completa se muestra como contenido exclusivo para suscriptores.</p>
+                </div>
+                <button class="learning-button" id="toggleSubscription" type="button">Simular suscripción activa</button>
+            </div>
+
+            <div class="learning-grid" id="learningContent">
+                <article class="lesson-card">
+                    <span class="lesson-tag lesson-tag-basic">Vista básica</span>
+                    <h3>Introducción a la impresión 3D</h3>
+                    <p>Conoce el flujo general: modelo, laminado, preparación de la impresora y revisión de la pieza.</p>
+                    <div class="lesson-preview" aria-label="Resumen de la lección introductoria">
+                        <strong>En esta lección aprenderás</strong>
+                        <span>Qué es un archivo STL, para qué sirve el laminador y cómo preparar una primera impresión.</span>
+                    </div>
+                </article>
+                <article class="lesson-card lesson-card-locked" data-premium-content>
+                    <span class="lesson-tag lesson-tag-premium">Solo suscriptores</span>
+                    <h3>Configuración del laminador</h3>
+                    <p>Perfiles, altura de capa, soportes y parámetros para ajustar tus resultados.</p>
+                    <div class="lesson-lock" aria-label="Contenido bloqueado en el acceso básico">🔒 Acceso completo</div>
+                </article>
+                <article class="lesson-card lesson-card-locked" data-premium-content>
+                    <span class="lesson-tag lesson-tag-premium">Solo suscriptores</span>
+                    <h3>Materiales y solución de fallas</h3>
+                    <p>Aprende a reconocer problemas frecuentes y a elegir el material adecuado para cada proyecto.</p>
+                    <div class="lesson-lock" aria-label="Contenido bloqueado en el acceso básico">🔒 Acceso completo</div>
+                </article>
+            </div>
+
+            <aside class="subscription-callout" id="subscriptionCallout">
+                <div>
+                    <h3>¿Quieres ver todos los cursos?</h3>
+                    <p>Consulta por la suscripción y sus medios de pago directamente con 3deco.</p>
+                </div>
+                <a class="learning-button" href="https://wa.me/56975297791?text=Hola%2C%20quiero%20consultar%20por%20la%20suscripci%C3%B3n%20de%20asesor%C3%ADa%20y%20capacitaci%C3%B3n%203D." target="_blank" rel="noopener noreferrer">Consultar suscripción por WhatsApp</a>
+            </aside>
+            <p class="learning-footnote">La simulación de suscripción no verifica pagos ni concede acceso real. El contenido de este ejemplo no proviene de videos subidos.</p>
+        </section>
+    </main>
+
+    <footer class="learning-footer">© 2026 3deco · Muestra de portal educativo</footer>
+    <script src="capacitacion.js"></script>
+</body>
+</html>

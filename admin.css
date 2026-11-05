@@ -392,6 +392,67 @@ button { cursor: pointer; }
 .analytics-help { color: var(--blue-dark); font-size: 10px; text-decoration: none; }
 .analytics-help:hover { text-decoration: underline; }
 
+.course-admin-card {
+    margin-bottom: 23px;
+    padding: 21px 23px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 13px;
+    box-shadow: 0 4px 16px rgba(32, 54, 82, 0.035);
+}
+.course-admin-card h2 { margin: 0; color: var(--ink); font-size: 18px; }
+.course-admin-card .orders-toolbar > div > p:not(.eyebrow) {
+    margin: 7px 0 0;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.5;
+}
+.course-upload-notice {
+    margin: 15px 0;
+    padding: 11px 13px;
+    color: #70480a;
+    background: #fff6dd;
+    border: 1px solid #f3dfaa;
+    border-radius: 8px;
+    font-size: 11px;
+    line-height: 1.5;
+}
+.course-video-form {
+    display: grid;
+    grid-template-columns: minmax(180px, 1fr) minmax(150px, 0.65fr);
+    gap: 12px;
+    align-items: end;
+}
+.course-video-form label {
+    display: grid;
+    gap: 6px;
+    color: #33445a;
+    font-size: 11px;
+    font-weight: 700;
+}
+.course-video-form input,
+.course-video-form select {
+    width: 100%;
+    min-height: 40px;
+    padding: 8px 10px;
+    color: var(--ink);
+    background: white;
+    border: 1px solid #d6e0eb;
+    border-radius: 7px;
+    font: inherit;
+    font-size: 11px;
+}
+.course-video-form .course-file-label { grid-column: 1 / 2; }
+.course-video-form button { min-height: 40px; }
+.course-video-status { margin: 10px 0 0; color: #176f4c; font-size: 11px; }
+.course-video-status[data-state="error"] { color: #a33b36; }
+.course-video-list { margin-top: 15px; display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
+.course-video-item { min-width: 0; padding: 12px; background: #f8fafc; border: 1px solid var(--line); border-radius: 9px; }
+.course-video-item h3 { margin: 0 0 5px; color: var(--ink); font-size: 13px; overflow-wrap: anywhere; }
+.course-video-item p { margin: 0 0 9px; color: var(--muted); font-size: 10px; }
+.course-video-item video { width: 100%; max-height: 220px; background: #17212f; border-radius: 6px; }
+.course-video-item button { margin-top: 9px; padding: 6px 9px; color: #8e2c2c; background: white; border: 1px solid #ead3d3; border-radius: 6px; font-size: 10px; }
+
 .orders-card {
     padding: 22px;
     background: var(--surface);
@@ -616,6 +677,9 @@ td.numeric-cell { color: #18764b; font-weight: 700; }
     .demo-intake { align-items: stretch; flex-direction: column; }
     .analytics-card { align-items: flex-start; flex-direction: column; padding: 18px; }
     .analytics-actions { width: 100%; }
+    .course-admin-card { padding: 18px; }
+    .course-video-form { grid-template-columns: 1fr; }
+    .course-video-form .course-file-label { grid-column: auto; }
     .orders-card { padding: 17px 13px; }
     .orders-toolbar { align-items: stretch; flex-direction: column; gap: 14px; }
     .search-control { width: 100%; }

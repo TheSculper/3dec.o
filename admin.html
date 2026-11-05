@@ -117,6 +117,42 @@
                 </div>
             </section>
 
+            <section class="orders-card course-admin-card" aria-labelledby="courseAdminTitle">
+                <div class="orders-toolbar">
+                    <div>
+                        <p class="eyebrow">BIBLIOTECA DE CAPACITACIÓN · DEMO</p>
+                        <h2 id="courseAdminTitle">Videos de asesoría y capacitación</h2>
+                        <p>Previsualiza videos en este navegador y define si serían material básico o para suscriptores.</p>
+                    </div>
+                    <a class="analytics-help" href="capacitacion.html">Ver portal de estudiantes</a>
+                </div>
+                <div class="course-upload-notice" role="note">
+                    <strong>Solo demostración:</strong> los archivos no se suben al sitio, no se guardan y no aparecen en el portal de estudiantes. Al cerrar o recargar esta página se eliminan.
+                </div>
+                <form id="courseVideoForm" class="course-video-form">
+                    <label>
+                        Título del video
+                        <input id="courseVideoTitle" name="title" type="text" maxlength="100" required placeholder="Ej.: Primeros pasos con impresión 3D">
+                    </label>
+                    <label>
+                        Acceso de muestra
+                        <select id="courseVideoAccess" name="access">
+                            <option value="basic">Vista básica</option>
+                            <option value="subscriber">Suscriptores</option>
+                        </select>
+                    </label>
+                    <label class="course-file-label">
+                        Archivo de video (máx. 200 MB)
+                        <input id="courseVideoFile" name="video" type="file" accept="video/*" required>
+                    </label>
+                    <button class="primary-button" type="submit">Agregar video de muestra</button>
+                </form>
+                <p class="course-video-status" id="courseVideoStatus" role="status" aria-live="polite"></p>
+                <div class="course-video-list" id="courseVideoList" aria-live="polite">
+                    <p class="empty-state" id="emptyCourseVideos">Aún no agregas videos de muestra.</p>
+                </div>
+            </section>
+
             <section class="orders-card" aria-labelledby="ordersTitle">
                 <div class="orders-toolbar">
                     <div>
