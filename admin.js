@@ -324,6 +324,164 @@ const emptyCourseVideos = document.getElementById('emptyCourseVideos');
 const courseVideoStatus = document.getElementById('courseVideoStatus');
 const demoVideoUrls = new Set();
 const maxDemoVideoSize = 200 * 1024 * 1024;
+const adminTodoStorageKey = '3deco-admin-todos-v1';
+const adminTodos = [...document.querySelectorAll('[data-admin-todo]')];
+const todoProgress = document.getElementById('todoProgress');
+const todoProgressLabel = document.getElementById('todoProgressLabel');
+const todoStorageStatus = document.getElementById('todoStorageStatus');
+const businessIdeas = [
+    {
+        category: 'Capacitación',
+        title: 'Un microcurso gratuito como puerta de entrada',
+        description: 'Publica una lección introductoria breve y reserva los cursos prácticos para estudiantes suscritos.',
+        test: 'Pregunta a algunos clientes si pagarían por un curso y qué tema resolvería una necesidad concreta.'
+    },
+    {
+        category: 'Nuevos servicios',
+        title: 'Paquetes de prototipado con impresión y corte láser',
+        description: 'Ofrece una consulta inicial para proyectos que necesiten combinar piezas impresas y cortadas.',
+        test: 'Muestra un ejemplo de paquete y mide cuántas consultas calificadas recibes antes de fijar precios.'
+    },
+    {
+        category: 'Fidelización',
+        title: 'Seguimiento después de cada pedido',
+        description: 'Contacta al cliente después de la entrega para conocer el resultado, ofrecer ajustes y pedir autorización para mostrar el proyecto.',
+        test: 'Prueba el seguimiento manual con los próximos cinco pedidos y registra respuestas y nuevas solicitudes.'
+    },
+    {
+        category: 'Reciclaje',
+        title: 'Jornada piloto de recepción de material',
+        description: 'Explora una jornada coordinada para evaluar soportes y piezas fallidas, sin prometer que todo material será reciclable.',
+        test: 'Publica una invitación con materiales aceptables y confirma un lugar/proceso viable antes de recibirlos.'
+    },
+    {
+        category: 'Productos',
+        title: 'Validar una pequeña colección de productos locales',
+        description: 'Busca objetos útiles para clientes o negocios cercanos y valida interés antes de fabricar inventario.',
+        test: 'Comparte tres conceptos y acepta expresiones de interés; produce solo el artículo con mejor respuesta.'
+    },
+    {
+        category: 'Diseñadores',
+        title: 'Convocatoria de diseño con reglas claras',
+        description: 'Invita a diseñadores a conversar sobre licencias, comisión, atribución y cómo se gestionarán los pedidos.',
+        test: 'Entrevista a dos diseñadores y acuerda por escrito las condiciones antes de publicar o vender archivos.'
+    },
+    {
+        category: 'Experiencia de compra',
+        title: 'Mostrar mejor qué incluye cada cotización',
+        description: 'Explica material, plazo estimado, terminaciones y qué puede cambiar el precio para reducir dudas antes de confirmar.',
+        test: 'Envía una cotización con este desglose y pregunta si ayudó a tomar la decisión.'
+    },
+    {
+        category: 'Crecimiento',
+        title: 'Crear una alianza con un taller o centro educativo',
+        description: 'Explora talleres introductorios o apoyo de prototipado con organizaciones de la zona.',
+        test: 'Contacta a una organización con una propuesta piloto acotada y evalúa interés, costos y capacidad.'
+    }
+];
+let currentIdeaIndex = 0;
+let ideaRotationTimer = null;
+const ideaRotationInterval = 30000;
+
+function updateTodoProgress() {
+    let completed = 0;
+    adminTodos.forEach(todo => {
+        const isDone = todo.checked;
+        if (isDone) completed += 1;
+        todo.closest('.todo-item').dataset.done = String(isDone);
+    });
+    todoProgress.max = adminTodos.length;
+    todoProgress.value = completed;
+    todoProgressLabel.textContent = `${completed} de ${adminTodos.length} completadas`;
+}
+
+function loadTodoProgress() {
+    let savedProgress;
+    try {
+        const saved = localStorage.getItem(adminTodoStorageKey);
+        if (saved === null) {
+            todoStorageStatus.textContent = 'El progreso se guardará en el almacenamiento local de este navegador.';
+            updateTodoProgress();
+            return;
+        }
+        savedProgress = JSON.parse(saved);
+    } catch (error) {
+        todoStorageStatus.dataset.state = 'error';
+        todoStorageStatus.textContent = 'No se pudo leer el progreso guardado en este navegador.';
+        console.error('No se pudo leer el progreso local de tareas de 3deco.', error);
+        updateTodoProgress();
+        return;
+    }
+
+    if (!savedProgress || typeof savedProgress !== 'object' || Array.isArray(savedProgress)) {
+        todoStorageStatus.dataset.state = 'error';
+        todoStorageStatus.textContent = 'El progreso guardado no es válido; al cambiar una tarea se reemplazará por una lista nueva.';
+        updateTodoProgress();
+        return;
+    }
+
+    adminTodos.forEach(todo => {
+        if (typeof savedProgress[todo.dataset.adminTodo] === 'boolean') {
+            todo.checked = savedProgress[todo.dataset.adminTodo];
+        }
+    });
+    todoStorageStatus.textContent = 'Progreso cargado desde el almacenamiento local de este navegador.';
+    updateTodoProgress();
+}
+
+function saveTodoProgress() {
+    const progress = Object.fromEntries(adminTodos.map(todo => [
+        todo.dataset.adminTodo,
+        todo.checked
+    ]));
+    try {
+        localStorage.setItem(adminTodoStorageKey, JSON.stringify(progress));
+        todoStorageStatus.dataset.state = 'saved';
+        todoStorageStatus.textContent = 'Progreso guardado solo en este navegador.';
+    } catch (error) {
+        todoStorageStatus.dataset.state = 'error';
+        todoStorageStatus.textContent = 'No se pudo guardar el progreso. Revisa la configuración de almacenamiento de este navegador.';
+        console.error('No se pudo guardar el progreso local de tareas de 3deco.', error);
+    }
+    updateTodoProgress();
+}
+
+adminTodos.forEach(todo => todo.addEventListener('change', saveTodoProgress));
+loadTodoProgress();
+
+function renderBusinessIdea() {
+    const idea = businessIdeas[currentIdeaIndex];
+    document.getElementById('ideaCategory').textContent = idea.category;
+    document.getElementById('ideaCounter').textContent = `Idea ${currentIdeaIndex + 1} de ${businessIdeas.length}`;
+    document.getElementById('ideaSuggestionTitle').textContent = idea.title;
+    document.getElementById('ideaDescription').textContent = idea.description;
+    document.getElementById('ideaTest').textContent = idea.test;
+}
+
+function showNextBusinessIdea() {
+    currentIdeaIndex = (currentIdeaIndex + 1) % businessIdeas.length;
+    renderBusinessIdea();
+}
+
+function stopIdeaRotation(message) {
+    if (ideaRotationTimer !== null) {
+        window.clearInterval(ideaRotationTimer);
+        ideaRotationTimer = null;
+    }
+    document.getElementById('toggleIdeaRotation').textContent = 'Reanudar rotación';
+    document.getElementById('toggleIdeaRotation').setAttribute('aria-pressed', 'true');
+    document.getElementById('ideaRotationStatus').textContent = message;
+}
+
+function startIdeaRotation() {
+    if (ideaRotationTimer !== null) return;
+    ideaRotationTimer = window.setInterval(showNextBusinessIdea, ideaRotationInterval);
+    document.getElementById('toggleIdeaRotation').textContent = 'Pausar rotación';
+    document.getElementById('toggleIdeaRotation').setAttribute('aria-pressed', 'false');
+    document.getElementById('ideaRotationStatus').textContent = 'Rotación activa; las ideas se repiten cada 30 segundos.';
+}
+
+renderBusinessIdea();
 
 function clearDemoVideos() {
     demoVideoUrls.forEach(url => URL.revokeObjectURL(url));
@@ -398,11 +556,13 @@ document.getElementById('demoLoginForm').addEventListener('submit', event => {
     updateMetrics();
     updateQueueCounts();
     updatePrinterRoutingStatus();
+    startIdeaRotation();
     setQueue(selectedQueue);
     document.getElementById('dashboardTitle').focus();
 });
 
 document.getElementById('logoutButton').addEventListener('click', () => {
+    stopIdeaRotation('Rotación pausada al salir del panel demo.');
     clearDemoVideos();
     document.getElementById('dashboardPanel').hidden = true;
     document.getElementById('loginPanel').hidden = false;
@@ -426,5 +586,13 @@ document.querySelectorAll('[data-printer-state]').forEach(select => {
 });
 document.getElementById('simulateOrderButton').addEventListener('click', simulateNewOrder);
 courseVideoForm.addEventListener('submit', addDemoVideo);
+document.getElementById('nextIdeaButton').addEventListener('click', showNextBusinessIdea);
+document.getElementById('toggleIdeaRotation').addEventListener('click', () => {
+    if (ideaRotationTimer === null) {
+        startIdeaRotation();
+    } else {
+        stopIdeaRotation('Rotación pausada; puedes avanzar manualmente o reanudarla.');
+    }
+});
 tableBody.addEventListener('change', updateOrderField);
 searchInput.addEventListener('input', renderOrders);
