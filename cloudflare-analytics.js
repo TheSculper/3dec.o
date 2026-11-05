@@ -3,7 +3,7 @@
     if (typeof token !== 'string' || token.trim() === '') return;
 
     const beacon = document.createElement('script');
-    beacon.defer = true;
+    beacon.type = 'module';
     beacon.src = 'https://static.cloudflareinsights.com/beacon.min.js';
     beacon.dataset.cfBeacon = JSON.stringify({ token: token.trim() });
     document.body.appendChild(beacon);
