@@ -724,6 +724,18 @@
                 </div>
             </div>
 
+            <div class="form-group">
+                <label for="urgencyFactor">Plazo del pedido</label>
+                <select id="urgencyFactor">
+                    <option value="0">Estándar — sin recargo</option>
+                    <option value="0.15">Prioritario — recargo 15%</option>
+                    <option value="0.30">Urgente — recargo 30%</option>
+                </select>
+                <small style="display:block;margin-top:6px;color:var(--gray-1)">
+                    El recargo se calcula sobre el subtotal antes del ajuste por fallos y el margen. Los plazos urgentes se confirman según disponibilidad.
+                </small>
+            </div>
+
             <!-- Post-procesado -->
             <div class="form-group">
                 <label>Tiempo post-procesado (hrs)</label>
@@ -825,8 +837,12 @@
                 <span class="row-value" id="costoEmpaque">$0</span>
             </div>
             <div class="breakdown-row subtotal">
-                <span class="row-label">Subtotal</span>
+                <span class="row-label">Subtotal inicial</span>
                 <span class="row-value" id="subtotalInicial">$0</span>
+            </div>
+            <div class="breakdown-row">
+                <span class="row-label">Recargo por urgencia <span class="row-badge" id="urgenciaPorcentaje">0%</span></span>
+                <span class="row-value" id="recargoUrgencia">$0</span>
             </div>
             <div class="breakdown-row">
                 <span class="row-label">Ajuste por fallos <span class="row-badge">5%</span></span>
@@ -1007,7 +1023,8 @@ function calculate() {
         badge.textContent = 'Completa los campos';
         ['costoTotal','costoMaterialBase','costoMaterialSoporte','costoMaquina',
          'costoPostProcesado','costoEmpaque','subtotalInicial','ajusteFallo',
-         'margenGanancia','porUnidad','costoTotalFinal'].forEach(id => $(id).textContent = id === 'costoTotal' ? '0' : '$0');
+         'recargoUrgencia','margenGanancia','porUnidad','costoTotalFinal'].forEach(id => $(id).textContent = id === 'costoTotal' ? '0' : '$0');
+        $('urgenciaPorcentaje').textContent = '0%';
         $('unidadesResumen').textContent = units;
         lastResult = null;
         return;
@@ -1024,8 +1041,11 @@ function calculate() {
     const cPost    = COSTS.laborPerHour * post;
     const cEmp     = getPackaging(vol);
     const subtotal = cMat + cSoporte + cMaq + cPost + cEmp;
-    const cFallo   = subtotal * COSTS.failureFactor;
-    const subtotal2= subtotal + cFallo;
+    const urgencyRate = parseFloat($('urgencyFactor').value) || 0;
+    const urgencyCharge = subtotal * urgencyRate;
+    const subtotalWithUrgency = subtotal + urgencyCharge;
+    const cFallo   = subtotalWithUrgency * COSTS.failureFactor;
+    const subtotal2= subtotalWithUrgency + cFallo;
     const cMargen  = subtotal2 * COSTS.profitMargin;
     const totalUnit = subtotal2 + cMargen;
     const total    = totalUnit * units;
@@ -1037,6 +1057,8 @@ function calculate() {
     $('costoPostProcesado').textContent = clp(cPost);
     $('costoEmpaque').textContent       = clp(cEmp);
     $('subtotalInicial').textContent    = clp(subtotal);
+    $('urgenciaPorcentaje').textContent = Math.round(urgencyRate * 100) + '%';
+    $('recargoUrgencia').textContent    = clp(urgencyCharge);
     $('ajusteFallo').textContent        = clp(cFallo);
     $('margenGanancia').textContent     = clp(cMargen);
     $('porUnidad').textContent          = clp(totalUnit);
@@ -1048,7 +1070,7 @@ function calculate() {
 
     lastResult = {
         mat, peso, tiempo, post, largo, ancho, alto, vol,
-        cMat, cSoporte, cMaq, cPost, cEmp, subtotal, cFallo, cMargen,
+        cMat, cSoporte, cMaq, cPost, cEmp, subtotal, urgencyRate, urgencyCharge, cFallo, cMargen,
         totalUnit, total, units,
         supportLabel,
         matLabel: MATERIAL_DATA[mat].label,
@@ -1249,6 +1271,11 @@ function generarPDF() {
     doc.text(clp(r.subtotal), W - 20, y + 5, { align: 'right' });
     y += 11;
 
+    doc.text(`Recargo por urgencia (${Math.round(r.urgencyRate * 100)}%)`, 20, y + 5);
+    doc.setTextColor(...gray2);
+    doc.text(clp(r.urgencyCharge), W - 20, y + 5, { align: 'right' });
+    y += 11;
+
     doc.text('Ajuste por fallos (5%)', 20, y + 5);
     doc.setTextColor(...gray2);
     doc.text(clp(r.cFallo), W - 20, y + 5, { align: 'right' });
@@ -1328,6 +1355,7 @@ function enviarWhatsApp() {
 *Color:* ${r.color}
 *Peso:* ${r.peso.toFixed(1)} g
 *Tiempo impresión:* ${r.tiempo.toFixed(1)} hrs
+*Plazo solicitado:* ${r.urgencyRate === 0.3 ? 'Urgente' : r.urgencyRate === 0.15 ? 'Prioritario' : 'Estándar'} (${Math.round(r.urgencyRate * 100)}% recargo)
 *Post-procesado:* ${r.post.toFixed(1)} hrs
 *Dimensiones:* ${r.largo}×${r.ancho}×${r.alto} cm
 *Relleno:* ${r.relleno}
@@ -1340,6 +1368,7 @@ function enviarWhatsApp() {
 • Máquina: ${clp(r.cMaq)}
 • Post-proc: ${clp(r.cPost)}
 • Empaque: ${clp(r.cEmp)}
+• Recargo por urgencia (${Math.round(r.urgencyRate * 100)}%): ${clp(r.urgencyCharge)}
 • Ajuste fallos: ${clp(r.cFallo)}
 • Margen: ${clp(r.cMargen)}
 
@@ -1485,6 +1514,7 @@ $('resetBtn').addEventListener('click', () => {
         if (el.id === 'unidades') { el.value = 1; return; }
         if (el.id === 'postProcesadoInput') { el.value = 0; return; }
         if (el.id === 'relleno') { el.value = 50; return; }
+        if (el.id === 'urgencyFactor') { el.value = 0; return; }
         el.value = '';
     });
     $('colorSelect').innerHTML = '<option value="">Selecciona material primero</option>';
@@ -1506,7 +1536,7 @@ $('materialSelect').addEventListener('change', () => {
 });
 ['pesoInput','tiempoInput','postProcesadoInput','largoInput','anchoInput',
  'altoInput','unidades','relleno','impresora','nombrePieza',
- 'notasInput','clientNombre','clientEmail','clientTel','cotizacionNum','colorSelect']
+ 'urgencyFactor','notasInput','clientNombre','clientEmail','clientTel','cotizacionNum','colorSelect']
     .forEach(id => {
         const el = $(id);
         if (el && ['relleno','impresora'].includes(id)) el.addEventListener('change', invalidateSliceEstimate);
